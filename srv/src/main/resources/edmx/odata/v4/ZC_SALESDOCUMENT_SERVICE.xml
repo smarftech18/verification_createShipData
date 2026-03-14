@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="ZC_SALESDOCUMENT_SERVICE" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <Annotation Term="Core.Links">
+        <Collection>
+          <Record>
+            <PropertyValue Property="rel" String="author"/>
+            <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+          </Record>
+        </Collection>
+      </Annotation>
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="ZcSalesDocument" EntityType="ZC_SALESDOCUMENT_SERVICE.ZcSalesDocument"/>
+      </EntityContainer>
+      <EntityType Name="ZcSalesDocument">
+        <Key>
+          <PropertyRef Name="SalesDocument"/>
+          <PropertyRef Name="SalesDocumentItem"/>
+          <PropertyRef Name="SequentialNumber"/>
+        </Key>
+        <Property Name="SalesDocument" Type="Edm.String" MaxLength="10" Nullable="false"/>
+        <Property Name="SalesDocumentItem" Type="Edm.String" MaxLength="6" Nullable="false"/>
+        <Property Name="SequentialNumber" Type="Edm.String" MaxLength="3" Nullable="false"/>
+        <Property Name="SalesOrganization" Type="Edm.String" MaxLength="4"/>
+        <Property Name="DistributionChannel" Type="Edm.String" MaxLength="2"/>
+        <Property Name="Division" Type="Edm.String" MaxLength="2"/>
+        <Property Name="SalesDocumentDate" Type="Edm.Date"/>
+        <Property Name="SalesDocumentType" Type="Edm.String" MaxLength="4"/>
+        <Property Name="CustomerID" Type="Edm.String" MaxLength="10"/>
+        <Property Name="MaterialCode" Type="Edm.String" MaxLength="18"/>
+        <Property Name="OrderQuantity" Type="Edm.Decimal" Precision="13" Scale="3"/>
+        <Property Name="OrderQuantityUnit" Type="Edm.String" MaxLength="3"/>
+        <Property Name="NetAmount" Type="Edm.Decimal" Precision="15" Scale="2"/>
+        <Property Name="Currency" Type="Edm.String" MaxLength="5"/>
+        <Property Name="Plant" Type="Edm.String" MaxLength="4"/>
+        <Property Name="StorageLocation" Type="Edm.String" MaxLength="4"/>
+        <Property Name="PricingDate" Type="Edm.Date"/>
+        <Property Name="DetailCategory" Type="Edm.String" MaxLength="2"/>
+        <Property Name="DetailText" Type="Edm.String" MaxLength="255"/>
+        <Property Name="DetailAmount" Type="Edm.Decimal" Precision="15" Scale="2"/>
+        <Property Name="ConditionType" Type="Edm.String" MaxLength="4"/>
+        <Property Name="ScheduleLineDate" Type="Edm.Date"/>
+        <Property Name="DeliveryScheduleQty" Type="Edm.Decimal" Precision="13" Scale="3"/>
+      </EntityType>
+      <Annotations Target="ZC_SALESDOCUMENT_SERVICE.ZcSalesDocument">
+        <Annotation Term="Common.Label" String="Sales Document CDS View"/>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

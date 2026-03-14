@@ -1,0 +1,1 @@
+SalesDocument,SalesDocumentItem,MaterialCode,MaterialName,MaterialGroup,OrderQuantity,OrderQuantityUnit,NetAmount,Currency,Plant,PlantName,CompanyCode,StorageLocation,PricingDate,createdAt,createdBy,modifiedAt,modifiedBy

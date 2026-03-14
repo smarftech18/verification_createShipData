@@ -1,0 +1,1 @@
+SalesDocument,SalesOrganization,DistributionChannel,Division,SalesDocumentDate,SalesDocumentType,CustomerID,CustomerName,CustomerGroup,Currency,TotalNetAmount,Status,ErrorMessage,createdAt,createdBy,modifiedAt,modifiedBy

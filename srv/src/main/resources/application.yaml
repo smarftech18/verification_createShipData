@@ -1,0 +1,31 @@
+
+---
+spring:
+  sql.init.platform: h2
+  security:
+    user:
+      name: admin
+      password: admin
+cds:
+  data-source.auto-config.enabled: false
+  security:
+    mock:
+      enabled: true   
+---
+management:
+  endpoint:
+    health:
+      show-components: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    defaults:
+      enabled: false
+    ping:
+      enabled: true
+    db:
+      enabled: true

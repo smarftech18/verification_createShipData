@@ -1,0 +1,1 @@
+SalesDocument,SalesDocumentItem,SequentialNumber,SalesOrganization,DistributionChannel,Division,SalesDocumentDate,SalesDocumentType,CustomerID,MaterialCode,OrderQuantity,OrderQuantityUnit,NetAmount,Currency,Plant,StorageLocation,PricingDate,DetailCategory,DetailText,DetailAmount,ConditionType,ScheduleLineDate,DeliveryScheduleQty
