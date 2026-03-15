@@ -1,1 +1,4 @@
 Customer,AuthorizationGroup,BillingIsBlockedForCustomer,CreatedByUser,CreationDate,CustomerAccountGroup,CustomerClassification,CustomerFullName,CustomerName,DeliveryIsBlocked,FreeDefinedAttribute01,NFPartnerIsNaturalPerson,OrderIsBlockedForCustomer,PostingIsBlocked,Supplier,CustomerCorporateGroup,FiscalAddress,Industry,IndustryCode1,InternationalLocationNumber1,InternationalLocationNumber2,IsMarkedForDeletion
+C0000001,,false,admin,2025-01-15,0001,,株式会社テック商事,テック商事,false,,,false,false,,,,IT,,,false
+C0000002,,false,admin,2025-01-15,0001,,グローバル物産株式会社,グローバル物産,false,,,false,false,,,,TRADE,,,false
+C0000003,,false,admin,2025-01-15,0001,,サクラ製造株式会社,サクラ製造,false,,,false,false,,,,MFGT,,,false

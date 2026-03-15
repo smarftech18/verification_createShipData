@@ -1,1 +1,4 @@
 ID,businessPartnerID,fullName,firstName,lastName,category,isBlocked,isMarkedForDeletion,createdAt,createdBy,modifiedAt,modifiedBy
+10000000-0000-0000-0000-000000000001,C0000001,株式会社テック商事,,,2,false,false,2025-01-15T09:00:00Z,admin,2025-01-15T09:00:00Z,admin
+10000000-0000-0000-0000-000000000002,C0000002,グローバル物産株式会社,,,2,false,false,2025-01-15T09:00:00Z,admin,2025-01-15T09:00:00Z,admin
+10000000-0000-0000-0000-000000000003,C0000003,サクラ製造株式会社,,,2,false,false,2025-01-15T09:00:00Z,admin,2025-01-15T09:00:00Z,admin

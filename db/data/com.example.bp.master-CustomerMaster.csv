@@ -1,1 +1,4 @@
 CustomerID,SalesOrganization,DistributionChannel,Division,CustomerName,CustomerGroup,Currency,PaymentTerms,CreditLimit,SalesDistrict
+C0000001,1000,10,00,株式会社テック商事,01,JPY,NT30,5000000.00,JP001
+C0000002,1000,10,00,グローバル物産株式会社,02,JPY,NT60,10000000.00,JP002
+C0000003,1000,20,00,サクラ製造株式会社,01,JPY,NT30,3000000.00,JP003

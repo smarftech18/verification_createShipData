@@ -1,1 +1,4 @@
 MaterialCode,MaterialName,MaterialGroup,BaseUnit,ProductHierarchy,TaxClassification,WeightUnit,GrossWeight
+MATNR000001,ノートPC 15インチ,ELECT,EA,001001001,1,KG,2.500
+MATNR000002,オフィスチェア エルゴノミクス,FURN,EA,002001001,1,KG,12.000
+MATNR000003,プリンタ用紙 A4 500枚,PAPER,EA,003001001,1,KG,2.200
