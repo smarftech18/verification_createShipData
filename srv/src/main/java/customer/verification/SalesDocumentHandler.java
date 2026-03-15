@@ -6,7 +6,9 @@ import cds.gen.com.example.bp.SalesDocItem;
 
 import com.sap.cds.Result;
 import com.sap.cds.Row;
+import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Select;
+import com.sap.cds.ql.cqn.CqnPredicate;
 import com.sap.cds.services.EventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
  *   <li>インプットパラメータ（伝票番号）をイベントコンテキストから取得する</li>
  *   <li>ZC_SALESDOCUMENT_SERVICE から対象伝票データを取得する</li>
  *   <li>取得データを伝票番号でグループ化する</li>
- *   <li>SalesDocItemView からマスタ補完データを一括取得する（IN句）</li>
+ *   <li>SalesDocItemView からマスタ補完データを一括取得する（OR of AND）</li>
  *   <li>ZcSalesDocument + SalesDocItemView のデータを3種類のエンティティにマッピングする</li>
  *   <li>伝票番号単位のデータ作成結果を返却する（DB登録は別機能が担う）</li>
  * </ol>
@@ -50,19 +52,18 @@ public class SalesDocumentHandler implements EventHandler {
     // 処理ステータス定数
     // ---------------------------------------------------------------
     private static final String STATUS_PROCESSING = "01";
-    private static final String STATUS_ERROR      = "09";
 
     // ---------------------------------------------------------------
     // CDS エンティティ / サービス名定数
     // ---------------------------------------------------------------
     /** 外部サービス名（ZC_SALESDOCUMENT_SERVICE.cds のサービス名と一致させる） */
-    private static final String S4_SERVICE_NAME   = "ZC_SALESDOCUMENT_SERVICE";
+    private static final String S4_SERVICE_NAME = "ZC_SALESDOCUMENT_SERVICE";
 
     /** ZcSalesDocument のフルパス（外部サービス名.エンティティ名） */
-    private static final String S4_ENTITY         = "ZC_SALESDOCUMENT_SERVICE.ZcSalesDocument";
+    private static final String S4_ENTITY       = "ZC_SALESDOCUMENT_SERVICE.ZcSalesDocument";
 
     /** SalesDocItemView のフルパス（サービス名.ビュー名） */
-    private static final String MASTER_VIEW        = "SalesDocumentService.SalesDocItemView";
+    private static final String MASTER_VIEW      = "SalesDocumentService.SalesDocItemView";
 
     // ---------------------------------------------------------------
     // 依存サービス
@@ -78,11 +79,33 @@ public class SalesDocumentHandler implements EventHandler {
     // ====================================================================
 
     /**
+     * SalesDocItemView の検索キー。
+     *
+     * <p>ZcSalesDocument の各レコードが持つ条件の組み合わせを表す。
+     * Java record により equals / hashCode が自動生成されるため Map のキーとして使用できる。
+     *
+     * <p>フィールドの選定根拠:
+     * <ul>
+     *   <li>SalesDocument + SalesDocumentItem : SalesDocItemView のキー項目</li>
+     *   <li>SalesOrganization + DistributionChannel + Division : CustomerMaster の JOIN キー</li>
+     *   <li>CustomerID : CustomerMaster の JOIN キー（販売エリアと組み合わせで一意）</li>
+     * </ul>
+     */
+    record MasterKey(
+        String salesDocument,
+        String salesDocumentItem,
+        String salesOrganization,
+        String distributionChannel,
+        String division,
+        String customerId
+    ) {}
+
+    /**
      * 伝票単位の作成データを保持する。
      * DB登録は行わず、データ構造のみを保持する（登録は別機能が担う）。
      */
     public static class SalesDocBuildResult {
-        public final SalesDocHeader       header  ;
+        public final SalesDocHeader       header;
         public final List<SalesDocItem>   items   = new ArrayList<>();
         public final List<SalesDocDetail> details = new ArrayList<>();
 
@@ -124,11 +147,10 @@ public class SalesDocumentHandler implements EventHandler {
                 Collectors.toList()
             ));
 
-        // STEP4: SalesDocItemView からマスタデータを一括取得
-        //   検索条件: STEP2 で取得した伝票番号セット（IN句）
+        // STEP4: SalesDocItemView からマスタデータを一括取得（OR of AND）
+        //   検索条件: ZcSalesDocument の各レコードが持つ条件の組み合わせ
         //   NOTE: 将来的に取得方法が変わる場合は fetchMasterData のみ修正する
-        Set<String> salesDocNums = byDocument.keySet();
-        Map<String, Row> masterMap = fetchMasterData(salesDocNums);
+        Map<MasterKey, Row> masterMap = fetchMasterData(s4Records);
 
         // STEP5/6: エンティティへのマッピング・伝票番号単位で返却
         Map<String, SalesDocBuildResult> buildResults =
@@ -184,39 +206,78 @@ public class SalesDocumentHandler implements EventHandler {
     }
 
     // ====================================================================
-    // STEP4: マスタデータ一括取得
+    // STEP4: マスタデータ一括取得（OR of AND）
     // ====================================================================
 
     /**
      * SalesDocItemView からマスタ補完データを一括取得する。
      *
-     * <p>検索条件: STEP2 で取得したレコードの伝票番号セット（IN句）
-     * レコードによってマスタデータの値（CustomerName, MaterialName, PlantName 等）が異なるが、
-     * IN句で一括取得しMapに変換することで N+1 問題を回避する。
+     * <p>【取得方式: OR of AND】
+     * ZcSalesDocument の各レコードが持つ条件の組み合わせを MasterKey として収集し、
+     * 組み合わせごとに AND 条件を生成、全体を OR でつないで1回のクエリで取得する。
+     *
+     * <p>発行されるSQL（イメージ）:
+     * <pre>
+     * WHERE (SalesDocument='4500000001' AND SalesDocumentItem='000010' AND CustomerID='C001' AND ...)
+     *    OR (SalesDocument='4500000001' AND SalesDocumentItem='000020' AND CustomerID='C001' AND ...)
+     *    OR (SalesDocument='4500000002' AND SalesDocumentItem='000010' AND CustomerID='C002' AND ...)
+     * </pre>
      *
      * <p>NOTE: SalesDocItemView の起点テーブルや結合方法が変わる場合でも、
      * このメソッドのインターフェース（引数/戻り値）は変わらないため、
      * 呼び出し元への影響を局所化できる。
      *
-     * @param salesDocNums 伝票番号セット
-     * @return キー "SalesDocument_SalesDocumentItem" → マスタ補完Row のMap
+     * @param s4Records ZcSalesDocument の全取得レコード
+     * @return MasterKey → マスタ補完Row のMap
      */
-    private Map<String, Row> fetchMasterData(Set<String> salesDocNums) {
+    private Map<MasterKey, Row> fetchMasterData(List<Row> s4Records) {
 
-        Result result = db.run(
-            Select.from(MASTER_VIEW)
-                  .where(v -> v.get("SalesDocument").in(salesDocNums))
-        );
+        // ① ZcSalesDocument の各レコードから条件の組み合わせ（重複なし）を収集
+        Set<MasterKey> uniqueKeys = s4Records.stream()
+            .map(r -> new MasterKey(
+                (String) r.get("SalesDocument"),
+                (String) r.get("SalesDocumentItem"),
+                (String) r.get("SalesOrganization"),
+                (String) r.get("DistributionChannel"),
+                (String) r.get("Division"),
+                (String) r.get("CustomerID")
+            ))
+            .collect(Collectors.toSet());
 
-        Map<String, Row> masterMap = new HashMap<>();
+        // ② 組み合わせごとに AND 条件を生成
+        List<CqnPredicate> orConditions = uniqueKeys.stream()
+            .map(k -> CQL.get("SalesDocument")      .eq(k.salesDocument())
+                .and(CQL.get("SalesDocumentItem")    .eq(k.salesDocumentItem()))
+                .and(CQL.get("SalesOrganization")    .eq(k.salesOrganization()))
+                .and(CQL.get("DistributionChannel")  .eq(k.distributionChannel()))
+                .and(CQL.get("Division")             .eq(k.division()))
+                .and(CQL.get("CustomerID")           .eq(k.customerId())))
+            .collect(Collectors.toList());
+
+        // ③ 全 AND 条件を OR でつないで1回のクエリで取得
+        CqnPredicate combined = orConditions.stream()
+            .reduce(CqnPredicate::or)
+            .orElseThrow(() -> new IllegalStateException("No conditions to query"));
+
+        Result result = db.run(Select.from(MASTER_VIEW).where(combined));
+
+        // ④ MasterKey → Row の Map に変換（後のマッピングで O(1) 参照するため）
+        Map<MasterKey, Row> masterMap = new HashMap<>();
         result.forEach(row -> {
-            String key = row.get("SalesDocument") + "_" + row.get("SalesDocumentItem");
-            // 同一キーが複数存在する場合は先勝ち（通常は1:1）
+            MasterKey key = new MasterKey(
+                (String) row.get("SalesDocument"),
+                (String) row.get("SalesDocumentItem"),
+                (String) row.get("SalesOrganization"),
+                (String) row.get("DistributionChannel"),
+                (String) row.get("Division"),
+                (String) row.get("CustomerID")
+            );
+            // 同一キーが複数存在する場合は先勝ち（通常は 1:1）
             masterMap.putIfAbsent(key, row);
         });
 
-        log.info("Fetched {} records from SalesDocItemView (keys={})",
-                 masterMap.size(), salesDocNums);
+        log.info("Fetched {} records from SalesDocItemView (uniqueKeys={})",
+                 masterMap.size(), uniqueKeys.size());
         return masterMap;
     }
 
@@ -231,28 +292,28 @@ public class SalesDocumentHandler implements EventHandler {
      * <p>DB登録は行わない。呼び出し元がリストを受け取り、別機能で登録する。
      *
      * @param byDocument 伝票番号でグループ化した ZcSalesDocument レコード
-     * @param masterMap  SalesDocItemView から取得したマスタデータ（キー: "伝票番号_明細番号"）
+     * @param masterMap  SalesDocItemView から取得したマスタデータ（キー: MasterKey）
      * @return 伝票番号 → SalesDocBuildResult のMap
      */
     private Map<String, SalesDocBuildResult> buildSalesDocuments(
             Map<String, List<Row>> byDocument,
-            Map<String, Row> masterMap) {
+            Map<MasterKey, Row> masterMap) {
 
         // 結果Map（取得順序を保持）
         Map<String, SalesDocBuildResult> results = new LinkedHashMap<>();
 
         for (Map.Entry<String, List<Row>> docEntry : byDocument.entrySet()) {
-            String      docNum  = docEntry.getKey();
-            List<Row>   docRecs = docEntry.getValue();
-            Row         first   = docRecs.get(0);
+            String    docNum  = docEntry.getKey();
+            List<Row> docRecs = docEntry.getValue();
+            Row       first   = docRecs.get(0);
 
             // ---- ヘッダ作成 ----
             // CustomerMaster の補完値はヘッダ単位で取得する
-            // 先頭明細番号のキーでマスタMapを参照する（ヘッダ共通のマスタ値）
-            String firstItemKey = docNum + "_" + first.get("SalesDocumentItem");
-            Row    headerMaster = masterMap.get(firstItemKey);
+            // 先頭明細レコードの条件で MasterKey を作成し Map を参照する
+            MasterKey firstItemKey = toMasterKey(docNum, first);
+            Row       headerMaster = masterMap.get(firstItemKey);
 
-            SalesDocHeader header = buildHeader(first, headerMaster);
+            SalesDocHeader      header      = buildHeader(first, headerMaster);
             SalesDocBuildResult buildResult = new SalesDocBuildResult(header);
 
             // 明細番号でグループ化
@@ -266,14 +327,14 @@ public class SalesDocumentHandler implements EventHandler {
             BigDecimal totalNetAmount = BigDecimal.ZERO;
 
             for (Map.Entry<String, List<Row>> itemEntry : byItem.entrySet()) {
-                String    itemNum  = itemEntry.getKey();
-                List<Row> itemRecs = itemEntry.getValue();
+                List<Row> itemRecs  = itemEntry.getValue();
                 Row       firstItem = itemRecs.get(0);
 
                 // MaterialMaster / PlantMaster の補完値は明細単位で取得する
-                // 明細番号のキーでマスタMapを参照する（明細ごとに品目・プラントが変動）
-                String itemKey  = docNum + "_" + itemNum;
-                Row    itemMaster = masterMap.get(itemKey);
+                // 明細レコードの条件で MasterKey を作成し Map を参照する
+                // （明細ごとに CustomerID・販売エリアの組み合わせが変動する）
+                MasterKey itemKey    = toMasterKey(docNum, firstItem);
+                Row       itemMaster = masterMap.get(itemKey);
 
                 // ---- 明細作成 ----
                 SalesDocItem item = buildItem(firstItem, itemMaster);
@@ -417,6 +478,26 @@ public class SalesDocumentHandler implements EventHandler {
     // ====================================================================
     // ユーティリティ
     // ====================================================================
+
+    /**
+     * ZcSalesDocument の Row から MasterKey を生成する。
+     *
+     * <p>fetchMasterData と buildSalesDocuments の両方で同じキー生成ロジックを使用するため
+     * メソッドに切り出している。キーの構成フィールドが変わる場合はここだけ修正する。
+     *
+     * @param salesDocument 伝票番号
+     * @param row           ZcSalesDocument の Row
+     */
+    private MasterKey toMasterKey(String salesDocument, Row row) {
+        return new MasterKey(
+            salesDocument,
+            (String) row.get("SalesDocumentItem"),
+            (String) row.get("SalesOrganization"),
+            (String) row.get("DistributionChannel"),
+            (String) row.get("Division"),
+            (String) row.get("CustomerID")
+        );
+    }
 
     private void setResult(EventContext ctx, boolean success, String message,
                            int headers, int items, int details, int errors) {
