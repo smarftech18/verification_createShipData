@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS ZC_SALESDOCUMENT_SERVICE_ZcSalesDocument;
 DROP TABLE IF EXISTS com_example_bp_master_PlantMaster;
 DROP TABLE IF EXISTS com_example_bp_master_MaterialMaster;
 DROP TABLE IF EXISTS com_example_bp_master_CustomerMaster;
+DROP TABLE IF EXISTS com_example_bp_OrderHeader;
 DROP TABLE IF EXISTS com_example_bp_SalesDocDetail;
 DROP TABLE IF EXISTS com_example_bp_SalesDocItem;
 DROP TABLE IF EXISTS com_example_bp_SalesDocHeader;
@@ -381,6 +382,25 @@ CREATE TABLE com_example_bp_SalesDocDetail (
   PRIMARY KEY(SalesDocument, SalesDocumentItem, SequentialNumber)
 );
 
+CREATE TABLE com_example_bp_OrderHeader (
+  SalesDocument NVARCHAR(10) NOT NULL,
+  SalesDocumentItem NVARCHAR(6) NOT NULL,
+  SalesOrganization NVARCHAR(4),
+  DistributionChannel NVARCHAR(2),
+  Division NVARCHAR(2),
+  CustomerID NVARCHAR(10),
+  MaterialCode NVARCHAR(18),
+  Plant NVARCHAR(4),
+  OrderDate DATE,
+  OrderQuantity DECIMAL(13, 3),
+  OrderQuantityUnit NVARCHAR(3),
+  NetAmount DECIMAL(15, 2),
+  Currency NVARCHAR(5),
+  StorageLocation NVARCHAR(4),
+  PricingDate DATE,
+  PRIMARY KEY(SalesDocument, SalesDocumentItem)
+);
+
 CREATE TABLE com_example_bp_master_CustomerMaster (
   CustomerID NVARCHAR(10) NOT NULL,
   SalesOrganization NVARCHAR(4) NOT NULL,
@@ -621,38 +641,28 @@ CREATE VIEW SalesDocumentService_SalesDocDetails AS SELECT
 FROM com_example_bp_SalesDocDetail AS SalesDocDetail_0;
 
 CREATE VIEW SalesDocumentService_SalesDocItemView AS SELECT
-  item_0.SalesDocument,
-  hdr_1.SalesDocumentDate,
-  hdr_1.SalesDocumentType,
-  hdr_1.SalesOrganization,
-  hdr_1.DistributionChannel,
-  hdr_1.Division,
-  hdr_1.Status,
-  hdr_1.ErrorMessage,
-  hdr_1.CustomerID,
-  cm_2.CustomerName,
-  cm_2.CustomerGroup,
-  cm_2.Currency AS CustomerCurrency,
-  cm_2.PaymentTerms,
-  cm_2.SalesDistrict,
-  item_0.SalesDocumentItem,
-  item_0.OrderQuantity,
-  item_0.OrderQuantityUnit,
-  item_0.NetAmount,
-  item_0.Currency,
-  item_0.StorageLocation,
-  item_0.PricingDate,
-  item_0.MaterialCode,
-  mm_3.MaterialName,
-  mm_3.MaterialGroup,
-  mm_3.BaseUnit,
-  mm_3.ProductHierarchy,
-  mm_3.TaxClassification,
-  item_0.Plant,
-  pm_4.PlantName,
-  pm_4.CompanyCode,
-  pm_4.FactoryCalendar
-FROM ((((com_example_bp_SalesDocItem AS item_0 INNER JOIN com_example_bp_SalesDocHeader AS hdr_1 ON hdr_1.SalesDocument = item_0.SalesDocument) LEFT JOIN com_example_bp_master_CustomerMaster AS cm_2 ON cm_2.CustomerID = hdr_1.CustomerID AND cm_2.SalesOrganization = hdr_1.SalesOrganization AND cm_2.DistributionChannel = hdr_1.DistributionChannel AND cm_2.Division = hdr_1.Division) LEFT JOIN com_example_bp_master_MaterialMaster AS mm_3 ON mm_3.MaterialCode = item_0.MaterialCode) LEFT JOIN com_example_bp_master_PlantMaster AS pm_4 ON pm_4.Plant = item_0.Plant);
+  oh_0.SalesDocument,
+  oh_0.SalesDocumentItem,
+  oh_0.SalesOrganization,
+  oh_0.DistributionChannel,
+  oh_0.Division,
+  oh_0.CustomerID,
+  oh_0.MaterialCode,
+  oh_0.Plant,
+  cm_1.CustomerName,
+  cm_1.CustomerGroup,
+  cm_1.Currency AS CustomerCurrency,
+  cm_1.PaymentTerms,
+  cm_1.SalesDistrict,
+  mm_2.MaterialName,
+  mm_2.MaterialGroup,
+  mm_2.BaseUnit,
+  mm_2.ProductHierarchy,
+  mm_2.TaxClassification,
+  pm_3.PlantName,
+  pm_3.CompanyCode,
+  pm_3.FactoryCalendar
+FROM (((com_example_bp_OrderHeader AS oh_0 LEFT JOIN com_example_bp_master_CustomerMaster AS cm_1 ON cm_1.CustomerID = oh_0.CustomerID AND cm_1.SalesOrganization = oh_0.SalesOrganization AND cm_1.DistributionChannel = oh_0.DistributionChannel AND cm_1.Division = oh_0.Division) LEFT JOIN com_example_bp_master_MaterialMaster AS mm_2 ON mm_2.MaterialCode = oh_0.MaterialCode) LEFT JOIN com_example_bp_master_PlantMaster AS pm_3 ON pm_3.Plant = oh_0.Plant);
 
 CREATE VIEW SalesDocumentService_S4SalesDocuments AS SELECT
   ZcSalesDocument_0.SalesDocument,

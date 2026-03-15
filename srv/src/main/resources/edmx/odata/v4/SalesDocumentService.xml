@@ -114,33 +114,23 @@
           <PropertyRef Name="SalesDocumentItem"/>
         </Key>
         <Property Name="SalesDocument" Type="Edm.String" MaxLength="10" Nullable="false"/>
-        <Property Name="SalesDocumentDate" Type="Edm.Date"/>
-        <Property Name="SalesDocumentType" Type="Edm.String" MaxLength="4"/>
+        <Property Name="SalesDocumentItem" Type="Edm.String" MaxLength="6" Nullable="false"/>
         <Property Name="SalesOrganization" Type="Edm.String" MaxLength="4"/>
         <Property Name="DistributionChannel" Type="Edm.String" MaxLength="2"/>
         <Property Name="Division" Type="Edm.String" MaxLength="2"/>
-        <Property Name="Status" Type="Edm.String" MaxLength="2" DefaultValue="01"/>
-        <Property Name="ErrorMessage" Type="Edm.String" MaxLength="255"/>
         <Property Name="CustomerID" Type="Edm.String" MaxLength="10"/>
+        <Property Name="MaterialCode" Type="Edm.String" MaxLength="18"/>
+        <Property Name="Plant" Type="Edm.String" MaxLength="4"/>
         <Property Name="CustomerName" Type="Edm.String" MaxLength="80"/>
         <Property Name="CustomerGroup" Type="Edm.String" MaxLength="4"/>
         <Property Name="CustomerCurrency" Type="Edm.String" MaxLength="5"/>
         <Property Name="PaymentTerms" Type="Edm.String" MaxLength="4"/>
         <Property Name="SalesDistrict" Type="Edm.String" MaxLength="6"/>
-        <Property Name="SalesDocumentItem" Type="Edm.String" MaxLength="6" Nullable="false"/>
-        <Property Name="OrderQuantity" Type="Edm.Decimal" Precision="13" Scale="3"/>
-        <Property Name="OrderQuantityUnit" Type="Edm.String" MaxLength="3"/>
-        <Property Name="NetAmount" Type="Edm.Decimal" Precision="15" Scale="2"/>
-        <Property Name="Currency" Type="Edm.String" MaxLength="5"/>
-        <Property Name="StorageLocation" Type="Edm.String" MaxLength="4"/>
-        <Property Name="PricingDate" Type="Edm.Date"/>
-        <Property Name="MaterialCode" Type="Edm.String" MaxLength="18"/>
         <Property Name="MaterialName" Type="Edm.String" MaxLength="40"/>
         <Property Name="MaterialGroup" Type="Edm.String" MaxLength="9"/>
         <Property Name="BaseUnit" Type="Edm.String" MaxLength="3"/>
         <Property Name="ProductHierarchy" Type="Edm.String" MaxLength="18"/>
         <Property Name="TaxClassification" Type="Edm.String" MaxLength="1"/>
-        <Property Name="Plant" Type="Edm.String" MaxLength="4"/>
         <Property Name="PlantName" Type="Edm.String" MaxLength="30"/>
         <Property Name="CompanyCode" Type="Edm.String" MaxLength="4"/>
         <Property Name="FactoryCalendar" Type="Edm.String" MaxLength="2"/>

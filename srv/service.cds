@@ -103,63 +103,55 @@ service SalesDocumentService @(path: '/api/sales-documents') {
   // 売上伝票明細ビュー（マスタ LEFT JOIN）
   //
   // 用途:
-  //   - イベントハンドラがマスタ補完済みデータを一括参照する際に使用
-  //   - 画面/APIへの表示用途にも利用可能
+  //   - createSalesDocuments アクションがマスタ補完済みデータを一括参照する際に使用
+  //   - ZcSalesDocument の各項目値を検索条件としてマスタ値を取得する
   //
-  // JOIN 対象（すべてシノニム経由でHANAレベルのJOIN）:
-  //   - SalesDocHeader × SalesDocItem      … 内部結合（明細必須）
-  //   - SalesDocHeader × CustomerMaster    … LEFT JOIN（得意先マスタ）
-  //   - SalesDocItem   × MaterialMaster    … LEFT JOIN（品目マスタ）
-  //   - SalesDocItem   × PlantMaster       … LEFT JOIN（プラントマスタ）
+  // 起点:
+  //   - db.OrderHeader（受注ヘッダ）
+  //   ※ SalesDocHeader/SalesDocItem/SalesDocDetail（作成対象エンティティ）は結合しない
+  //
+  // JOIN 対象:
+  //   - OrderHeader × CustomerMaster … LEFT JOIN（得意先マスタ）
+  //   - OrderHeader × MaterialMaster … LEFT JOIN（品目マスタ）
+  //   - OrderHeader × PlantMaster    … LEFT JOIN（プラントマスタ）
   // ----------------------------------------------------------
   @readonly
   view SalesDocItemView as
-    select from db.SalesDocItem as item
-    join       db.SalesDocHeader       as hdr on  hdr.SalesDocument = item.SalesDocument
-    left join  db.master.CustomerMaster as cm  on  cm.CustomerID          = hdr.CustomerID
-                                               and cm.SalesOrganization   = hdr.SalesOrganization
-                                               and cm.DistributionChannel = hdr.DistributionChannel
-                                               and cm.Division            = hdr.Division
-    left join  db.master.MaterialMaster as mm  on  mm.MaterialCode  = item.MaterialCode
-    left join  db.master.PlantMaster    as pm  on  pm.Plant         = item.Plant
+    select from db.OrderHeader as oh
+    left join  db.master.CustomerMaster as cm  on  cm.CustomerID          = oh.CustomerID
+                                               and cm.SalesOrganization   = oh.SalesOrganization
+                                               and cm.DistributionChannel = oh.DistributionChannel
+                                               and cm.Division            = oh.Division
+    left join  db.master.MaterialMaster as mm  on  mm.MaterialCode = oh.MaterialCode
+    left join  db.master.PlantMaster    as pm  on  pm.Plant        = oh.Plant
   {
-    // ヘッダ項目
-    key item.SalesDocument,
-    hdr.SalesDocumentDate,
-    hdr.SalesDocumentType,
-    hdr.SalesOrganization,
-    hdr.DistributionChannel,
-    hdr.Division,
-    hdr.Status,
-    hdr.ErrorMessage,
+    // キー
+    key oh.SalesDocument,
+    key oh.SalesDocumentItem,
 
-    // 得意先（CustomerMaster から補完）
-    hdr.CustomerID,
+    // 受注ヘッダ項目（マスタ JOIN キー）
+    oh.SalesOrganization,
+    oh.DistributionChannel,
+    oh.Division,
+    oh.CustomerID,
+    oh.MaterialCode,
+    oh.Plant,
+
+    // 得意先マスタ補完
     cm.CustomerName,
     cm.CustomerGroup,
-    cm.Currency          as CustomerCurrency,
+    cm.Currency       as CustomerCurrency,
     cm.PaymentTerms,
     cm.SalesDistrict,
 
-    // 明細項目
-    key item.SalesDocumentItem,
-    item.OrderQuantity,
-    item.OrderQuantityUnit,
-    item.NetAmount,
-    item.Currency,
-    item.StorageLocation,
-    item.PricingDate,
-
-    // 品目（MaterialMaster から補完）
-    item.MaterialCode,
+    // 品目マスタ補完
     mm.MaterialName,
     mm.MaterialGroup,
     mm.BaseUnit,
     mm.ProductHierarchy,
     mm.TaxClassification,
 
-    // プラント（PlantMaster から補完）
-    item.Plant,
+    // プラントマスタ補完
     pm.PlantName,
     pm.CompanyCode,
     pm.FactoryCalendar
