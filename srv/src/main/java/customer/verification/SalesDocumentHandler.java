@@ -6,6 +6,7 @@ import cds.gen.com.example.bp.SalesDocItem;
 
 import com.sap.cds.Result;
 import com.sap.cds.Row;
+import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.EventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -15,10 +16,14 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import com.sap.cds.services.persistence.PersistenceService;
 import com.sap.cds.services.runtime.CdsRuntime;
 
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -62,6 +67,11 @@ public class SalesDocumentHandler implements EventHandler {
     /** SalesDocItemView のフルパス（サービス名.ビュー名） */
     private static final String MASTER_VIEW      = "SalesDocumentService.SalesDocItemView";
 
+    /** 登録先エンティティパス（スキーマの名前空間.エンティティ名） */
+    private static final String HEADER_ENTITY = "com.example.bp.SalesDocHeader";
+    private static final String ITEM_ENTITY   = "com.example.bp.SalesDocItem";
+    private static final String DETAIL_ENTITY = "com.example.bp.SalesDocDetail";
+
     // ---------------------------------------------------------------
     // 依存サービス
     // ---------------------------------------------------------------
@@ -70,6 +80,20 @@ public class SalesDocumentHandler implements EventHandler {
 
     @Autowired
     private CdsRuntime runtime;
+
+    @Autowired
+    private PlatformTransactionManager txManager;
+
+    /** 伝票番号単位の独立したトランザクション制御に使用 */
+    private TransactionTemplate transactionTemplate;
+
+    @PostConstruct
+    private void init() {
+        transactionTemplate = new TransactionTemplate(txManager);
+        // REQUIRES_NEW: 伝票ごとに独立したトランザクションを開始する
+        // 1伝票の失敗が他伝票のコミット済み結果に影響しない
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+    }
 
     // ====================================================================
     // 内部データクラス
@@ -146,19 +170,18 @@ public class SalesDocumentHandler implements EventHandler {
         //   NOTE: マスタ取得方法が変わる場合は fetchMasterData のみ修正する
         Map<String, SalesDocBuildResult> buildResults = buildSalesDocuments(s4Records);
 
-        // 件数集計
-        int headerCount = buildResults.size();
-        int itemCount   = buildResults.values().stream()
-                              .mapToInt(r -> r.itemEntries.size()).sum();
-        int detailCount = buildResults.values().stream()
-                              .mapToInt(r -> r.details.size()).sum();
+        // STEP6: 伝票番号単位でDB登録
+        //   1伝票の登録失敗が他伝票に影響しないよう、トランザクションは伝票番号単位で独立
+        int[] counts = saveDocuments(buildResults);
+        // counts[0]=headersCreated, [1]=itemsCreated, [2]=detailsCreated, [3]=errorCount
 
         String msg = String.format(
-            "Build completed. Headers=%d, Items=%d, Details=%d",
-            headerCount, itemCount, detailCount);
+            "Completed. Headers=%d, Items=%d, Details=%d, Errors=%d",
+            counts[0], counts[1], counts[2], counts[3]);
         log.info(msg);
 
-        setResult(ctx, true, msg, headerCount, itemCount, detailCount, 0);
+        boolean success = counts[3] == 0;
+        setResult(ctx, success, msg, counts[0], counts[1], counts[2], counts[3]);
     }
 
     // ====================================================================
@@ -319,6 +342,66 @@ public class SalesDocumentHandler implements EventHandler {
         }
 
         return results;
+    }
+
+    // ====================================================================
+    // STEP6: DB登録（伝票番号単位トランザクション）
+    // ====================================================================
+
+    /**
+     * 伝票番号単位でヘッダ・明細・詳細をDBに登録する。
+     *
+     * <p>トランザクションは伝票番号単位で独立（REQUIRES_NEW）。
+     * ある伝票の登録失敗は他伝票のコミット結果に影響しない。
+     *
+     * @param buildResults 伝票番号 → SalesDocBuildResult のMap
+     * @return int[4] { headersCreated, itemsCreated, detailsCreated, errorCount }
+     */
+    private int[] saveDocuments(Map<String, SalesDocBuildResult> buildResults) {
+
+        int headersCreated = 0;
+        int itemsCreated   = 0;
+        int detailsCreated = 0;
+        int errorCount     = 0;
+
+        for (Map.Entry<String, SalesDocBuildResult> entry : buildResults.entrySet()) {
+            String              docNum = entry.getKey();
+            SalesDocBuildResult result = entry.getValue();
+
+            try {
+                // 伝票1件を独立したトランザクションで登録
+                transactionTemplate.execute(status -> {
+
+                    // ① ヘッダ登録（1件）
+                    db.run(Insert.into(HEADER_ENTITY).entry(result.header));
+
+                    // ② 明細登録（明細番号単位, 複数件）
+                    List<SalesDocItem> items = result.getItems();
+                    if (!items.isEmpty()) {
+                        db.run(Insert.into(ITEM_ENTITY).entries(items));
+                    }
+
+                    // ③ 詳細登録（連番単位, 複数件）
+                    if (!result.details.isEmpty()) {
+                        db.run(Insert.into(DETAIL_ENTITY).entries(result.details));
+                    }
+
+                    return null;
+                });
+
+                headersCreated += 1;
+                itemsCreated   += result.itemEntries.size();
+                detailsCreated += result.details.size();
+                log.info("Saved: SalesDocument={}, items={}, details={}",
+                         docNum, result.itemEntries.size(), result.details.size());
+
+            } catch (Exception e) {
+                errorCount++;
+                log.error("Failed to save SalesDocument={}: {}", docNum, e.getMessage(), e);
+            }
+        }
+
+        return new int[]{ headersCreated, itemsCreated, detailsCreated, errorCount };
     }
 
     // ====================================================================
