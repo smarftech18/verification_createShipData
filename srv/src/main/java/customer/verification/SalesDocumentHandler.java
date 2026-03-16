@@ -79,13 +79,41 @@ public class SalesDocumentHandler implements EventHandler {
      * 伝票単位の作成データを保持する。
      * DB登録は行わず、データ構造のみを保持する（登録は別機能が担う）。
      */
-    public static class SalesDocBuildResult {
-        public final SalesDocHeader       header;
-        public final List<SalesDocItem>   items   = new ArrayList<>();
-        public final List<SalesDocDetail> details = new ArrayList<>();
+    /**
+     * 明細と新規フラグをペアで保持する。
+     */
+    public static class SalesDocItemEntry {
+        public final SalesDocItem item;
+        /** 新規作成された明細か（同一キーがMapに存在しなかった場合に true） */
+        public final boolean      isNew;
 
-        public SalesDocBuildResult(SalesDocHeader header) {
-            this.header = header;
+        public SalesDocItemEntry(SalesDocItem item, boolean isNew) {
+            this.item  = item;
+            this.isNew = isNew;
+        }
+    }
+
+    /**
+     * 伝票単位の作成データを保持する。
+     * DB登録は行わず、データ構造のみを保持する（登録は別機能が担う）。
+     */
+    public static class SalesDocBuildResult {
+        public final SalesDocHeader           header;
+        public final List<SalesDocItemEntry>  itemEntries = new ArrayList<>();
+        public final List<SalesDocDetail>     details     = new ArrayList<>();
+        /** 新規作成されたヘッダか（同一伝票番号キーがMapに存在しなかった場合に true） */
+        public final boolean                  headerIsNew;
+
+        public SalesDocBuildResult(SalesDocHeader header, boolean headerIsNew) {
+            this.header      = header;
+            this.headerIsNew = headerIsNew;
+        }
+
+        /** 後方互換用: 明細エンティティのみのリストを返す */
+        public List<SalesDocItem> getItems() {
+            List<SalesDocItem> list = new ArrayList<>();
+            for (SalesDocItemEntry e : itemEntries) list.add(e.item);
+            return list;
         }
     }
 
@@ -113,23 +141,15 @@ public class SalesDocumentHandler implements EventHandler {
             return;
         }
 
-        // STEP3: 伝票番号でグループ化
-        //   LinkedHashMap で取得順序を保持する
-        Map<String, List<Row>> byDocument = s4Records.stream()
-            .collect(Collectors.groupingBy(
-                r -> (String) r.get("SalesDocument"),
-                LinkedHashMap::new,
-                Collectors.toList()
-            ));
-
-        // STEP4/5: S4レコード単位でマスタ取得 → エンティティ作成 → 伝票番号単位で返却
+        // STEP3/4/5: S4レコード単位でマスタ取得 → エンティティ作成 → 伝票番号単位で返却
+        //   Map によりヘッダ・明細の新規/既存を判定しながら処理する
         //   NOTE: マスタ取得方法が変わる場合は fetchMasterData のみ修正する
-        Map<String, SalesDocBuildResult> buildResults = buildSalesDocuments(byDocument);
+        Map<String, SalesDocBuildResult> buildResults = buildSalesDocuments(s4Records);
 
         // 件数集計
         int headerCount = buildResults.size();
         int itemCount   = buildResults.values().stream()
-                              .mapToInt(r -> r.items.size()).sum();
+                              .mapToInt(r -> r.itemEntries.size()).sum();
         int detailCount = buildResults.values().stream()
                               .mapToInt(r -> r.details.size()).sum();
 
@@ -232,68 +252,70 @@ public class SalesDocumentHandler implements EventHandler {
      * <p>S4レコード単位でマスタデータを取得してからエンティティを作成する。
      * DB登録は行わない。呼び出し元がリストを受け取り、別機能で登録する。
      *
-     * @param byDocument 伝票番号でグループ化した ZcSalesDocument レコード
+     * <p>ZcSalesDocument のキー構成: SalesDocument + SalesDocumentItem + SequentialNumber
+     * <ul>
+     *   <li>ヘッダキー（SalesDocument）が初出 → 新規ヘッダ（headerIsNew=true）</li>
+     *   <li>明細キー（SalesDocument_SalesDocumentItem）が初出 → 新規明細（isNew=true）</li>
+     *   <li>同一ヘッダ/明細キーの2件目以降 → 新規詳細のみ追加</li>
+     * </ul>
+     *
+     * @param s4Records ZcSalesDocument の全レコード（SalesDocument→Item→SequentialNumber順）
      * @return 伝票番号 → SalesDocBuildResult のMap
      */
-    private Map<String, SalesDocBuildResult> buildSalesDocuments(
-            Map<String, List<Row>> byDocument) {
+    private Map<String, SalesDocBuildResult> buildSalesDocuments(List<Row> s4Records) {
 
         // 結果Map（取得順序を保持）
         Map<String, SalesDocBuildResult> results = new LinkedHashMap<>();
 
-        for (Map.Entry<String, List<Row>> docEntry : byDocument.entrySet()) {
-            String    docNum  = docEntry.getKey();
-            List<Row> docRecs = docEntry.getValue();
-            Row       first   = docRecs.get(0);
+        // ヘッダ新規/既存判定用: key = SalesDocument
+        Map<String, SalesDocHeader> headerSeenMap = new LinkedHashMap<>();
+        // 明細新規/既存判定用: key = SalesDocument + "_" + SalesDocumentItem
+        Map<String, SalesDocItem>   itemSeenMap   = new LinkedHashMap<>();
 
-            // ---- ヘッダ作成 ----
-            // CustomerMaster の補完値はヘッダ単位で取得する
-            // 先頭明細レコードの条件でマスタを取得する（ヘッダ共通のマスタ値）
-            Row headerMaster = fetchMasterData(first);
+        for (Row rec : s4Records) {
+            String salesDocument     = (String) rec.get("SalesDocument");
+            String salesDocumentItem = (String) rec.get("SalesDocumentItem");
+            String headerKey = salesDocument;
+            String itemKey   = salesDocument + "_" + salesDocumentItem;
 
-            SalesDocHeader      header      = buildHeader(first, headerMaster);
-            SalesDocBuildResult buildResult = new SalesDocBuildResult(header);
-
-            // 明細番号でグループ化
-            Map<String, List<Row>> byItem = docRecs.stream()
-                .collect(Collectors.groupingBy(
-                    r -> (String) r.get("SalesDocumentItem"),
-                    LinkedHashMap::new,
-                    Collectors.toList()
-                ));
-
-            BigDecimal totalNetAmount = BigDecimal.ZERO;
-
-            for (Map.Entry<String, List<Row>> itemEntry : byItem.entrySet()) {
-                List<Row> itemRecs  = itemEntry.getValue();
-                Row       firstItem = itemRecs.get(0);
-
-                // ---- 明細作成 ----
-                // MaterialMaster / PlantMaster の補完値は明細単位で取得する
-                // 明細レコードの条件でマスタを取得する（明細ごとに品目・プラントが変動）
-                Row itemMaster = fetchMasterData(firstItem);
-
-                SalesDocItem item = buildItem(firstItem, itemMaster);
-                buildResult.items.add(item);
-
-                // 合計金額集計（ヘッダ更新用）
-                Object netAmt = firstItem.get("NetAmount");
-                if (netAmt instanceof BigDecimal bd) {
-                    totalNetAmount = totalNetAmount.add(bd);
-                }
-
-                // ---- 詳細作成（SequentialNumber 単位） ----
-                // ZcSalesDocument の1レコード = 1詳細（連番単位で詳細区分・条件が変動）
-                for (Row detailRec : itemRecs) {
-                    SalesDocDetail detail = buildDetail(detailRec);
-                    buildResult.details.add(detail);
-                }
+            // ---- ヘッダ ----
+            // headerSeenMap にキーが存在しない = このレコードで初めて登場した伝票番号 → 新規
+            boolean headerIsNew = !headerSeenMap.containsKey(headerKey);
+            if (headerIsNew) {
+                // CustomerMaster の補完値はヘッダ単位で取得する（伝票の先頭レコードのみ）
+                Row headerMaster = fetchMasterData(rec);
+                SalesDocHeader header = buildHeader(rec, headerMaster);
+                headerSeenMap.put(headerKey, header);
+                results.put(salesDocument, new SalesDocBuildResult(header, true));
+                log.debug("New header: SalesDocument={}", salesDocument);
             }
 
-            // 合計金額をヘッダに反映
-            header.setTotalNetAmount(totalNetAmount);
+            SalesDocBuildResult buildResult = results.get(salesDocument);
 
-            results.put(docNum, buildResult);
+            // ---- 明細 ----
+            // itemSeenMap にキーが存在しない = この明細番号の初回登場 → 新規
+            boolean itemIsNew = !itemSeenMap.containsKey(itemKey);
+            if (itemIsNew) {
+                // MaterialMaster / PlantMaster の補完値は明細単位で取得する（明細の先頭レコードのみ）
+                Row itemMaster = fetchMasterData(rec);
+                SalesDocItem item = buildItem(rec, itemMaster);
+                itemSeenMap.put(itemKey, item);
+                buildResult.itemEntries.add(new SalesDocItemEntry(item, true));
+
+                // 合計金額集計（明細の初回登場時のみ加算）
+                Object netAmt = rec.get("NetAmount");
+                if (netAmt instanceof BigDecimal bd) {
+                    BigDecimal current = buildResult.header.getTotalNetAmount();
+                    buildResult.header.setTotalNetAmount(
+                        (current != null ? current : BigDecimal.ZERO).add(bd));
+                }
+                log.debug("New item: SalesDocument={}, SalesDocumentItem={}", salesDocument, salesDocumentItem);
+            }
+
+            // ---- 詳細 ----
+            // ZcSalesDocument の1レコード = 1詳細（SequentialNumber 単位で必ず新規）
+            SalesDocDetail detail = buildDetail(rec);
+            buildResult.details.add(detail);
         }
 
         return results;
