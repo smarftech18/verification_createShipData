@@ -6,9 +6,7 @@ import cds.gen.com.example.bp.SalesDocItem;
 
 import com.sap.cds.Result;
 import com.sap.cds.Row;
-import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Select;
-import com.sap.cds.ql.cqn.CqnPredicate;
 import com.sap.cds.services.EventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
@@ -34,8 +32,7 @@ import java.util.stream.Collectors;
  *   <li>インプットパラメータ（伝票番号）をイベントコンテキストから取得する</li>
  *   <li>ZC_SALESDOCUMENT_SERVICE から対象伝票データを取得する</li>
  *   <li>取得データを伝票番号でグループ化する</li>
- *   <li>SalesDocItemView からマスタ補完データを一括取得する（OR of AND）</li>
- *   <li>ZcSalesDocument + SalesDocItemView のデータを3種類のエンティティにマッピングする</li>
+ *   <li>S4レコード単位で SalesDocItemView からマスタデータを取得しエンティティを作成する</li>
  *   <li>伝票番号単位のデータ作成結果を返却する（DB登録は別機能が担う）</li>
  * </ol>
  *
@@ -77,28 +74,6 @@ public class SalesDocumentHandler implements EventHandler {
     // ====================================================================
     // 内部データクラス
     // ====================================================================
-
-    /**
-     * SalesDocItemView の検索キー。
-     *
-     * <p>ZcSalesDocument の各レコードが持つ条件の組み合わせを表す。
-     * Java record により equals / hashCode が自動生成されるため Map のキーとして使用できる。
-     *
-     * <p>フィールドの選定根拠:
-     * <ul>
-     *   <li>SalesDocument + SalesDocumentItem : SalesDocItemView のキー項目</li>
-     *   <li>SalesOrganization + DistributionChannel + Division : CustomerMaster の JOIN キー</li>
-     *   <li>CustomerID : CustomerMaster の JOIN キー（販売エリアと組み合わせで一意）</li>
-     * </ul>
-     */
-    record MasterKey(
-        String salesDocument,
-        String salesDocumentItem,
-        String salesOrganization,
-        String distributionChannel,
-        String division,
-        String customerId
-    ) {}
 
     /**
      * 伝票単位の作成データを保持する。
@@ -147,14 +122,9 @@ public class SalesDocumentHandler implements EventHandler {
                 Collectors.toList()
             ));
 
-        // STEP4: SalesDocItemView からマスタデータを一括取得（OR of AND）
-        //   検索条件: ZcSalesDocument の各レコードが持つ条件の組み合わせ
-        //   NOTE: 将来的に取得方法が変わる場合は fetchMasterData のみ修正する
-        Map<MasterKey, Row> masterMap = fetchMasterData(s4Records);
-
-        // STEP5/6: エンティティへのマッピング・伝票番号単位で返却
-        Map<String, SalesDocBuildResult> buildResults =
-            buildSalesDocuments(byDocument, masterMap);
+        // STEP4/5: S4レコード単位でマスタ取得 → エンティティ作成 → 伝票番号単位で返却
+        //   NOTE: マスタ取得方法が変わる場合は fetchMasterData のみ修正する
+        Map<String, SalesDocBuildResult> buildResults = buildSalesDocuments(byDocument);
 
         // 件数集計
         int headerCount = buildResults.size();
@@ -206,98 +176,67 @@ public class SalesDocumentHandler implements EventHandler {
     }
 
     // ====================================================================
-    // STEP4: マスタデータ一括取得（OR of AND）
+    // STEP4: マスタデータ取得（S4レコード単位）
     // ====================================================================
 
     /**
-     * SalesDocItemView からマスタ補完データを一括取得する。
+     * SalesDocItemView から1レコード分のマスタ補完データを取得する。
      *
-     * <p>【取得方式: OR of AND】
-     * ZcSalesDocument の各レコードが持つ条件の組み合わせを MasterKey として収集し、
-     * 組み合わせごとに AND 条件を生成、全体を OR でつないで1回のクエリで取得する。
-     *
-     * <p>発行されるSQL（イメージ）:
-     * <pre>
-     * WHERE (SalesDocument='4500000001' AND SalesDocumentItem='000010' AND CustomerID='C001' AND ...)
-     *    OR (SalesDocument='4500000001' AND SalesDocumentItem='000020' AND CustomerID='C001' AND ...)
-     *    OR (SalesDocument='4500000002' AND SalesDocumentItem='000010' AND CustomerID='C002' AND ...)
-     * </pre>
+     * <p>S4レコードの各項目値を検索条件として使用する。
+     * レコードによって CustomerID・販売エリア・品目・プラントの組み合わせが異なるため、
+     * レコード単位で都度取得する。
      *
      * <p>NOTE: SalesDocItemView の起点テーブルや結合方法が変わる場合でも、
      * このメソッドのインターフェース（引数/戻り値）は変わらないため、
      * 呼び出し元への影響を局所化できる。
      *
-     * @param s4Records ZcSalesDocument の全取得レコード
-     * @return MasterKey → マスタ補完Row のMap
+     * @param s4Record ZcSalesDocument の1レコード（検索条件の値を持つ）
+     * @return マスタ補完Row。対象データが存在しない場合は null
      */
-    private Map<MasterKey, Row> fetchMasterData(List<Row> s4Records) {
+    private Row fetchMasterData(Row s4Record) {
 
-        // ① ZcSalesDocument の各レコードから条件の組み合わせ（重複なし）を収集
-        Set<MasterKey> uniqueKeys = s4Records.stream()
-            .map(r -> new MasterKey(
-                (String) r.get("SalesDocument"),
-                (String) r.get("SalesDocumentItem"),
-                (String) r.get("SalesOrganization"),
-                (String) r.get("DistributionChannel"),
-                (String) r.get("Division"),
-                (String) r.get("CustomerID")
-            ))
-            .collect(Collectors.toSet());
+        // S4レコードの項目値を検索条件として使用
+        // レコードによってこれらの値が変動するため、レコード単位で取得する
+        String salesDocument      = (String) s4Record.get("SalesDocument");
+        String salesDocumentItem  = (String) s4Record.get("SalesDocumentItem");
+        String salesOrganization  = (String) s4Record.get("SalesOrganization");
+        String distributionChannel = (String) s4Record.get("DistributionChannel");
+        String division           = (String) s4Record.get("Division");
+        String customerId         = (String) s4Record.get("CustomerID");
 
-        // ② 組み合わせごとに AND 条件を生成
-        List<CqnPredicate> orConditions = uniqueKeys.stream()
-            .map(k -> CQL.get("SalesDocument")      .eq(k.salesDocument())
-                .and(CQL.get("SalesDocumentItem")    .eq(k.salesDocumentItem()))
-                .and(CQL.get("SalesOrganization")    .eq(k.salesOrganization()))
-                .and(CQL.get("DistributionChannel")  .eq(k.distributionChannel()))
-                .and(CQL.get("Division")             .eq(k.division()))
-                .and(CQL.get("CustomerID")           .eq(k.customerId())))
-            .collect(Collectors.toList());
+        Result result = db.run(
+            Select.from(MASTER_VIEW)
+                  .where(v -> v.get("SalesDocument")      .eq(salesDocument)
+                         .and(v.get("SalesDocumentItem")   .eq(salesDocumentItem))
+                         .and(v.get("SalesOrganization")   .eq(salesOrganization))
+                         .and(v.get("DistributionChannel") .eq(distributionChannel))
+                         .and(v.get("Division")            .eq(division))
+                         .and(v.get("CustomerID")          .eq(customerId)))
+        );
 
-        // ③ 全 AND 条件を OR でつないで1回のクエリで取得
-        CqnPredicate combined = orConditions.stream()
-            .reduce(CqnPredicate::or)
-            .orElseThrow(() -> new IllegalStateException("No conditions to query"));
-
-        Result result = db.run(Select.from(MASTER_VIEW).where(combined));
-
-        // ④ MasterKey → Row の Map に変換（後のマッピングで O(1) 参照するため）
-        Map<MasterKey, Row> masterMap = new HashMap<>();
-        result.forEach(row -> {
-            MasterKey key = new MasterKey(
-                (String) row.get("SalesDocument"),
-                (String) row.get("SalesDocumentItem"),
-                (String) row.get("SalesOrganization"),
-                (String) row.get("DistributionChannel"),
-                (String) row.get("Division"),
-                (String) row.get("CustomerID")
-            );
-            // 同一キーが複数存在する場合は先勝ち（通常は 1:1）
-            masterMap.putIfAbsent(key, row);
-        });
-
-        log.info("Fetched {} records from SalesDocItemView (uniqueKeys={})",
-                 masterMap.size(), uniqueKeys.size());
-        return masterMap;
+        Row master = result.first().orElse(null);
+        if (master == null) {
+            log.warn("Master not found: SalesDocument={}, SalesDocumentItem={}, CustomerID={}",
+                     salesDocument, salesDocumentItem, customerId);
+        }
+        return master;
     }
 
     // ====================================================================
-    // STEP5/6: エンティティへのマッピング・伝票番号単位で返却
+    // STEP4/5: エンティティへのマッピング・伝票番号単位で返却
     // ====================================================================
 
     /**
-     * ZcSalesDocument レコードと SalesDocItemView のマスタデータを使用し、
-     * 3種類のエンティティを伝票番号単位で組み立てる。
+     * ZcSalesDocument レコードを伝票番号単位で処理し、3種類のエンティティを組み立てる。
      *
-     * <p>DB登録は行わない。呼び出し元がリストを受け取り、別機能で登録する。
+     * <p>S4レコード単位でマスタデータを取得してからエンティティを作成する。
+     * DB登録は行わない。呼び出し元がリストを受け取り、別機能で登録する。
      *
      * @param byDocument 伝票番号でグループ化した ZcSalesDocument レコード
-     * @param masterMap  SalesDocItemView から取得したマスタデータ（キー: MasterKey）
      * @return 伝票番号 → SalesDocBuildResult のMap
      */
     private Map<String, SalesDocBuildResult> buildSalesDocuments(
-            Map<String, List<Row>> byDocument,
-            Map<MasterKey, Row> masterMap) {
+            Map<String, List<Row>> byDocument) {
 
         // 結果Map（取得順序を保持）
         Map<String, SalesDocBuildResult> results = new LinkedHashMap<>();
@@ -309,9 +248,8 @@ public class SalesDocumentHandler implements EventHandler {
 
             // ---- ヘッダ作成 ----
             // CustomerMaster の補完値はヘッダ単位で取得する
-            // 先頭明細レコードの条件で MasterKey を作成し Map を参照する
-            MasterKey firstItemKey = toMasterKey(docNum, first);
-            Row       headerMaster = masterMap.get(firstItemKey);
+            // 先頭明細レコードの条件でマスタを取得する（ヘッダ共通のマスタ値）
+            Row headerMaster = fetchMasterData(first);
 
             SalesDocHeader      header      = buildHeader(first, headerMaster);
             SalesDocBuildResult buildResult = new SalesDocBuildResult(header);
@@ -330,13 +268,11 @@ public class SalesDocumentHandler implements EventHandler {
                 List<Row> itemRecs  = itemEntry.getValue();
                 Row       firstItem = itemRecs.get(0);
 
-                // MaterialMaster / PlantMaster の補完値は明細単位で取得する
-                // 明細レコードの条件で MasterKey を作成し Map を参照する
-                // （明細ごとに CustomerID・販売エリアの組み合わせが変動する）
-                MasterKey itemKey    = toMasterKey(docNum, firstItem);
-                Row       itemMaster = masterMap.get(itemKey);
-
                 // ---- 明細作成 ----
+                // MaterialMaster / PlantMaster の補完値は明細単位で取得する
+                // 明細レコードの条件でマスタを取得する（明細ごとに品目・プラントが変動）
+                Row itemMaster = fetchMasterData(firstItem);
+
                 SalesDocItem item = buildItem(firstItem, itemMaster);
                 buildResult.items.add(item);
 
@@ -478,26 +414,6 @@ public class SalesDocumentHandler implements EventHandler {
     // ====================================================================
     // ユーティリティ
     // ====================================================================
-
-    /**
-     * ZcSalesDocument の Row から MasterKey を生成する。
-     *
-     * <p>fetchMasterData と buildSalesDocuments の両方で同じキー生成ロジックを使用するため
-     * メソッドに切り出している。キーの構成フィールドが変わる場合はここだけ修正する。
-     *
-     * @param salesDocument 伝票番号
-     * @param row           ZcSalesDocument の Row
-     */
-    private MasterKey toMasterKey(String salesDocument, Row row) {
-        return new MasterKey(
-            salesDocument,
-            (String) row.get("SalesDocumentItem"),
-            (String) row.get("SalesOrganization"),
-            (String) row.get("DistributionChannel"),
-            (String) row.get("Division"),
-            (String) row.get("CustomerID")
-        );
-    }
 
     private void setResult(EventContext ctx, boolean success, String message,
                            int headers, int items, int details, int errors) {
