@@ -4,9 +4,9 @@
 
 `createSalesDocuments` アクションのイベントハンドラ。
 画面から伝票番号を受け取り、S/4HANA の CDS View（ZcSalesDocument）とマスタデータを使用して
-売上伝票の3種類のエンティティ（ヘッダ・明細・詳細）を作成する。
+売上伝票の3種類のエンティティ（ヘッダ・明細・詳細）を作成し、DBに登録する。
 
-> **NOTE:** このハンドラはデータの「作成」のみを担う。DB への登録は別機能が行う。
+> **NOTE:** マスタデータ取得方法が変わる場合は `fetchMasterData()` のみ修正する。呼び出し元への影響はない。
 
 ---
 
@@ -18,26 +18,41 @@ sequenceDiagram
     participant Handler as SalesDocumentHandler
     participant S4 as ZC_SALESDOCUMENT_SERVICE<br/>（外部 S/4HANA）
     participant View as SalesDocItemView<br/>（ローカルDB）
+    participant DB as ローカルDB<br/>（SalesDocHeader/Item/Detail）
 
     UI->>Handler: createSalesDocuments(salesDocument)
 
     Note over Handler: STEP1<br/>インプットパラメータ取得
 
-    Handler->>S4: SELECT * WHERE SalesDocument = {伝票番号}
+    Handler->>S4: SELECT * WHERE SalesDocument = {伝票番号}<br/>ORDER BY SalesDocument, SalesDocumentItem, SequentialNumber
     S4-->>Handler: ZcSalesDocument レコード（複数）
 
-    Note over Handler: STEP3<br/>伝票番号でグループ化
+    Note over Handler: STEP3/4/5: buildSalesDocuments()<br/>S4レコードをフラットにループ<br/>headerSeenMap / itemSeenMap で<br/>新規/既存を判定しながら組み立て
 
-    Note over Handler: STEP4（OR of AND）<br/>各レコードの条件の組み合わせを<br/>MasterKey として収集
+    loop S4レコード1件ずつ
+        alt ヘッダが新規（headerSeenMap に未登場）
+            Handler->>View: WHERE SalesDocument=? AND SalesDocumentItem=? AND ...
+            View-->>Handler: マスタ補完Row
+            Note over Handler: buildHeader()
+        end
+        alt 明細が新規（itemSeenMap に未登場）
+            Handler->>View: WHERE SalesDocument=? AND SalesDocumentItem=? AND ...
+            View-->>Handler: マスタ補完Row
+            Note over Handler: buildItem()
+        end
+        Note over Handler: buildDetail()（毎回）
+    end
 
-    Handler->>View: WHERE (A AND B AND ...) OR (A AND B AND ...) ...
-    View-->>Handler: マスタ補完済みレコード（複数）
+    Note over Handler: STEP6: saveDocuments()<br/>伝票番号単位でDB登録<br/>トランザクション: REQUIRES_NEW
 
-    Note over Handler: MasterKey → Row の Map に変換
+    loop 伝票1件ずつ（独立トランザクション）
+        Handler->>DB: INSERT INTO SalesDocHeader
+        Handler->>DB: INSERT INTO SalesDocItem（バルク）
+        Handler->>DB: INSERT INTO SalesDocDetail（バルク）
+        Note over DB: COMMIT（失敗時は ROLLBACK）
+    end
 
-    Note over Handler: STEP5/6<br/>エンティティへのマッピング<br/>masterMap.get(MasterKey) で参照<br/>伝票番号単位で結果を組み立て
-
-    Handler-->>UI: { success, headersCreated, itemsCreated, detailsCreated }
+    Handler-->>UI: { success, headersCreated, itemsCreated, detailsCreated, errorCount }
 ```
 
 ---
@@ -63,6 +78,7 @@ EventContext
 ### STEP2 - ZcSalesDocument 取得
 
 外部サービス `ZC_SALESDOCUMENT_SERVICE` に伝票番号を検索条件として投げる。
+ソート順を固定することで後続の Map 処理における処理順序を安定させる。
 
 ```java
 var query = Select.from(S4_ENTITY)
@@ -88,116 +104,64 @@ SalesDocument | SalesDocumentItem | SequentialNumber | DetailCategory | Material
 
 ---
 
-### STEP3 - 伝票番号でグループ化
+### STEP3/4/5 - `buildSalesDocuments()` - エンティティ組み立て
+
+#### 新規/既存判定の仕組み
+
+ZcSalesDocument のキー構成は `SalesDocument + SalesDocumentItem + SequentialNumber`。
+同一レコードが複数行ある場合（SequentialNumber が異なる）は、新しい詳細の行を意味する。
+Map を使うことで、ヘッダ・明細が「初出かどうか」を O(1) で判定できる。
+
+```
+キーと判定ルール:
+
+headerSeenMap: key = SalesDocument
+  → containsKey = false  ⇒ 新規ヘッダ（マスタ取得 + buildHeader）
+  → containsKey = true   ⇒ 既存ヘッダ（スキップ）
+
+itemSeenMap: key = SalesDocument + "_" + SalesDocumentItem
+  → containsKey = false  ⇒ 新規明細（マスタ取得 + buildItem）
+  → containsKey = true   ⇒ 既存明細（スキップ）
+
+詳細: 常に buildDetail（SequentialNumber 単位で必ず新規）
+```
+
+#### S4レコードのトレース例
+
+```
+レコード1: 4500000001 / 000010 / 001
+  headerSeenMap: {} → containsKey=false → 新規ヘッダ作成 put("4500000001")
+  itemSeenMap:   {} → containsKey=false → 新規明細作成 put("4500000001_000010")
+  詳細001 を details に追加
+  TotalNetAmount = 0 + 10,000 = 10,000
+
+レコード2: 4500000001 / 000010 / 002   ← 同一明細の連番違い
+  headerSeenMap: containsKey=true → ヘッダスキップ
+  itemSeenMap:   containsKey=true → 明細スキップ（重複加算を防ぐ）
+  詳細002 を details に追加（詳細は常に追加）
+
+レコード3: 4500000001 / 000020 / 001   ← 別明細
+  headerSeenMap: containsKey=true → ヘッダスキップ
+  itemSeenMap:   "4500000001_000020" なし → 新規明細作成 put
+  詳細001 を details に追加
+  TotalNetAmount = 10,000 + 20,000 = 30,000
+```
+
+#### STEP4 - SalesDocItemView からマスタデータ取得（S4レコード単位）
+
+ヘッダ・明細の新規判定時（初回登場時のみ）に `fetchMasterData()` を呼び出す。
+S4レコードの6項目を検索条件として SalesDocItemView に問い合わせる。
 
 ```java
-Map<String, List<Row>> byDocument = s4Records.stream()
-    .collect(Collectors.groupingBy(
-        r -> (String) r.get("SalesDocument"),
-        LinkedHashMap::new,   // 取得順序を保持
-        Collectors.toList()
-    ));
-```
-
-```
-byDocument = {
-  "4500000001" → [Row(000010/001), Row(000010/002), Row(000020/001)]
-  "4500000002" → [Row(000010/001), ...]
-}
-```
-
----
-
-### STEP4 - SalesDocItemView からマスタデータ一括取得（OR of AND）
-
-#### なぜ OR of AND なのか
-
-検索条件が複数フィールドの「組み合わせ」単位であるため、単純な IN 句では正確な絞り込みができない。
-
-```
-❌ 単純 IN 句
-  WHERE SalesDocument IN ('4500000001', '4500000002')
-  → 伝票番号しか絞れない。条件の組み合わせが一致しない余剰レコードが混入する可能性がある。
-
-✅ OR of AND（このコードの方式）
-  WHERE (SalesDocument='4500000001' AND SalesDocumentItem='000010' AND CustomerID='C001' AND ...)
-     OR (SalesDocument='4500000001' AND SalesDocumentItem='000020' AND CustomerID='C001' AND ...)
-     OR (SalesDocument='4500000002' AND SalesDocumentItem='000010' AND CustomerID='C002' AND ...)
-  → 条件の組み合わせ単位で正確に絞り込める。
-```
-
-#### MasterKey - 条件の組み合わせを表すキー
-
-```java
-record MasterKey(
-    String salesDocument,      // SalesDocItemView のキー
-    String salesDocumentItem,  // SalesDocItemView のキー
-    String salesOrganization,  // CustomerMaster の JOIN キー
-    String distributionChannel,// CustomerMaster の JOIN キー
-    String division,           // CustomerMaster の JOIN キー
-    String customerId          // CustomerMaster の JOIN キー
-) {}
-```
-
-Java の `record` は `equals` / `hashCode` が自動生成されるため、Map のキーとして正しく機能する。
-
-#### 取得〜Map変換の4ステップ
-
-```java
-// ① ZcSalesDocument の各レコードから条件の組み合わせ（重複なし）を収集
-Set<MasterKey> uniqueKeys = s4Records.stream()
-    .map(r -> new MasterKey(
-        (String) r.get("SalesDocument"),
-        (String) r.get("SalesDocumentItem"),
-        (String) r.get("SalesOrganization"),
-        (String) r.get("DistributionChannel"),
-        (String) r.get("Division"),
-        (String) r.get("CustomerID")
-    ))
-    .collect(Collectors.toSet());
-
-// ② 組み合わせごとに AND 条件を生成
-List<CqnPredicate> orConditions = uniqueKeys.stream()
-    .map(k -> CQL.get("SalesDocument")     .eq(k.salesDocument())
-        .and(CQL.get("SalesDocumentItem")  .eq(k.salesDocumentItem()))
-        .and(CQL.get("SalesOrganization")  .eq(k.salesOrganization()))
-        .and(CQL.get("DistributionChannel").eq(k.distributionChannel()))
-        .and(CQL.get("Division")           .eq(k.division()))
-        .and(CQL.get("CustomerID")         .eq(k.customerId())))
-    .collect(Collectors.toList());
-
-// ③ 全 AND 条件を OR でつないで 1 回のクエリで取得
-CqnPredicate combined = orConditions.stream()
-    .reduce(CqnPredicate::or)
-    .orElseThrow();
-
-Result result = db.run(Select.from(MASTER_VIEW).where(combined));
-
-// ④ MasterKey → Row の Map に変換（後のマッピングで O(1) 参照するため）
-Map<MasterKey, Row> masterMap = new HashMap<>();
-result.forEach(row -> {
-    MasterKey key = new MasterKey( /* row から同じフィールドを取り出す */ );
-    masterMap.putIfAbsent(key, row);
-});
-```
-
-#### 取得結果のイメージ
-
-```
-① uniqueKeys（Set）
-  MasterKey("4500000001", "000010", "1000", "10", "00", "C0000001")
-  MasterKey("4500000001", "000020", "1000", "10", "00", "C0000001")
-  MasterKey("4500000002", "000010", "2000", "10", "00", "C0000002")
-
-② → ③ 発行される SQL
-  WHERE (SalesDocument='4500000001' AND SalesDocumentItem='000010' AND SalesOrganization='1000' AND ...)
-     OR (SalesDocument='4500000001' AND SalesDocumentItem='000020' AND SalesOrganization='1000' AND ...)
-     OR (SalesDocument='4500000002' AND SalesDocumentItem='000010' AND SalesOrganization='2000' AND ...)
-
-④ masterMap（HashMap）
-  MasterKey("4500000001","000010",...) → { CustomerName=テック商事,   MaterialName=製品A, PlantName=東京工場, ... }
-  MasterKey("4500000001","000020",...) → { CustomerName=テック商事,   MaterialName=製品B, PlantName=大阪工場, ... }
-  MasterKey("4500000002","000010",...) → { CustomerName=グローバル物産, MaterialName=製品C, PlantName=東京工場, ... }
+Result result = db.run(
+    Select.from(MASTER_VIEW)
+          .where(v -> v.get("SalesDocument")      .eq(salesDocument)
+                 .and(v.get("SalesDocumentItem")   .eq(salesDocumentItem))
+                 .and(v.get("SalesOrganization")   .eq(salesOrganization))
+                 .and(v.get("DistributionChannel") .eq(distributionChannel))
+                 .and(v.get("Division")            .eq(division))
+                 .and(v.get("CustomerID")          .eq(customerId)))
+);
 ```
 
 #### SalesDocItemView の役割
@@ -214,59 +178,13 @@ OrderHeader（受注ヘッダ）
 > **NOTE:** SalesDocItemView の起点テーブルや結合方法が変わる場合でも、
 > `fetchMasterData()` メソッド内のみ修正すれば呼び出し元への影響はない。
 
----
-
-### STEP5/6 - エンティティへのマッピング・返却
-
-#### toMasterKey() - キー生成の一元化
-
-`fetchMasterData`（Map構築時）と `buildSalesDocuments`（Map参照時）で同じキー生成ロジックを使う必要があるため、`toMasterKey()` に切り出している。
-
-```java
-private MasterKey toMasterKey(String salesDocument, Row row) {
-    return new MasterKey(
-        salesDocument,
-        (String) row.get("SalesDocumentItem"),
-        (String) row.get("SalesOrganization"),
-        (String) row.get("DistributionChannel"),
-        (String) row.get("Division"),
-        (String) row.get("CustomerID")
-    );
-}
-// キーの構成フィールドが変わる場合はここだけ修正する
-```
-
-#### グループ化と処理の構造
-
-```
-byDocument（伝票番号でグループ）
-  └─ 伝票 4500000001
-      ├─ toMasterKey(docNum, first)  → MasterKey
-      ├─ masterMap.get(MasterKey)    → headerMaster（CustomerMaster補完値）
-      ├─ buildHeader()               → SalesDocHeader（1件）
-      │
-      └─ byItem（明細番号でグループ）
-          ├─ 明細 000010
-          │    ├─ toMasterKey(docNum, firstItem) → MasterKey
-          │    ├─ masterMap.get(MasterKey)        → itemMaster（Material/Plant補完値）
-          │    ├─ buildItem()                     → SalesDocItem（1件）
-          │    ├─ buildDetail()                   → SalesDocDetail（SequentialNumber 001）
-          │    └─ buildDetail()                   → SalesDocDetail（SequentialNumber 002）
-          │
-          └─ 明細 000020
-               ├─ toMasterKey(docNum, firstItem) → MasterKey（別の組み合わせ）
-               ├─ masterMap.get(MasterKey)        → itemMaster（別のMaterial/Plant補完値）
-               ├─ buildItem()                     → SalesDocItem（1件）
-               └─ buildDetail()                   → SalesDocDetail（SequentialNumber 001）
-```
-
 #### 各エンティティのマッピング元
 
 | エンティティ | フィールド | 取得元 |
-|---|---|---|
+| --- | --- | --- |
 | SalesDocHeader | SalesDocument, SalesOrganization, DistributionChannel, Division | ZcSalesDocument |
 | SalesDocHeader | SalesDocumentDate, SalesDocumentType, CustomerID, Currency | ZcSalesDocument |
-| SalesDocHeader | TotalNetAmount | ZcSalesDocument の NetAmount を伝票単位で合計 |
+| SalesDocHeader | TotalNetAmount | ZcSalesDocument の NetAmount を明細初回登場時に累計 |
 | SalesDocHeader | CustomerName, CustomerGroup | SalesDocItemView（CustomerMaster補完） |
 | SalesDocItem | SalesDocument, SalesDocumentItem, MaterialCode | ZcSalesDocument |
 | SalesDocItem | OrderQuantity, OrderQuantityUnit, NetAmount, Currency | ZcSalesDocument |
@@ -275,18 +193,65 @@ byDocument（伝票番号でグループ）
 | SalesDocItem | PlantName, CompanyCode | SalesDocItemView（PlantMaster補完） |
 | SalesDocDetail | 全フィールド | ZcSalesDocument のみ |
 
-#### 返却形式
+#### buildSalesDocuments() の返却形式
 
-```java
-Map<String, SalesDocBuildResult> results = {
+```
+buildResults = {
   "4500000001" → SalesDocBuildResult {
-                   header  : SalesDocHeader（1件）
-                   items   : List<SalesDocItem>（明細件数分）
-                   details : List<SalesDocDetail>（連番件数分）
-                 }
+    header      : SalesDocHeader { SalesDocument=4500000001, TotalNetAmount=30,000, headerIsNew=true }
+    itemEntries : [
+      SalesDocItemEntry { item=SalesDocItem{000010, MATNR001}, isNew=true }
+      SalesDocItemEntry { item=SalesDocItem{000020, MATNR002}, isNew=true }
+    ]
+    details : [
+      SalesDocDetail { 000010/001 }
+      SalesDocDetail { 000010/002 }
+      SalesDocDetail { 000020/001 }
+    ]
+  }
   "4500000002" → SalesDocBuildResult { ... }
 }
-// DB登録は行わない。登録は別機能が担う。
+```
+
+---
+
+### STEP6 - `saveDocuments()` - DB登録（伝票番号単位トランザクション）
+
+#### トランザクション設計
+
+```
+【なぜ TransactionTemplate を使うか】
+Spring の @Transactional はプロキシ経由で動作する。
+同一クラス内の self-call ではプロキシを経由しないため @Transactional が効かない。
+TransactionTemplate はプロキシ不要でプログラム的にトランザクションを制御できる。
+
+【PROPAGATION_REQUIRES_NEW の動作】
+CAP @On ハンドラ（外側トランザクション = CAP ChangeSet）
+  ├─ 伝票A: execute() → 外側を suspend → 独立トランザクション開始 → COMMIT ✅
+  ├─ 伝票B: execute() → 外側を suspend → 独立トランザクション開始 → COMMIT ✅
+  └─ 伝票C: execute() → 外側を suspend → 独立トランザクション開始 → ROLLBACK ❌
+                          ↑ RuntimeException 発生
+→ 伝票A・Bのデータは残る。伝票Cのデータのみ取り消される。
+→ 外側の CAP ChangeSet がロールバックしても、コミット済み伝票のデータは DB に残る。
+```
+
+#### 1伝票あたりの登録処理
+
+```java
+transactionTemplate.execute(status -> {
+
+    // ① ヘッダ登録（1件）
+    db.run(Insert.into(HEADER_ENTITY).entry(result.header));
+
+    // ② 明細登録（バルクINSERT）
+    db.run(Insert.into(ITEM_ENTITY).entries(items));
+
+    // ③ 詳細登録（バルクINSERT）
+    db.run(Insert.into(DETAIL_ENTITY).entries(result.details));
+
+    return null;  // ① ② ③ すべて成功 → COMMIT
+    // ① 成功後に ② でエラー → ① ② ③ すべて ROLLBACK
+});
 ```
 
 ---
@@ -296,36 +261,43 @@ Map<String, SalesDocBuildResult> results = {
 | 処理 | DB往復 | 説明 |
 |---|---|---|
 | ZcSalesDocument 取得（STEP2） | 1回 | 外部サービスへのクエリ |
-| SalesDocItemView 取得（STEP4） | 1回 | OR of AND で全条件をまとめて取得 |
-| エンティティ組み立て（STEP5/6） | 0回 | masterMap.get(MasterKey) でメモリ内参照 O(1) |
-| **合計** | **2回** | **件数・明細数に依存しない** |
+| SalesDocItemView 取得（STEP4） | ヘッダ・明細のユニーク件数分 | 新規判定時のみ取得（既存はスキップ） |
+| ヘッダ INSERT（STEP6） | 伝票件数分 | 1伝票 = 1回 |
+| 明細 INSERT（STEP6） | 伝票件数分 | entries() でバルクINSERT |
+| 詳細 INSERT（STEP6） | 伝票件数分 | entries() でバルクINSERT |
+
+> 明細・詳細の件数が増えてもバルクINSERT により DB往復は伝票件数分のみ。
 
 ---
 
 ## クラス・メソッド構成
 
-```
+```text
 SalesDocumentHandler
   │
-  ├─ onCreateSalesDocuments()    ← アクションのエントリポイント（全体オーケストレーション）
+  ├─ init()                    ← @PostConstruct: TransactionTemplate（REQUIRES_NEW）の初期化
   │
-  ├─ fetchZcSalesDocuments()     ← STEP2: 外部S4からソースデータ取得
+  ├─ onCreateSalesDocuments()  ← アクションのエントリポイント（全体オーケストレーション）
   │
-  ├─ fetchMasterData()           ← STEP4: SalesDocItemViewからマスタ一括取得（OR of AND）
-  │                                 ※将来の取得方法変更はここだけ修正
+  ├─ fetchZcSalesDocuments()   ← STEP2: 外部S4からソースデータ取得
   │
-  ├─ buildSalesDocuments()       ← STEP5/6: グループ化・マッピング・返却
+  ├─ fetchMasterData()         ← STEP4: SalesDocItemViewからマスタ取得（S4レコード単位）
+  │                               ※将来の取得方法変更はここだけ修正
   │
-  ├─ buildHeader()               ← SalesDocHeader の組み立て
-  ├─ buildItem()                 ← SalesDocItem の組み立て
-  ├─ buildDetail()               ← SalesDocDetail の組み立て
+  ├─ buildSalesDocuments()     ← STEP3/4/5: フラットループ・Map判定・エンティティ組み立て
   │
-  └─ toMasterKey()               ← MasterKey 生成の一元化（fetchMasterData / buildSalesDocuments 共用）
+  ├─ saveDocuments()           ← STEP6: 伝票番号単位でDB登録（REQUIRES_NEW トランザクション）
+  │
+  ├─ buildHeader()             ← SalesDocHeader の組み立て
+  ├─ buildItem()               ← SalesDocItem の組み立て
+  ├─ buildDetail()             ← SalesDocDetail の組み立て
+  │
+  └─ setResult()               ← EventContext への返却値セット
 
 
-  内部クラス / record:
-  ├─ MasterKey                   ← 条件の組み合わせを表すキー（record: equals/hashCode 自動生成）
-  └─ SalesDocBuildResult         ← 伝票単位の作成結果保持（header + items + details）
+  内部クラス:
+  ├─ SalesDocItemEntry         ← 明細エンティティ + isNew フラグのペア
+  └─ SalesDocBuildResult       ← 伝票単位の組み立て結果（header + itemEntries + details）
 ```
 
 ---

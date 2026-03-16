@@ -36,10 +36,14 @@ import java.util.stream.Collectors;
  * <ol>
  *   <li>インプットパラメータ（伝票番号）をイベントコンテキストから取得する</li>
  *   <li>ZC_SALESDOCUMENT_SERVICE から対象伝票データを取得する</li>
- *   <li>取得データを伝票番号でグループ化する</li>
- *   <li>S4レコード単位で SalesDocItemView からマスタデータを取得しエンティティを作成する</li>
- *   <li>伝票番号単位のデータ作成結果を返却する（DB登録は別機能が担う）</li>
+ *   <li>S4レコード単位でマスタデータを取得しエンティティを作成する（Map で新規/既存判定）</li>
+ *   <li>伝票番号単位で独立したトランザクションでDBに登録する</li>
  * </ol>
+ *
+ * <p>【トランザクション設計】
+ * CAP @On ハンドラは1リクエスト = 1 CAP ChangeSet（Springトランザクション）で実行される。
+ * 伝票単位の独立したトランザクションは {@link TransactionTemplate}（REQUIRES_NEW）で実現する。
+ * 詳細は {@link #init()} および {@link #saveDocuments} を参照。
  *
  * <p>NOTE: マスタデータ取得方法は SalesDocItemView を介する方式を採用しているが、
  * 将来的に取得方法が変わる可能性があるため、{@link #fetchMasterData} に集約している。
@@ -87,11 +91,33 @@ public class SalesDocumentHandler implements EventHandler {
     /** 伝票番号単位の独立したトランザクション制御に使用 */
     private TransactionTemplate transactionTemplate;
 
+    /**
+     * トランザクション設定の初期化。
+     *
+     * <p>【なぜ TransactionTemplate を使うか】
+     * Spring の @Transactional アノテーションはプロキシ経由で動作する。
+     * 同一クラス内の自己呼び出し（self-call）ではプロキシを経由しないため
+     * @Transactional が機能しない。
+     * TransactionTemplate はプロキシ不要でプログラム的にトランザクションを制御できるため、
+     * 同一クラス内で伝票単位のトランザクション分割を実現できる。
+     *
+     * <p>【PROPAGATION_REQUIRES_NEW の動作】
+     * <pre>
+     * CAP @On ハンドラ（外側トランザクション = CAP ChangeSet）
+     *   └─ transactionTemplate.execute() が呼ばれると:
+     *        ① 外側トランザクションを一時停止（suspend）
+     *        ② 新しい独立したトランザクションを開始
+     *        ③ db.run() が新トランザクションに参加
+     *        ④ execute() の終了時に commit または rollback
+     *        ⑤ 外側トランザクションを再開（resume）
+     * </pre>
+     * → ある伝票がコミットされた後で別伝票がエラーになっても、
+     *   外側の CAP ChangeSet がロールバックしても、
+     *   既にコミットされた伝票のデータは DB に残る。
+     */
     @PostConstruct
     private void init() {
         transactionTemplate = new TransactionTemplate(txManager);
-        // REQUIRES_NEW: 伝票ごとに独立したトランザクションを開始する
-        // 1伝票の失敗が他伝票のコミット済み結果に影響しない
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
 
@@ -351,8 +377,20 @@ public class SalesDocumentHandler implements EventHandler {
     /**
      * 伝票番号単位でヘッダ・明細・詳細をDBに登録する。
      *
-     * <p>トランザクションは伝票番号単位で独立（REQUIRES_NEW）。
-     * ある伝票の登録失敗は他伝票のコミット結果に影響しない。
+     * <p>【トランザクション分離の仕組み】
+     * <pre>
+     * CAP @On ハンドラ（外側トランザクション）
+     *   ├─ 伝票A: transactionTemplate.execute() → 独立トランザクション → COMMIT ✅
+     *   ├─ 伝票B: transactionTemplate.execute() → 独立トランザクション → COMMIT ✅
+     *   └─ 伝票C: transactionTemplate.execute() → 独立トランザクション → ROLLBACK ❌
+     *                                                ↑ 例外が発生した場合
+     * → 伝票A・Bのデータは残る。伝票Cのデータのみ取り消される。
+     * </pre>
+     *
+     * <p>【ROLLBACK のトリガー】
+     * transactionTemplate.execute() 内で RuntimeException が throw されると
+     * Spring が自動で対象トランザクションをロールバックする。
+     * その例外はここの catch で捕捉し、errorCount に記録して処理を継続する。
      *
      * @param buildResults 伝票番号 → SalesDocBuildResult のMap
      * @return int[4] { headersCreated, itemsCreated, detailsCreated, errorCount }
@@ -369,25 +407,37 @@ public class SalesDocumentHandler implements EventHandler {
             SalesDocBuildResult result = entry.getValue();
 
             try {
-                // 伝票1件を独立したトランザクションで登録
+                // -------------------------------------------------------
+                // 【トランザクション境界】
+                // execute() の開始: 外側トランザクションを suspend し、
+                //                   この伝票専用の新しいトランザクションを開始
+                // execute() の終了: 例外がなければ COMMIT、あれば ROLLBACK
+                // -------------------------------------------------------
                 transactionTemplate.execute(status -> {
 
                     // ① ヘッダ登録（1件）
                     db.run(Insert.into(HEADER_ENTITY).entry(result.header));
 
                     // ② 明細登録（明細番号単位, 複数件）
+                    //    entries() でバルクINSERT → 明細数が増えてもDB往復1回
                     List<SalesDocItem> items = result.getItems();
                     if (!items.isEmpty()) {
                         db.run(Insert.into(ITEM_ENTITY).entries(items));
                     }
 
                     // ③ 詳細登録（連番単位, 複数件）
+                    //    entries() でバルクINSERT → 詳細数が増えてもDB往復1回
                     if (!result.details.isEmpty()) {
                         db.run(Insert.into(DETAIL_ENTITY).entries(result.details));
                     }
 
+                    // ① ② ③ がすべて成功した場合にここに到達し COMMIT される
+                    // ① の後に ② でエラーが起きた場合 → ① ② ③ すべてROLLBACK
                     return null;
                 });
+                // -------------------------------------------------------
+                // ここに到達 = COMMIT 済み
+                // -------------------------------------------------------
 
                 headersCreated += 1;
                 itemsCreated   += result.itemEntries.size();
@@ -396,6 +446,9 @@ public class SalesDocumentHandler implements EventHandler {
                          docNum, result.itemEntries.size(), result.details.size());
 
             } catch (Exception e) {
+                // transactionTemplate.execute() 内で例外が発生した場合にここに到達
+                // 対象伝票のトランザクションはすでに ROLLBACK 済み
+                // 他伝票の処理は継続する（ループを抜けない）
                 errorCount++;
                 log.error("Failed to save SalesDocument={}: {}", docNum, e.getMessage(), e);
             }
