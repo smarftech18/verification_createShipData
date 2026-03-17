@@ -395,7 +395,8 @@ public class SalesDocumentHandler implements EventHandler {
      * @param buildResults 伝票番号 → SalesDocBuildResult のMap
      * @return int[4] { headersCreated, itemsCreated, detailsCreated, errorCount }
      */
-    private int[] saveDocuments(Map<String, SalesDocBuildResult> buildResults) {
+    // package-private: テストから直接呼び出すため（saveDocuments のトランザクション動作を検証する）
+    int[] saveDocuments(Map<String, SalesDocBuildResult> buildResults) {
 
         int headersCreated = 0;
         int itemsCreated   = 0;
@@ -484,7 +485,7 @@ public class SalesDocumentHandler implements EventHandler {
         h.setDivision           ((String)     src.get("Division"));
         h.setSalesDocumentDate  (             src.get("SalesDocumentDate"));
         h.setSalesDocumentType  ((String)     src.get("SalesDocumentType"));
-        h.setCustomerId         ((String)     src.get("CustomerID"));
+        h.setCustomerID         ((String)     src.get("CustomerID"));
         h.setCurrency           ((String)     src.get("Currency"));
         h.setTotalNetAmount     (BigDecimal.ZERO); // buildSalesDocuments で後から合計値を設定
         h.setStatus             (STATUS_PROCESSING);
