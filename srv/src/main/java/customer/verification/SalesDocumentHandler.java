@@ -9,6 +9,7 @@ import com.sap.cds.Row;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.EventContext;
+import com.sap.cds.services.ServiceException;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
@@ -58,6 +59,13 @@ public class SalesDocumentHandler implements EventHandler {
     // 処理ステータス定数
     // ---------------------------------------------------------------
     private static final String STATUS_PROCESSING = "01";
+
+    // ---------------------------------------------------------------
+    // エラーメッセージ収集用
+    // 各処理で発生したエラーをここに追加し、ハンドラ終了時に結果へ反映する
+    // リクエスト開始時に必ず clear() すること（前回リクエストの残りを防ぐ）
+    // ---------------------------------------------------------------
+    private final List<String> errorMessages = new ArrayList<>();
 
     // ---------------------------------------------------------------
     // CDS エンティティ / サービス名定数
@@ -126,9 +134,24 @@ public class SalesDocumentHandler implements EventHandler {
     // ====================================================================
 
     /**
-     * 伝票単位の作成データを保持する。
-     * DB登録は行わず、データ構造のみを保持する（登録は別機能が担う）。
+     * 処理単位（伝票・明細）の失敗を呼び出し元のループへ伝えるカスタム例外。
+     *
+     * <p>【役割】
+     * 「この伝票/明細の処理は失敗した」という事実だけをループ層に伝える。
+     * エラーの詳細は throw する前に {@code errorMessages} へ収集済みのため、
+     * この例外のメッセージ自体は使用しない。
+     *
+     * <p>【伝播範囲】
+     * イベントハンドラ（{@link #onCreateSalesDocuments}）まで届かせない。
+     * ループ層（{@link #buildSalesDocuments} / {@link #saveDocuments}）で catch して
+     * 処理継続（continue）に使う。
      */
+    static class DocumentProcessingException extends RuntimeException {
+        public DocumentProcessingException(String message) {
+            super(message);
+        }
+    }
+
     /**
      * 明細と新規フラグをペアで保持する。
      */
@@ -179,35 +202,54 @@ public class SalesDocumentHandler implements EventHandler {
     @On(event = "createSalesDocuments")
     public void onCreateSalesDocuments(EventContext ctx) {
 
+        // リクエスト開始時に初期化（前回リクエストのエラーメッセージが残らないように）
+        errorMessages.clear();
+
         // STEP1: インプットパラメータ取得
         String salesDocument = (String) ctx.get("salesDocument");
 
         log.info("createSalesDocuments start: salesDocument={}", salesDocument);
 
-        // STEP2: ZcSalesDocument から対象データ取得
-        List<Row> s4Records = fetchZcSalesDocuments(salesDocument);
-        if (s4Records.isEmpty()) {
-            setResult(ctx, false, "No data found in ZcSalesDocument: " + salesDocument, 0, 0, 0, 0);
-            return;
+        try {
+            // STEP2: ZcSalesDocument から対象データ取得
+            // fetchZcSalesDocuments は失敗時に DocumentProcessingException を throw する
+            List<Row> s4Records = fetchZcSalesDocuments(salesDocument);
+            if (s4Records.isEmpty()) {
+                setResult(ctx, false, "No data found in ZcSalesDocument: " + salesDocument, 0, 0, 0, 0);
+                return;
+            }
+
+            // STEP3/4/5: S4レコード単位でマスタ取得 → エンティティ作成 → 伝票番号単位で返却
+            //   Map によりヘッダ・明細の新規/既存を判定しながら処理する
+            //   NOTE: マスタ取得方法が変わる場合は fetchMasterData のみ修正する
+            Map<String, SalesDocBuildResult> buildResults = buildSalesDocuments(s4Records);
+
+            // STEP6: 伝票番号単位でDB登録
+            //   1伝票の登録失敗が他伝票に影響しないよう、トランザクションは伝票番号単位で独立
+            int[] counts = saveDocuments(buildResults);
+            // counts[0]=headersCreated, [1]=itemsCreated, [2]=detailsCreated, [3]=errorCount
+
+            boolean success = errorMessages.isEmpty();
+            String msg = buildResultMessage(counts, success);
+            log.info(msg);
+            setResult(ctx, success, msg, counts[0], counts[1], counts[2], counts[3]);
+
+        } catch (DocumentProcessingException e) {
+            // fetchZcSalesDocuments が失敗した場合（S4接続エラー等でデータ取得が不可能）
+            // エラーメッセージはすでに errorMessages に収集済み
+            String msg = String.join("\n", errorMessages);
+            log.error("createSalesDocuments failed: {}", msg);
+            setResult(ctx, false, msg, 0, 0, 0, 1);
+
+        } catch (Exception e) {
+            // 予期しない例外の保険 catch
+            // DocumentProcessingException 以外の想定外の例外がここで止まる
+            errorMessages.add("予期しないエラーが発生しました: " + e.getMessage());
+            String msg = String.join("\n", errorMessages);
+            log.error("Unexpected error in createSalesDocuments", e);
+            setResult(ctx, false, msg, 0, 0, 0, 1);
         }
-
-        // STEP3/4/5: S4レコード単位でマスタ取得 → エンティティ作成 → 伝票番号単位で返却
-        //   Map によりヘッダ・明細の新規/既存を判定しながら処理する
-        //   NOTE: マスタ取得方法が変わる場合は fetchMasterData のみ修正する
-        Map<String, SalesDocBuildResult> buildResults = buildSalesDocuments(s4Records);
-
-        // STEP6: 伝票番号単位でDB登録
-        //   1伝票の登録失敗が他伝票に影響しないよう、トランザクションは伝票番号単位で独立
-        int[] counts = saveDocuments(buildResults);
-        // counts[0]=headersCreated, [1]=itemsCreated, [2]=detailsCreated, [3]=errorCount
-
-        String msg = String.format(
-            "Completed. Headers=%d, Items=%d, Details=%d, Errors=%d",
-            counts[0], counts[1], counts[2], counts[3]);
-        log.info(msg);
-
-        boolean success = counts[3] == 0;
-        setResult(ctx, success, msg, counts[0], counts[1], counts[2], counts[3]);
+        // 例外の有無に関わらず必ずここに到達する → ctx.put() が必ず実行される
     }
 
     // ====================================================================
@@ -222,26 +264,39 @@ public class SalesDocumentHandler implements EventHandler {
      */
     private List<Row> fetchZcSalesDocuments(String salesDocument) {
 
-        CqnService s4Service = (CqnService) runtime.getServiceCatalog()
-            .getService(CqnService.class, S4_SERVICE_NAME);
+        try {
+            CqnService s4Service = (CqnService) runtime.getServiceCatalog()
+                .getService(CqnService.class, S4_SERVICE_NAME);
 
-        // 伝票番号を検索条件として使用
-        // 順序: 伝票番号 → 明細番号 → 連番 でソートし処理順序を安定させる
-        var query = Select.from(S4_ENTITY)
-            .where(q -> q.get("SalesDocument").eq(salesDocument))
-            .orderBy(
-                q -> q.get("SalesDocument").asc(),
-                q -> q.get("SalesDocumentItem").asc(),
-                q -> q.get("SequentialNumber").asc()
-            );
+            // 伝票番号を検索条件として使用
+            // 順序: 伝票番号 → 明細番号 → 連番 でソートし処理順序を安定させる
+            var query = Select.from(S4_ENTITY)
+                .where(q -> q.get("SalesDocument").eq(salesDocument))
+                .orderBy(
+                    q -> q.get("SalesDocument").asc(),
+                    q -> q.get("SalesDocumentItem").asc(),
+                    q -> q.get("SequentialNumber").asc()
+                );
 
-        Result result = s4Service.run(query);
-        List<Row> rows = new ArrayList<>();
-        result.forEach(rows::add);
+            Result result = s4Service.run(query);
+            List<Row> rows = new ArrayList<>();
+            result.forEach(rows::add);
 
-        log.info("Fetched {} records from ZcSalesDocument (SalesDocument={})",
-                 rows.size(), salesDocument);
-        return rows;
+            log.info("Fetched {} records from ZcSalesDocument (SalesDocument={})",
+                     rows.size(), salesDocument);
+            return rows;
+
+        } catch (ServiceException e) {
+            // S4サービス呼び出しエラー
+            // エラーメッセージを収集 → カスタム例外を throw → onCreateSalesDocuments の catch へ伝播
+            errorMessages.add(String.format("ZcSalesDocument 取得エラー [%s]: %s", salesDocument, e.getMessage()));
+            throw new DocumentProcessingException(e.getMessage());
+
+        } catch (Exception e) {
+            // 予期しない例外（サービス名解決失敗など）
+            errorMessages.add(String.format("ZcSalesDocument 取得中に予期しないエラー [%s]: %s", salesDocument, e.getMessage()));
+            throw new DocumentProcessingException(e.getMessage());
+        }
     }
 
     // ====================================================================
@@ -273,22 +328,37 @@ public class SalesDocumentHandler implements EventHandler {
         String division           = (String) s4Record.get("Division");
         String customerId         = (String) s4Record.get("CustomerID");
 
-        Result result = db.run(
-            Select.from(MASTER_VIEW)
-                  .where(v -> v.get("SalesDocument")      .eq(salesDocument)
-                         .and(v.get("SalesDocumentItem")   .eq(salesDocumentItem))
-                         .and(v.get("SalesOrganization")   .eq(salesOrganization))
-                         .and(v.get("DistributionChannel") .eq(distributionChannel))
-                         .and(v.get("Division")            .eq(division))
-                         .and(v.get("CustomerID")          .eq(customerId)))
-        );
+        try {
+            Result result = db.run(
+                Select.from(MASTER_VIEW)
+                      .where(v -> v.get("SalesDocument")      .eq(salesDocument)
+                             .and(v.get("SalesDocumentItem")   .eq(salesDocumentItem))
+                             .and(v.get("SalesOrganization")   .eq(salesOrganization))
+                             .and(v.get("DistributionChannel") .eq(distributionChannel))
+                             .and(v.get("Division")            .eq(division))
+                             .and(v.get("CustomerID")          .eq(customerId)))
+            );
 
-        Row master = result.first().orElse(null);
-        if (master == null) {
-            log.warn("Master not found: SalesDocument={}, SalesDocumentItem={}, CustomerID={}",
-                     salesDocument, salesDocumentItem, customerId);
+            Row master = result.first().orElse(null);
+            if (master == null) {
+                // マスタ未登録はデータ不備扱い（ワーニングのみ、処理は継続）
+                log.warn("Master not found: SalesDocument={}, SalesDocumentItem={}, CustomerID={}",
+                         salesDocument, salesDocumentItem, customerId);
+            }
+            return master;
+
+        } catch (ServiceException e) {
+            // DBアクセスエラー → エラー収集 → カスタム例外 throw → buildSalesDocuments の catch へ伝播
+            errorMessages.add(String.format(
+                "マスタデータ取得エラー [%s/%s]: %s", salesDocument, salesDocumentItem, e.getMessage()));
+            throw new DocumentProcessingException(e.getMessage());
+
+        } catch (Exception e) {
+            // 予期しない例外
+            errorMessages.add(String.format(
+                "マスタデータ取得中に予期しないエラー [%s/%s]: %s", salesDocument, salesDocumentItem, e.getMessage()));
+            throw new DocumentProcessingException(e.getMessage());
         }
-        return master;
     }
 
     // ====================================================================
@@ -321,22 +391,38 @@ public class SalesDocumentHandler implements EventHandler {
         // 明細新規/既存判定用: key = SalesDocument + "_" + SalesDocumentItem
         Map<String, SalesDocItem>   itemSeenMap   = new LinkedHashMap<>();
 
+        // ヘッダ作成に失敗した伝票番号を記録する。
+        // 以降のレコードで同じ伝票番号が登場しても処理をスキップするために使用する。
+        Set<String> failedDocuments = new HashSet<>();
+
         for (Row rec : s4Records) {
             String salesDocument     = (String) rec.get("SalesDocument");
             String salesDocumentItem = (String) rec.get("SalesDocumentItem");
             String headerKey = salesDocument;
             String itemKey   = salesDocument + "_" + salesDocumentItem;
 
+            // ヘッダ作成が失敗した伝票は以降のレコードをすべてスキップ
+            if (failedDocuments.contains(salesDocument)) continue;
+
             // ---- ヘッダ ----
             // headerSeenMap にキーが存在しない = このレコードで初めて登場した伝票番号 → 新規
             boolean headerIsNew = !headerSeenMap.containsKey(headerKey);
             if (headerIsNew) {
-                // CustomerMaster の補完値はヘッダ単位で取得する（伝票の先頭レコードのみ）
-                Row headerMaster = fetchMasterData(rec);
-                SalesDocHeader header = buildHeader(rec, headerMaster);
-                headerSeenMap.put(headerKey, header);
-                results.put(salesDocument, new SalesDocBuildResult(header, true));
-                log.debug("New header: SalesDocument={}", salesDocument);
+                try {
+                    // CustomerMaster の補完値はヘッダ単位で取得する（伝票の先頭レコードのみ）
+                    // fetchMasterData はエラー時に DocumentProcessingException を throw する
+                    Row headerMaster = fetchMasterData(rec);
+                    SalesDocHeader header = buildHeader(rec, headerMaster);
+                    headerSeenMap.put(headerKey, header);
+                    results.put(salesDocument, new SalesDocBuildResult(header, true));
+                    log.debug("New header: SalesDocument={}", salesDocument);
+
+                } catch (DocumentProcessingException e) {
+                    // ヘッダ作成失敗 → この伝票番号の以降レコードをすべてスキップ
+                    // エラーメッセージはすでに errorMessages に収集済み
+                    failedDocuments.add(salesDocument);
+                    continue;
+                }
             }
 
             SalesDocBuildResult buildResult = results.get(salesDocument);
@@ -345,20 +431,28 @@ public class SalesDocumentHandler implements EventHandler {
             // itemSeenMap にキーが存在しない = この明細番号の初回登場 → 新規
             boolean itemIsNew = !itemSeenMap.containsKey(itemKey);
             if (itemIsNew) {
-                // MaterialMaster / PlantMaster の補完値は明細単位で取得する（明細の先頭レコードのみ）
-                Row itemMaster = fetchMasterData(rec);
-                SalesDocItem item = buildItem(rec, itemMaster);
-                itemSeenMap.put(itemKey, item);
-                buildResult.itemEntries.add(new SalesDocItemEntry(item, true));
+                try {
+                    // MaterialMaster / PlantMaster の補完値は明細単位で取得する（明細の先頭レコードのみ）
+                    // fetchMasterData はエラー時に DocumentProcessingException を throw する
+                    Row itemMaster = fetchMasterData(rec);
+                    SalesDocItem item = buildItem(rec, itemMaster);
+                    itemSeenMap.put(itemKey, item);
+                    buildResult.itemEntries.add(new SalesDocItemEntry(item, true));
 
-                // 合計金額集計（明細の初回登場時のみ加算）
-                Object netAmt = rec.get("NetAmount");
-                if (netAmt instanceof BigDecimal bd) {
-                    BigDecimal current = buildResult.header.getTotalNetAmount();
-                    buildResult.header.setTotalNetAmount(
-                        (current != null ? current : BigDecimal.ZERO).add(bd));
+                    // 合計金額集計（明細の初回登場時のみ加算）
+                    Object netAmt = rec.get("NetAmount");
+                    if (netAmt instanceof BigDecimal bd) {
+                        BigDecimal current = buildResult.header.getTotalNetAmount();
+                        buildResult.header.setTotalNetAmount(
+                            (current != null ? current : BigDecimal.ZERO).add(bd));
+                    }
+                    log.debug("New item: SalesDocument={}, SalesDocumentItem={}", salesDocument, salesDocumentItem);
+
+                } catch (DocumentProcessingException e) {
+                    // 明細作成失敗 → この明細レコード（と同レコードの詳細）をスキップして次レコードへ
+                    // エラーメッセージはすでに errorMessages に収集済み
+                    continue;
                 }
-                log.debug("New item: SalesDocument={}, SalesDocumentItem={}", salesDocument, salesDocumentItem);
             }
 
             // ---- 詳細 ----
@@ -449,7 +543,8 @@ public class SalesDocumentHandler implements EventHandler {
             } catch (Exception e) {
                 // transactionTemplate.execute() 内で例外が発生した場合にここに到達
                 // 対象伝票のトランザクションはすでに ROLLBACK 済み
-                // 他伝票の処理は継続する（ループを抜けない）
+                // エラーメッセージを収集し、他伝票の処理は継続する（ループを抜けない）
+                errorMessages.add(String.format("伝票[%s] DB登録エラー: %s", docNum, e.getMessage()));
                 errorCount++;
                 log.error("Failed to save SalesDocument={}: {}", docNum, e.getMessage(), e);
             }
@@ -573,6 +668,24 @@ public class SalesDocumentHandler implements EventHandler {
     // ====================================================================
     // ユーティリティ
     // ====================================================================
+
+    /**
+     * 処理結果メッセージを組み立てる。
+     *
+     * <p>成功時はカウント情報のみ、エラーあり時は errorMessages の内容も含める。
+     */
+    private String buildResultMessage(int[] counts, boolean success) {
+        if (success) {
+            return String.format(
+                "createSalesDocuments 完了: ヘッダ=%d件, 明細=%d件, 詳細=%d件",
+                counts[0], counts[1], counts[2]);
+        } else {
+            String summary = String.format(
+                "createSalesDocuments 完了（エラーあり）: ヘッダ=%d件, 明細=%d件, 詳細=%d件, エラー=%d件",
+                counts[0], counts[1], counts[2], counts[3]);
+            return summary + "\n" + String.join("\n", errorMessages);
+        }
+    }
 
     private void setResult(EventContext ctx, boolean success, String message,
                            int headers, int items, int details, int errors) {
