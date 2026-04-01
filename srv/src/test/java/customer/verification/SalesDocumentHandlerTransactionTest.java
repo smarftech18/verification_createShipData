@@ -9,14 +9,12 @@ import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.persistence.PersistenceService;
-import com.sap.cds.services.runtime.CdsRuntime;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -76,13 +74,6 @@ class SalesDocumentHandlerTransactionTest {
 
     @Autowired
     private PlatformTransactionManager txManager;
-
-    /**
-     * 外部S4サービスへの接続を防ぐためモックに差し替える。
-     * saveDocuments() は runtime を使用しないため、振る舞いの設定は不要。
-     */
-    @MockitoBean
-    private CdsRuntime runtime;
 
     /**
      * REQUIRES_NEW でコミットされたデータはテスト終了後も残るため、明示的に削除する。

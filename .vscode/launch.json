@@ -15,6 +15,22 @@
       "skipFiles": [
         "<node_internals>/**"
       ]
+    },
+    {
+      "name": "Run verification-1",
+      "type": "java",
+      "request": "launch",
+      "args": [
+        "--spring.profiles.active=default"
+      ],
+      "mainClass": "customer.verification.Application",
+      "projectName": "verification",
+      "preLaunchTask": "PreLaunchTask for Run verification-1",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/env/.env1",
+      "env": {
+        "run.config": "{\"handlerId\":\"cap_java_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/verification\\\",\\\"profileName\\\":\\\"default\\\"}\"}"
+      }
     }
   ]
 }

@@ -1,2 +1,3 @@
 {
+    "java.jdt.ls.vmargs": "-DwatchParentProcess=false -noverify -XX:MaxDirectMemorySize=10M -XX:MaxMetaspaceSize=98632K -Xss1M -Xmx1001472K -XX:+UseG1GC -XX:+UseStringDeduplication -XX:-HeapDumpOnOutOfMemoryError -Dlog.level=ERROR"
 }

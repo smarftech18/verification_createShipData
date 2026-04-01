@@ -24,6 +24,25 @@
         "--in-memory?"
       ],
       "problemMatcher": []
+    },
+    {
+      "label": "PreLaunchTask for Run verification-1",
+      "type": "shell",
+      "command": "mvn clean compile",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "check port availability"
+      ]
+    },
+    {
+      "label": "check port availability",
+      "type": "shell",
+      "command": "${command:JAVA.runConfigurations.killProcess}",
+      "args": [
+        "${port:8080}"
+      ]
     }
   ]
 }

@@ -1,0 +1,37 @@
+{
+    "SELECT": {
+        "from": {
+            "ref": [
+                "ZC_SALESDOCUMENT_SERVICE.ZcSalesDocument"
+            ]
+        },
+        "where": [
+            {
+                "ref": [
+                    "SalesDocument"
+                ]
+            },
+            "=",
+            {
+                "val": "12345"
+            }
+        ],
+        "orderBy": [
+            {
+                "ref": [
+                    "SalesDocument"
+                ]
+            },
+            {
+                "ref": [
+                    "SalesDocumentItem"
+                ]
+            },
+            {
+                "ref": [
+                    "SequentialNumber"
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,1240 @@
+@server=http://localhost:8080
+@username=authenticated
+@password=
+
+
+### A_BusinessPartner
+# @name A_BusinessPartner_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartner
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_BusinessPartner
+# @name A_BusinessPartner_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartner
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "BusinessPartner": "er-7718587",
+  "Customer": "er-7718587",
+  "Supplier": "er-7718587",
+  "AcademicTitle": "8587",
+  "AuthorizationGroup": "8587",
+  "BusinessPartnerCategory": "7",
+  "BusinessPartnerFullName": "BusinessPartnerFullName-7718587",
+  "BusinessPartnerGrouping": "8587",
+  "BusinessPartnerName": "BusinessPartnerName-7718587",
+  "BusinessPartnerUUID": "7718587d-5394-4eaf-8c42-6d73ab328684",
+  "CorrespondenceLanguage": "87",
+  "CreatedByUser": "User-7718587",
+  "CreationDate": "2001-02-02",
+  "CreationTime": "22:59:53",
+  "FirstName": "FirstName-7718587",
+  "FormOfAddress": "8587",
+  "Industry": "ry-7718587",
+  "IsNaturalPerson": "7",
+  "Language": "87",
+  "LastChangeDate": "2014-01-30",
+  "LastChangeTime": "22:59:53",
+  "LastChangedByUser": "User-7718587",
+  "LastName": "LastName-7718587",
+  "LegalForm": "87",
+  "OrganizationBPName1": "OrganizationBPName1-7718587",
+  "OrganizationBPName2": "OrganizationBPName2-7718587",
+  "OrganizationBPName3": "OrganizationBPName3-7718587",
+  "OrganizationBPName4": "OrganizationBPName4-7718587",
+  "OrganizationFoundationDate": "2001-05-21",
+  "OrganizationLiquidationDate": "2002-10-05",
+  "SearchTerm1": "SearchTerm1-7718587",
+  "SearchTerm2": "SearchTerm2-7718587",
+  "BirthDate": "2001-10-14",
+  "BusinessPartnerBirthplaceName": "BusinessPartnerBirthplaceName-7718587",
+  "BusinessPartnerDeathDate": "2008-06-25",
+  "BusinessPartnerIsBlocked": false,
+  "BusinessPartnerType": "8587",
+  "GroupBusinessPartnerName1": "GroupBusinessPartnerName1-7718587",
+  "GroupBusinessPartnerName2": "GroupBusinessPartnerName2-7718587",
+  "MiddleName": "MiddleName-7718587",
+  "NameCountry": "587",
+  "PersonFullName": "PersonFullName-7718587",
+  "PersonNumber": "er-7718587",
+  "IsMarkedForArchiving": false,
+  "BusinessPartnerIDByExtSystem": "DByExtSystem-7718587",
+  "TradingPartner": "718587",
+  "to_BusinessPartnerAddress": [
+    {
+      "AddressID": "s-13729396",
+      "ValidityStartDate": "2017-01-14T00:00:00.000Z",
+      "ValidityEndDate": "2002-04-20T00:00:00.000Z",
+      "AuthorizationGroup": "9396",
+      "AddressUUID": "13729396-5284-49a1-869f-b148b6de4ed0",
+      "AdditionalStreetPrefixName": "AdditionalStreetPrefixName-13729396",
+      "AdditionalStreetSuffixName": "AdditionalStreetSuffixName-13729396",
+      "AddressTimeZone": "729396",
+      "CareOfName": "CareOfName-13729396",
+      "CityCode": "ode-13729396",
+      "CityName": "CityName-13729396",
+      "CompanyPostalCode": "e-13729396",
+      "Country": "396",
+      "County": "County-13729396",
+      "DeliveryServiceNumber": "r-13729396",
+      "DeliveryServiceTypeCode": "9396",
+      "District": "District-13729396",
+      "FormOfAddress": "9396",
+      "FullName": "FullName-13729396",
+      "HomeCityName": "HomeCityName-13729396",
+      "HouseNumber": "r-13729396",
+      "HouseNumberSupplementText": "t-13729396",
+      "Language": "96",
+      "POBox": "x-13729396",
+      "POBoxIsWithoutNumber": true,
+      "POBoxPostalCode": "e-13729396",
+      "Person": "n-13729396",
+      "PostalCode": "e-13729396",
+      "Region": "396",
+      "StreetName": "StreetName-13729396",
+      "StreetPrefixName": "StreetPrefixName-13729396",
+      "StreetSuffixName": "StreetSuffixName-13729396",
+      "TaxJurisdiction": "iction-13729396",
+      "TransportZone": "e-13729396",
+      "IsDefaultAddress": true,
+      "to_EmailAddress": [
+        {
+          "Person": "s-11390446",
+          "OrdinalNumber": "446",
+          "IsDefaultEmailAddress": true,
+          "EmailAddress": "EmailAddress-11390446",
+          "SearchEmailAddress": "mailAddress-11390446",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390446"
+        },
+        {
+          "Person": "s-11390447",
+          "OrdinalNumber": "447",
+          "IsDefaultEmailAddress": false,
+          "EmailAddress": "EmailAddress-11390447",
+          "SearchEmailAddress": "mailAddress-11390447",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390447"
+        }
+      ],
+      "to_PhoneNumber": [
+        {
+          "Person": "r-21698503",
+          "OrdinalNumber": "503",
+          "DestinationLocationCountry": "503",
+          "Connection": "Connection-21698503",
+          "IsDefaultPhoneNumber": false,
+          "IsDefaultSmSNumber": false,
+          "PhoneNumber": "PhoneNumber-21698503",
+          "PhoneNumberType": "3",
+          "PhoneExtensionNumber": "r-21698503",
+          "InternationalPhoneNumber": "ernationalPhoneNumber-21698503",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698503"
+        },
+        {
+          "Person": "r-21698504",
+          "OrdinalNumber": "504",
+          "DestinationLocationCountry": "504",
+          "Connection": "Connection-21698504",
+          "IsDefaultPhoneNumber": true,
+          "IsDefaultSmSNumber": true,
+          "PhoneNumber": "PhoneNumber-21698504",
+          "PhoneNumberType": "4",
+          "PhoneExtensionNumber": "r-21698504",
+          "InternationalPhoneNumber": "ernationalPhoneNumber-21698504",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698504"
+        }
+      ]
+    },
+    {
+      "AddressID": "s-13729397",
+      "ValidityStartDate": "2001-10-31T00:00:00.000Z",
+      "ValidityEndDate": "2023-05-22T00:00:00.000Z",
+      "AuthorizationGroup": "9397",
+      "AddressUUID": "13729397-670b-4e23-abb7-bfec9a97f1c5",
+      "AdditionalStreetPrefixName": "AdditionalStreetPrefixName-13729397",
+      "AdditionalStreetSuffixName": "AdditionalStreetSuffixName-13729397",
+      "AddressTimeZone": "729397",
+      "CareOfName": "CareOfName-13729397",
+      "CityCode": "ode-13729397",
+      "CityName": "CityName-13729397",
+      "CompanyPostalCode": "e-13729397",
+      "Country": "397",
+      "County": "County-13729397",
+      "DeliveryServiceNumber": "r-13729397",
+      "DeliveryServiceTypeCode": "9397",
+      "District": "District-13729397",
+      "FormOfAddress": "9397",
+      "FullName": "FullName-13729397",
+      "HomeCityName": "HomeCityName-13729397",
+      "HouseNumber": "r-13729397",
+      "HouseNumberSupplementText": "t-13729397",
+      "Language": "97",
+      "POBox": "x-13729397",
+      "POBoxIsWithoutNumber": false,
+      "POBoxPostalCode": "e-13729397",
+      "Person": "n-13729397",
+      "PostalCode": "e-13729397",
+      "Region": "397",
+      "StreetName": "StreetName-13729397",
+      "StreetPrefixName": "StreetPrefixName-13729397",
+      "StreetSuffixName": "StreetSuffixName-13729397",
+      "TaxJurisdiction": "iction-13729397",
+      "TransportZone": "e-13729397",
+      "IsDefaultAddress": false,
+      "to_EmailAddress": [
+        {
+          "Person": "s-30542000",
+          "OrdinalNumber": "000",
+          "IsDefaultEmailAddress": true,
+          "EmailAddress": "EmailAddress-30542000",
+          "SearchEmailAddress": "mailAddress-30542000",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-30542000"
+        },
+        {
+          "Person": "s-30542001",
+          "OrdinalNumber": "001",
+          "IsDefaultEmailAddress": false,
+          "EmailAddress": "EmailAddress-30542001",
+          "SearchEmailAddress": "mailAddress-30542001",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-30542001"
+        }
+      ],
+      "to_PhoneNumber": [
+        {
+          "Person": "er-1930932",
+          "OrdinalNumber": "932",
+          "DestinationLocationCountry": "932",
+          "Connection": "Connection-1930932",
+          "IsDefaultPhoneNumber": true,
+          "IsDefaultSmSNumber": true,
+          "PhoneNumber": "PhoneNumber-1930932",
+          "PhoneNumberType": "2",
+          "PhoneExtensionNumber": "er-1930932",
+          "InternationalPhoneNumber": "ternationalPhoneNumber-1930932",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-1930932"
+        },
+        {
+          "Person": "er-1930933",
+          "OrdinalNumber": "933",
+          "DestinationLocationCountry": "933",
+          "Connection": "Connection-1930933",
+          "IsDefaultPhoneNumber": false,
+          "IsDefaultSmSNumber": false,
+          "PhoneNumber": "PhoneNumber-1930933",
+          "PhoneNumberType": "3",
+          "PhoneExtensionNumber": "er-1930933",
+          "InternationalPhoneNumber": "ternationalPhoneNumber-1930933",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-1930933"
+        }
+      ]
+    }
+  ],
+  "to_Customer": {
+    "Customer": "r-16203950"
+  },
+  "to_Supplier": {
+    "Supplier": "r-24938244"
+  }
+}
+
+
+### A_BusinessPartner
+# @name A_BusinessPartner_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartner/er-7718587
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "BusinessPartner": "er-7718587",
+  "Customer": "er-7718587",
+  "Supplier": "er-7718587",
+  "AcademicTitle": "8587",
+  "AuthorizationGroup": "8587",
+  "BusinessPartnerCategory": "7",
+  "BusinessPartnerFullName": "BusinessPartnerFullName-7718587",
+  "BusinessPartnerGrouping": "8587",
+  "BusinessPartnerName": "BusinessPartnerName-7718587",
+  "BusinessPartnerUUID": "7718587d-5394-4eaf-8c42-6d73ab328684",
+  "CorrespondenceLanguage": "87",
+  "CreatedByUser": "User-7718587",
+  "CreationDate": "2001-02-02",
+  "CreationTime": "22:59:53",
+  "FirstName": "FirstName-7718587",
+  "FormOfAddress": "8587",
+  "Industry": "ry-7718587",
+  "IsNaturalPerson": "7",
+  "Language": "87",
+  "LastChangeDate": "2014-01-30",
+  "LastChangeTime": "22:59:53",
+  "LastChangedByUser": "User-7718587",
+  "LastName": "LastName-7718587",
+  "LegalForm": "87",
+  "OrganizationBPName1": "OrganizationBPName1-7718587",
+  "OrganizationBPName2": "OrganizationBPName2-7718587",
+  "OrganizationBPName3": "OrganizationBPName3-7718587",
+  "OrganizationBPName4": "OrganizationBPName4-7718587",
+  "OrganizationFoundationDate": "2001-05-21",
+  "OrganizationLiquidationDate": "2002-10-05",
+  "SearchTerm1": "SearchTerm1-7718587",
+  "SearchTerm2": "SearchTerm2-7718587",
+  "BirthDate": "2001-10-14",
+  "BusinessPartnerBirthplaceName": "BusinessPartnerBirthplaceName-7718587",
+  "BusinessPartnerDeathDate": "2008-06-25",
+  "BusinessPartnerIsBlocked": false,
+  "BusinessPartnerType": "8587",
+  "GroupBusinessPartnerName1": "GroupBusinessPartnerName1-7718587",
+  "GroupBusinessPartnerName2": "GroupBusinessPartnerName2-7718587",
+  "MiddleName": "MiddleName-7718587",
+  "NameCountry": "587",
+  "PersonFullName": "PersonFullName-7718587",
+  "PersonNumber": "er-7718587",
+  "IsMarkedForArchiving": false,
+  "BusinessPartnerIDByExtSystem": "DByExtSystem-7718587",
+  "TradingPartner": "718587",
+  "to_BusinessPartnerAddress": [
+    {
+      "AddressID": "s-13729396",
+      "ValidityStartDate": "2017-01-14T00:00:00.000Z",
+      "ValidityEndDate": "2002-04-20T00:00:00.000Z",
+      "AuthorizationGroup": "9396",
+      "AddressUUID": "13729396-5284-49a1-869f-b148b6de4ed0",
+      "AdditionalStreetPrefixName": "AdditionalStreetPrefixName-13729396",
+      "AdditionalStreetSuffixName": "AdditionalStreetSuffixName-13729396",
+      "AddressTimeZone": "729396",
+      "CareOfName": "CareOfName-13729396",
+      "CityCode": "ode-13729396",
+      "CityName": "CityName-13729396",
+      "CompanyPostalCode": "e-13729396",
+      "Country": "396",
+      "County": "County-13729396",
+      "DeliveryServiceNumber": "r-13729396",
+      "DeliveryServiceTypeCode": "9396",
+      "District": "District-13729396",
+      "FormOfAddress": "9396",
+      "FullName": "FullName-13729396",
+      "HomeCityName": "HomeCityName-13729396",
+      "HouseNumber": "r-13729396",
+      "HouseNumberSupplementText": "t-13729396",
+      "Language": "96",
+      "POBox": "x-13729396",
+      "POBoxIsWithoutNumber": true,
+      "POBoxPostalCode": "e-13729396",
+      "Person": "n-13729396",
+      "PostalCode": "e-13729396",
+      "Region": "396",
+      "StreetName": "StreetName-13729396",
+      "StreetPrefixName": "StreetPrefixName-13729396",
+      "StreetSuffixName": "StreetSuffixName-13729396",
+      "TaxJurisdiction": "iction-13729396",
+      "TransportZone": "e-13729396",
+      "IsDefaultAddress": true,
+      "to_EmailAddress": [
+        {
+          "Person": "s-11390446",
+          "OrdinalNumber": "446",
+          "IsDefaultEmailAddress": true,
+          "EmailAddress": "EmailAddress-11390446",
+          "SearchEmailAddress": "mailAddress-11390446",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390446"
+        },
+        {
+          "Person": "s-11390447",
+          "OrdinalNumber": "447",
+          "IsDefaultEmailAddress": false,
+          "EmailAddress": "EmailAddress-11390447",
+          "SearchEmailAddress": "mailAddress-11390447",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390447"
+        }
+      ],
+      "to_PhoneNumber": [
+        {
+          "Person": "r-21698503",
+          "OrdinalNumber": "503",
+          "DestinationLocationCountry": "503",
+          "Connection": "Connection-21698503",
+          "IsDefaultPhoneNumber": false,
+          "IsDefaultSmSNumber": false,
+          "PhoneNumber": "PhoneNumber-21698503",
+          "PhoneNumberType": "3",
+          "PhoneExtensionNumber": "r-21698503",
+          "InternationalPhoneNumber": "ernationalPhoneNumber-21698503",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698503"
+        },
+        {
+          "Person": "r-21698504",
+          "OrdinalNumber": "504",
+          "DestinationLocationCountry": "504",
+          "Connection": "Connection-21698504",
+          "IsDefaultPhoneNumber": true,
+          "IsDefaultSmSNumber": true,
+          "PhoneNumber": "PhoneNumber-21698504",
+          "PhoneNumberType": "4",
+          "PhoneExtensionNumber": "r-21698504",
+          "InternationalPhoneNumber": "ernationalPhoneNumber-21698504",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698504"
+        }
+      ]
+    },
+    {
+      "AddressID": "s-13729397",
+      "ValidityStartDate": "2001-10-31T00:00:00.000Z",
+      "ValidityEndDate": "2023-05-22T00:00:00.000Z",
+      "AuthorizationGroup": "9397",
+      "AddressUUID": "13729397-670b-4e23-abb7-bfec9a97f1c5",
+      "AdditionalStreetPrefixName": "AdditionalStreetPrefixName-13729397",
+      "AdditionalStreetSuffixName": "AdditionalStreetSuffixName-13729397",
+      "AddressTimeZone": "729397",
+      "CareOfName": "CareOfName-13729397",
+      "CityCode": "ode-13729397",
+      "CityName": "CityName-13729397",
+      "CompanyPostalCode": "e-13729397",
+      "Country": "397",
+      "County": "County-13729397",
+      "DeliveryServiceNumber": "r-13729397",
+      "DeliveryServiceTypeCode": "9397",
+      "District": "District-13729397",
+      "FormOfAddress": "9397",
+      "FullName": "FullName-13729397",
+      "HomeCityName": "HomeCityName-13729397",
+      "HouseNumber": "r-13729397",
+      "HouseNumberSupplementText": "t-13729397",
+      "Language": "97",
+      "POBox": "x-13729397",
+      "POBoxIsWithoutNumber": false,
+      "POBoxPostalCode": "e-13729397",
+      "Person": "n-13729397",
+      "PostalCode": "e-13729397",
+      "Region": "397",
+      "StreetName": "StreetName-13729397",
+      "StreetPrefixName": "StreetPrefixName-13729397",
+      "StreetSuffixName": "StreetSuffixName-13729397",
+      "TaxJurisdiction": "iction-13729397",
+      "TransportZone": "e-13729397",
+      "IsDefaultAddress": false,
+      "to_EmailAddress": [
+        {
+          "Person": "s-30542000",
+          "OrdinalNumber": "000",
+          "IsDefaultEmailAddress": true,
+          "EmailAddress": "EmailAddress-30542000",
+          "SearchEmailAddress": "mailAddress-30542000",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-30542000"
+        },
+        {
+          "Person": "s-30542001",
+          "OrdinalNumber": "001",
+          "IsDefaultEmailAddress": false,
+          "EmailAddress": "EmailAddress-30542001",
+          "SearchEmailAddress": "mailAddress-30542001",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-30542001"
+        }
+      ],
+      "to_PhoneNumber": [
+        {
+          "Person": "er-1930932",
+          "OrdinalNumber": "932",
+          "DestinationLocationCountry": "932",
+          "Connection": "Connection-1930932",
+          "IsDefaultPhoneNumber": true,
+          "IsDefaultSmSNumber": true,
+          "PhoneNumber": "PhoneNumber-1930932",
+          "PhoneNumberType": "2",
+          "PhoneExtensionNumber": "er-1930932",
+          "InternationalPhoneNumber": "ternationalPhoneNumber-1930932",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-1930932"
+        },
+        {
+          "Person": "er-1930933",
+          "OrdinalNumber": "933",
+          "DestinationLocationCountry": "933",
+          "Connection": "Connection-1930933",
+          "IsDefaultPhoneNumber": false,
+          "IsDefaultSmSNumber": false,
+          "PhoneNumber": "PhoneNumber-1930933",
+          "PhoneNumberType": "3",
+          "PhoneExtensionNumber": "er-1930933",
+          "InternationalPhoneNumber": "ternationalPhoneNumber-1930933",
+          "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-1930933"
+        }
+      ]
+    }
+  ],
+  "to_Customer": {
+    "Customer": "r-16203950"
+  },
+  "to_Supplier": {
+    "Supplier": "r-24938244"
+  }
+}
+
+
+### A_BusinessPartner
+# @name A_BusinessPartner_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartner/er-7718587
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_BusinessPartnerAddress
+# @name A_BusinessPartnerAddress_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartnerAddress
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_BusinessPartnerAddress
+# @name A_BusinessPartnerAddress_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartnerAddress
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "AddressID": "s-13729396",
+  "ValidityStartDate": "2017-01-14T00:00:00.000Z",
+  "ValidityEndDate": "2002-04-20T00:00:00.000Z",
+  "AuthorizationGroup": "9396",
+  "AddressUUID": "13729396-5284-49a1-869f-b148b6de4ed0",
+  "AdditionalStreetPrefixName": "AdditionalStreetPrefixName-13729396",
+  "AdditionalStreetSuffixName": "AdditionalStreetSuffixName-13729396",
+  "AddressTimeZone": "729396",
+  "CareOfName": "CareOfName-13729396",
+  "CityCode": "ode-13729396",
+  "CityName": "CityName-13729396",
+  "CompanyPostalCode": "e-13729396",
+  "Country": "396",
+  "County": "County-13729396",
+  "DeliveryServiceNumber": "r-13729396",
+  "DeliveryServiceTypeCode": "9396",
+  "District": "District-13729396",
+  "FormOfAddress": "9396",
+  "FullName": "FullName-13729396",
+  "HomeCityName": "HomeCityName-13729396",
+  "HouseNumber": "r-13729396",
+  "HouseNumberSupplementText": "t-13729396",
+  "Language": "96",
+  "POBox": "x-13729396",
+  "POBoxIsWithoutNumber": true,
+  "POBoxPostalCode": "e-13729396",
+  "Person": "n-13729396",
+  "PostalCode": "e-13729396",
+  "Region": "396",
+  "StreetName": "StreetName-13729396",
+  "StreetPrefixName": "StreetPrefixName-13729396",
+  "StreetSuffixName": "StreetSuffixName-13729396",
+  "TaxJurisdiction": "iction-13729396",
+  "TransportZone": "e-13729396",
+  "IsDefaultAddress": true,
+  "to_EmailAddress": [
+    {
+      "Person": "s-11390446",
+      "OrdinalNumber": "446",
+      "IsDefaultEmailAddress": true,
+      "EmailAddress": "EmailAddress-11390446",
+      "SearchEmailAddress": "mailAddress-11390446",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390446"
+    },
+    {
+      "Person": "s-11390447",
+      "OrdinalNumber": "447",
+      "IsDefaultEmailAddress": false,
+      "EmailAddress": "EmailAddress-11390447",
+      "SearchEmailAddress": "mailAddress-11390447",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390447"
+    }
+  ],
+  "to_PhoneNumber": [
+    {
+      "Person": "r-21698503",
+      "OrdinalNumber": "503",
+      "DestinationLocationCountry": "503",
+      "Connection": "Connection-21698503",
+      "IsDefaultPhoneNumber": false,
+      "IsDefaultSmSNumber": false,
+      "PhoneNumber": "PhoneNumber-21698503",
+      "PhoneNumberType": "3",
+      "PhoneExtensionNumber": "r-21698503",
+      "InternationalPhoneNumber": "ernationalPhoneNumber-21698503",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698503"
+    },
+    {
+      "Person": "r-21698504",
+      "OrdinalNumber": "504",
+      "DestinationLocationCountry": "504",
+      "Connection": "Connection-21698504",
+      "IsDefaultPhoneNumber": true,
+      "IsDefaultSmSNumber": true,
+      "PhoneNumber": "PhoneNumber-21698504",
+      "PhoneNumberType": "4",
+      "PhoneExtensionNumber": "r-21698504",
+      "InternationalPhoneNumber": "ernationalPhoneNumber-21698504",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698504"
+    }
+  ]
+}
+
+
+### A_BusinessPartnerAddress
+# @name A_BusinessPartnerAddress_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartnerAddress(BusinessPartner='er-7718587',AddressID='s-13729396')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "AddressID": "s-13729396",
+  "ValidityStartDate": "2017-01-14T00:00:00.000Z",
+  "ValidityEndDate": "2002-04-20T00:00:00.000Z",
+  "AuthorizationGroup": "9396",
+  "AddressUUID": "13729396-5284-49a1-869f-b148b6de4ed0",
+  "AdditionalStreetPrefixName": "AdditionalStreetPrefixName-13729396",
+  "AdditionalStreetSuffixName": "AdditionalStreetSuffixName-13729396",
+  "AddressTimeZone": "729396",
+  "CareOfName": "CareOfName-13729396",
+  "CityCode": "ode-13729396",
+  "CityName": "CityName-13729396",
+  "CompanyPostalCode": "e-13729396",
+  "Country": "396",
+  "County": "County-13729396",
+  "DeliveryServiceNumber": "r-13729396",
+  "DeliveryServiceTypeCode": "9396",
+  "District": "District-13729396",
+  "FormOfAddress": "9396",
+  "FullName": "FullName-13729396",
+  "HomeCityName": "HomeCityName-13729396",
+  "HouseNumber": "r-13729396",
+  "HouseNumberSupplementText": "t-13729396",
+  "Language": "96",
+  "POBox": "x-13729396",
+  "POBoxIsWithoutNumber": true,
+  "POBoxPostalCode": "e-13729396",
+  "Person": "n-13729396",
+  "PostalCode": "e-13729396",
+  "Region": "396",
+  "StreetName": "StreetName-13729396",
+  "StreetPrefixName": "StreetPrefixName-13729396",
+  "StreetSuffixName": "StreetSuffixName-13729396",
+  "TaxJurisdiction": "iction-13729396",
+  "TransportZone": "e-13729396",
+  "IsDefaultAddress": true,
+  "to_EmailAddress": [
+    {
+      "Person": "s-11390446",
+      "OrdinalNumber": "446",
+      "IsDefaultEmailAddress": true,
+      "EmailAddress": "EmailAddress-11390446",
+      "SearchEmailAddress": "mailAddress-11390446",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390446"
+    },
+    {
+      "Person": "s-11390447",
+      "OrdinalNumber": "447",
+      "IsDefaultEmailAddress": false,
+      "EmailAddress": "EmailAddress-11390447",
+      "SearchEmailAddress": "mailAddress-11390447",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390447"
+    }
+  ],
+  "to_PhoneNumber": [
+    {
+      "Person": "r-21698503",
+      "OrdinalNumber": "503",
+      "DestinationLocationCountry": "503",
+      "Connection": "Connection-21698503",
+      "IsDefaultPhoneNumber": false,
+      "IsDefaultSmSNumber": false,
+      "PhoneNumber": "PhoneNumber-21698503",
+      "PhoneNumberType": "3",
+      "PhoneExtensionNumber": "r-21698503",
+      "InternationalPhoneNumber": "ernationalPhoneNumber-21698503",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698503"
+    },
+    {
+      "Person": "r-21698504",
+      "OrdinalNumber": "504",
+      "DestinationLocationCountry": "504",
+      "Connection": "Connection-21698504",
+      "IsDefaultPhoneNumber": true,
+      "IsDefaultSmSNumber": true,
+      "PhoneNumber": "PhoneNumber-21698504",
+      "PhoneNumberType": "4",
+      "PhoneExtensionNumber": "r-21698504",
+      "InternationalPhoneNumber": "ernationalPhoneNumber-21698504",
+      "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698504"
+    }
+  ]
+}
+
+
+### A_BusinessPartnerAddress
+# @name A_BusinessPartnerAddress_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_BusinessPartnerAddress(BusinessPartner='er-7718587',AddressID='s-13729396')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_AddressEmailAddress
+# @name A_AddressEmailAddress_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressEmailAddress
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_AddressEmailAddress
+# @name A_AddressEmailAddress_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressEmailAddress
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Person": "s-11390446",
+  "OrdinalNumber": "446",
+  "IsDefaultEmailAddress": true,
+  "EmailAddress": "EmailAddress-11390446",
+  "SearchEmailAddress": "mailAddress-11390446",
+  "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390446"
+}
+
+
+### A_AddressEmailAddress
+# @name A_AddressEmailAddress_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressEmailAddress(AddressID='s-13729396',Person='s-11390446',OrdinalNumber='446')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Person": "s-11390446",
+  "OrdinalNumber": "446",
+  "IsDefaultEmailAddress": true,
+  "EmailAddress": "EmailAddress-11390446",
+  "SearchEmailAddress": "mailAddress-11390446",
+  "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-11390446"
+}
+
+
+### A_AddressEmailAddress
+# @name A_AddressEmailAddress_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressEmailAddress(AddressID='s-13729396',Person='s-11390446',OrdinalNumber='446')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_AddressPhoneNumber
+# @name A_AddressPhoneNumber_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressPhoneNumber
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_AddressPhoneNumber
+# @name A_AddressPhoneNumber_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressPhoneNumber
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Person": "r-21698503",
+  "OrdinalNumber": "503",
+  "DestinationLocationCountry": "503",
+  "Connection": "Connection-21698503",
+  "IsDefaultPhoneNumber": false,
+  "IsDefaultSmSNumber": false,
+  "PhoneNumber": "PhoneNumber-21698503",
+  "PhoneNumberType": "3",
+  "PhoneExtensionNumber": "r-21698503",
+  "InternationalPhoneNumber": "ernationalPhoneNumber-21698503",
+  "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698503"
+}
+
+
+### A_AddressPhoneNumber
+# @name A_AddressPhoneNumber_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressPhoneNumber(AddressID='s-13729396',Person='r-21698503',OrdinalNumber='503')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Person": "r-21698503",
+  "OrdinalNumber": "503",
+  "DestinationLocationCountry": "503",
+  "Connection": "Connection-21698503",
+  "IsDefaultPhoneNumber": false,
+  "IsDefaultSmSNumber": false,
+  "PhoneNumber": "PhoneNumber-21698503",
+  "PhoneNumberType": "3",
+  "PhoneExtensionNumber": "r-21698503",
+  "InternationalPhoneNumber": "ernationalPhoneNumber-21698503",
+  "AddressCommunicationRemarkText": "AddressCommunicationRemarkText-21698503"
+}
+
+
+### A_AddressPhoneNumber
+# @name A_AddressPhoneNumber_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_AddressPhoneNumber(AddressID='s-13729396',Person='r-21698503',OrdinalNumber='503')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_Customer
+# @name A_Customer_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Customer
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_Customer
+# @name A_Customer_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Customer
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Customer": "r-16203950",
+  "AuthorizationGroup": "3950",
+  "BillingIsBlockedForCustomer": "50",
+  "CreatedByUser": "ser-16203950",
+  "CreationDate": "2010-05-26",
+  "CustomerAccountGroup": "3950",
+  "CustomerClassification": "50",
+  "CustomerFullName": "CustomerFullName-16203950",
+  "CustomerName": "CustomerName-16203950",
+  "DeliveryIsBlocked": "50",
+  "FreeDefinedAttribute01": "50",
+  "NFPartnerIsNaturalPerson": "0",
+  "OrderIsBlockedForCustomer": "50",
+  "PostingIsBlocked": true,
+  "Supplier": "r-16203950",
+  "CustomerCorporateGroup": "p-16203950",
+  "FiscalAddress": "s-16203950",
+  "Industry": "3950",
+  "IndustryCode1": "1-16203950",
+  "InternationalLocationNumber1": "6203950",
+  "InternationalLocationNumber2": "03950",
+  "IsMarkedForDeletion": true,
+  "to_CustomerSalesArea": [
+    {
+      "SalesOrganization": "4467",
+      "DistributionChannel": "67",
+      "Division": "67",
+      "AccountByCustomer": "mer-11644467",
+      "AuthorizationGroup": "4467",
+      "BillingIsBlockedForCustomer": "67",
+      "CompleteDeliveryIsDefined": false,
+      "CreditControlArea": "4467",
+      "Currency": "44467",
+      "CustomerABCClassification": "67",
+      "CustomerAccountAssignmentGroup": "67",
+      "CustomerGroup": "67",
+      "CustomerPaymentTerms": "4467",
+      "CustomerPriceGroup": "67",
+      "CustomerPricingProcedure": "67",
+      "DeliveryIsBlockedForCustomer": "67",
+      "IncotermsClassification": "467",
+      "IncotermsTransferLocation": "rmsTransferLocation-11644467",
+      "IncotermsLocation1": "IncotermsLocation1-11644467",
+      "IncotermsLocation2": "IncotermsLocation2-11644467",
+      "IncotermsVersion": "4467",
+      "ItemOrderProbabilityInPercent": "467",
+      "ManualInvoiceMaintIsRelevant": false,
+      "MaxNmbrOfPartialDelivery": 9,
+      "OrderCombinationIsAllowed": false,
+      "OrderIsBlockedForCustomer": "67",
+      "OverdelivTolrtdLmtRatioInPct": 48.9,
+      "PartialDeliveryIsAllowed": "7",
+      "PriceListType": "67",
+      "ProductTaxClassification1": "7",
+      "SalesGroup": "467",
+      "SalesItemProposal": "l-11644467",
+      "SalesOffice": "4467",
+      "ShippingCondition": "67",
+      "SlsDocIsRlvtForProofOfDlvry": false,
+      "SlsUnlmtdOvrdelivIsAllwd": false,
+      "SupplyingPlant": "4467",
+      "SalesDistrict": "644467",
+      "UnderdelivTolrtdLmtRatioInPct": 90.6,
+      "InvoiceDate": "67"
+    },
+    {
+      "SalesOrganization": "4468",
+      "DistributionChannel": "68",
+      "Division": "68",
+      "AccountByCustomer": "mer-11644468",
+      "AuthorizationGroup": "4468",
+      "BillingIsBlockedForCustomer": "68",
+      "CompleteDeliveryIsDefined": true,
+      "CreditControlArea": "4468",
+      "Currency": "44468",
+      "CustomerABCClassification": "68",
+      "CustomerAccountAssignmentGroup": "68",
+      "CustomerGroup": "68",
+      "CustomerPaymentTerms": "4468",
+      "CustomerPriceGroup": "68",
+      "CustomerPricingProcedure": "68",
+      "DeliveryIsBlockedForCustomer": "68",
+      "IncotermsClassification": "468",
+      "IncotermsTransferLocation": "rmsTransferLocation-11644468",
+      "IncotermsLocation1": "IncotermsLocation1-11644468",
+      "IncotermsLocation2": "IncotermsLocation2-11644468",
+      "IncotermsVersion": "4468",
+      "ItemOrderProbabilityInPercent": "468",
+      "ManualInvoiceMaintIsRelevant": true,
+      "MaxNmbrOfPartialDelivery": 4,
+      "OrderCombinationIsAllowed": true,
+      "OrderIsBlockedForCustomer": "68",
+      "OverdelivTolrtdLmtRatioInPct": 51.2,
+      "PartialDeliveryIsAllowed": "8",
+      "PriceListType": "68",
+      "ProductTaxClassification1": "8",
+      "SalesGroup": "468",
+      "SalesItemProposal": "l-11644468",
+      "SalesOffice": "4468",
+      "ShippingCondition": "68",
+      "SlsDocIsRlvtForProofOfDlvry": true,
+      "SlsUnlmtdOvrdelivIsAllwd": true,
+      "SupplyingPlant": "4468",
+      "SalesDistrict": "644468",
+      "UnderdelivTolrtdLmtRatioInPct": 42,
+      "InvoiceDate": "68"
+    }
+  ]
+}
+
+
+### A_Customer
+# @name A_Customer_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Customer/r-16203950
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Customer": "r-16203950",
+  "AuthorizationGroup": "3950",
+  "BillingIsBlockedForCustomer": "50",
+  "CreatedByUser": "ser-16203950",
+  "CreationDate": "2010-05-26",
+  "CustomerAccountGroup": "3950",
+  "CustomerClassification": "50",
+  "CustomerFullName": "CustomerFullName-16203950",
+  "CustomerName": "CustomerName-16203950",
+  "DeliveryIsBlocked": "50",
+  "FreeDefinedAttribute01": "50",
+  "NFPartnerIsNaturalPerson": "0",
+  "OrderIsBlockedForCustomer": "50",
+  "PostingIsBlocked": true,
+  "Supplier": "r-16203950",
+  "CustomerCorporateGroup": "p-16203950",
+  "FiscalAddress": "s-16203950",
+  "Industry": "3950",
+  "IndustryCode1": "1-16203950",
+  "InternationalLocationNumber1": "6203950",
+  "InternationalLocationNumber2": "03950",
+  "IsMarkedForDeletion": true,
+  "to_CustomerSalesArea": [
+    {
+      "SalesOrganization": "4467",
+      "DistributionChannel": "67",
+      "Division": "67",
+      "AccountByCustomer": "mer-11644467",
+      "AuthorizationGroup": "4467",
+      "BillingIsBlockedForCustomer": "67",
+      "CompleteDeliveryIsDefined": false,
+      "CreditControlArea": "4467",
+      "Currency": "44467",
+      "CustomerABCClassification": "67",
+      "CustomerAccountAssignmentGroup": "67",
+      "CustomerGroup": "67",
+      "CustomerPaymentTerms": "4467",
+      "CustomerPriceGroup": "67",
+      "CustomerPricingProcedure": "67",
+      "DeliveryIsBlockedForCustomer": "67",
+      "IncotermsClassification": "467",
+      "IncotermsTransferLocation": "rmsTransferLocation-11644467",
+      "IncotermsLocation1": "IncotermsLocation1-11644467",
+      "IncotermsLocation2": "IncotermsLocation2-11644467",
+      "IncotermsVersion": "4467",
+      "ItemOrderProbabilityInPercent": "467",
+      "ManualInvoiceMaintIsRelevant": false,
+      "MaxNmbrOfPartialDelivery": 9,
+      "OrderCombinationIsAllowed": false,
+      "OrderIsBlockedForCustomer": "67",
+      "OverdelivTolrtdLmtRatioInPct": 48.9,
+      "PartialDeliveryIsAllowed": "7",
+      "PriceListType": "67",
+      "ProductTaxClassification1": "7",
+      "SalesGroup": "467",
+      "SalesItemProposal": "l-11644467",
+      "SalesOffice": "4467",
+      "ShippingCondition": "67",
+      "SlsDocIsRlvtForProofOfDlvry": false,
+      "SlsUnlmtdOvrdelivIsAllwd": false,
+      "SupplyingPlant": "4467",
+      "SalesDistrict": "644467",
+      "UnderdelivTolrtdLmtRatioInPct": 90.6,
+      "InvoiceDate": "67"
+    },
+    {
+      "SalesOrganization": "4468",
+      "DistributionChannel": "68",
+      "Division": "68",
+      "AccountByCustomer": "mer-11644468",
+      "AuthorizationGroup": "4468",
+      "BillingIsBlockedForCustomer": "68",
+      "CompleteDeliveryIsDefined": true,
+      "CreditControlArea": "4468",
+      "Currency": "44468",
+      "CustomerABCClassification": "68",
+      "CustomerAccountAssignmentGroup": "68",
+      "CustomerGroup": "68",
+      "CustomerPaymentTerms": "4468",
+      "CustomerPriceGroup": "68",
+      "CustomerPricingProcedure": "68",
+      "DeliveryIsBlockedForCustomer": "68",
+      "IncotermsClassification": "468",
+      "IncotermsTransferLocation": "rmsTransferLocation-11644468",
+      "IncotermsLocation1": "IncotermsLocation1-11644468",
+      "IncotermsLocation2": "IncotermsLocation2-11644468",
+      "IncotermsVersion": "4468",
+      "ItemOrderProbabilityInPercent": "468",
+      "ManualInvoiceMaintIsRelevant": true,
+      "MaxNmbrOfPartialDelivery": 4,
+      "OrderCombinationIsAllowed": true,
+      "OrderIsBlockedForCustomer": "68",
+      "OverdelivTolrtdLmtRatioInPct": 51.2,
+      "PartialDeliveryIsAllowed": "8",
+      "PriceListType": "68",
+      "ProductTaxClassification1": "8",
+      "SalesGroup": "468",
+      "SalesItemProposal": "l-11644468",
+      "SalesOffice": "4468",
+      "ShippingCondition": "68",
+      "SlsDocIsRlvtForProofOfDlvry": true,
+      "SlsUnlmtdOvrdelivIsAllwd": true,
+      "SupplyingPlant": "4468",
+      "SalesDistrict": "644468",
+      "UnderdelivTolrtdLmtRatioInPct": 42,
+      "InvoiceDate": "68"
+    }
+  ]
+}
+
+
+### A_Customer
+# @name A_Customer_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Customer/r-16203950
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_CustomerSalesArea
+# @name A_CustomerSalesArea_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_CustomerSalesArea
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_CustomerSalesArea
+# @name A_CustomerSalesArea_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_CustomerSalesArea
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "SalesOrganization": "4467",
+  "DistributionChannel": "67",
+  "Division": "67",
+  "AccountByCustomer": "mer-11644467",
+  "AuthorizationGroup": "4467",
+  "BillingIsBlockedForCustomer": "67",
+  "CompleteDeliveryIsDefined": false,
+  "CreditControlArea": "4467",
+  "Currency": "44467",
+  "CustomerABCClassification": "67",
+  "CustomerAccountAssignmentGroup": "67",
+  "CustomerGroup": "67",
+  "CustomerPaymentTerms": "4467",
+  "CustomerPriceGroup": "67",
+  "CustomerPricingProcedure": "67",
+  "DeliveryIsBlockedForCustomer": "67",
+  "IncotermsClassification": "467",
+  "IncotermsTransferLocation": "rmsTransferLocation-11644467",
+  "IncotermsLocation1": "IncotermsLocation1-11644467",
+  "IncotermsLocation2": "IncotermsLocation2-11644467",
+  "IncotermsVersion": "4467",
+  "ItemOrderProbabilityInPercent": "467",
+  "ManualInvoiceMaintIsRelevant": false,
+  "MaxNmbrOfPartialDelivery": 9,
+  "OrderCombinationIsAllowed": false,
+  "OrderIsBlockedForCustomer": "67",
+  "OverdelivTolrtdLmtRatioInPct": 48.9,
+  "PartialDeliveryIsAllowed": "7",
+  "PriceListType": "67",
+  "ProductTaxClassification1": "7",
+  "SalesGroup": "467",
+  "SalesItemProposal": "l-11644467",
+  "SalesOffice": "4467",
+  "ShippingCondition": "67",
+  "SlsDocIsRlvtForProofOfDlvry": false,
+  "SlsUnlmtdOvrdelivIsAllwd": false,
+  "SupplyingPlant": "4467",
+  "SalesDistrict": "644467",
+  "UnderdelivTolrtdLmtRatioInPct": 90.6,
+  "InvoiceDate": "67"
+}
+
+
+### A_CustomerSalesArea
+# @name A_CustomerSalesArea_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_CustomerSalesArea(Customer='r-16203950',SalesOrganization='4467',DistributionChannel='67',Division='67')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "SalesOrganization": "4467",
+  "DistributionChannel": "67",
+  "Division": "67",
+  "AccountByCustomer": "mer-11644467",
+  "AuthorizationGroup": "4467",
+  "BillingIsBlockedForCustomer": "67",
+  "CompleteDeliveryIsDefined": false,
+  "CreditControlArea": "4467",
+  "Currency": "44467",
+  "CustomerABCClassification": "67",
+  "CustomerAccountAssignmentGroup": "67",
+  "CustomerGroup": "67",
+  "CustomerPaymentTerms": "4467",
+  "CustomerPriceGroup": "67",
+  "CustomerPricingProcedure": "67",
+  "DeliveryIsBlockedForCustomer": "67",
+  "IncotermsClassification": "467",
+  "IncotermsTransferLocation": "rmsTransferLocation-11644467",
+  "IncotermsLocation1": "IncotermsLocation1-11644467",
+  "IncotermsLocation2": "IncotermsLocation2-11644467",
+  "IncotermsVersion": "4467",
+  "ItemOrderProbabilityInPercent": "467",
+  "ManualInvoiceMaintIsRelevant": false,
+  "MaxNmbrOfPartialDelivery": 9,
+  "OrderCombinationIsAllowed": false,
+  "OrderIsBlockedForCustomer": "67",
+  "OverdelivTolrtdLmtRatioInPct": 48.9,
+  "PartialDeliveryIsAllowed": "7",
+  "PriceListType": "67",
+  "ProductTaxClassification1": "7",
+  "SalesGroup": "467",
+  "SalesItemProposal": "l-11644467",
+  "SalesOffice": "4467",
+  "ShippingCondition": "67",
+  "SlsDocIsRlvtForProofOfDlvry": false,
+  "SlsUnlmtdOvrdelivIsAllwd": false,
+  "SupplyingPlant": "4467",
+  "SalesDistrict": "644467",
+  "UnderdelivTolrtdLmtRatioInPct": 90.6,
+  "InvoiceDate": "67"
+}
+
+
+### A_CustomerSalesArea
+# @name A_CustomerSalesArea_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_CustomerSalesArea(Customer='r-16203950',SalesOrganization='4467',DistributionChannel='67',Division='67')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_Supplier
+# @name A_Supplier_GET
+GET {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Supplier
+Authorization: Basic {{username}}:{{password}}
+
+
+### A_Supplier
+# @name A_Supplier_POST
+POST {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Supplier
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Supplier": "r-24938244",
+  "AuthorizationGroup": "8244",
+  "CreatedByUser": "ser-24938244",
+  "CreationDate": "2007-03-16",
+  "Customer": "r-24938244",
+  "IsMarkedForDeletion": true,
+  "IsNaturalPerson": "4",
+  "PaymentIsBlockedForSupplier": true,
+  "PostingIsBlocked": true,
+  "PurchasingIsBlocked": true,
+  "SupplierAccountGroup": "8244",
+  "SupplierFullName": "SupplierFullName-24938244",
+  "SupplierName": "SupplierName-24938244",
+  "VATRegistration": "egistration-24938244",
+  "BirthDate": "2022-05-09",
+  "ConcatenatedInternationalLocNo": "LocNo-24938244",
+  "DeletionIndicator": true,
+  "FiscalAddress": "s-24938244",
+  "Industry": "8244",
+  "InternationalLocationNumber1": "4938244",
+  "InternationalLocationNumber2": "38244",
+  "IsNaturalPerson2": "4",
+  "ResponsibleType": "44",
+  "SuplrQltyInProcmtCertfnValidTo": "2022-09-27",
+  "SuplrQltyInProcmtIsActive": true,
+  "SuplrQltyMgmtSystemValidTo": "2008-06-18",
+  "SupplierCorporateGroup": "p-24938244",
+  "SupplierProcurementBlock": "44",
+  "TaxNumber1": "Number1-24938244",
+  "TaxNumber2": "r2-24938244",
+  "TaxNumber3": "axNumber3-24938244",
+  "TaxNumber4": "axNumber4-24938244",
+  "TaxNumber5": "TaxNumber5-24938244",
+  "TaxNumberResponsible": "TaxNumberResponsible-24938244",
+  "TaxNumberType": "44",
+  "SuplrProofOfDelivRlvtCode": "4",
+  "BR_TaxIsSplit": true
+}
+
+
+### A_Supplier
+# @name A_Supplier_PATCH
+PATCH {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Supplier/r-24938244
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "Supplier": "r-24938244",
+  "AuthorizationGroup": "8244",
+  "CreatedByUser": "ser-24938244",
+  "CreationDate": "2007-03-16",
+  "Customer": "r-24938244",
+  "IsMarkedForDeletion": true,
+  "IsNaturalPerson": "4",
+  "PaymentIsBlockedForSupplier": true,
+  "PostingIsBlocked": true,
+  "PurchasingIsBlocked": true,
+  "SupplierAccountGroup": "8244",
+  "SupplierFullName": "SupplierFullName-24938244",
+  "SupplierName": "SupplierName-24938244",
+  "VATRegistration": "egistration-24938244",
+  "BirthDate": "2022-05-09",
+  "ConcatenatedInternationalLocNo": "LocNo-24938244",
+  "DeletionIndicator": true,
+  "FiscalAddress": "s-24938244",
+  "Industry": "8244",
+  "InternationalLocationNumber1": "4938244",
+  "InternationalLocationNumber2": "38244",
+  "IsNaturalPerson2": "4",
+  "ResponsibleType": "44",
+  "SuplrQltyInProcmtCertfnValidTo": "2022-09-27",
+  "SuplrQltyInProcmtIsActive": true,
+  "SuplrQltyMgmtSystemValidTo": "2008-06-18",
+  "SupplierCorporateGroup": "p-24938244",
+  "SupplierProcurementBlock": "44",
+  "TaxNumber1": "Number1-24938244",
+  "TaxNumber2": "r2-24938244",
+  "TaxNumber3": "axNumber3-24938244",
+  "TaxNumber4": "axNumber4-24938244",
+  "TaxNumber5": "TaxNumber5-24938244",
+  "TaxNumberResponsible": "TaxNumberResponsible-24938244",
+  "TaxNumberType": "44",
+  "SuplrProofOfDelivRlvtCode": "4",
+  "BR_TaxIsSplit": true
+}
+
+
+### A_Supplier
+# @name A_Supplier_DELETE
+DELETE {{server}}/odata/v4/API_BUSINESS_PARTNER/A_Supplier/r-24938244
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}

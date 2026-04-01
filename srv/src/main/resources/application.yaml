@@ -2,15 +2,24 @@
 ---
 spring:
   sql.init.platform: h2
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   security:
     user:
       name: admin
       password: admin
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
 cds:
   data-source.auto-config.enabled: false
   security:
     mock:
-      enabled: true   
+      enabled: true
+  
 ---
 management:
   endpoint:

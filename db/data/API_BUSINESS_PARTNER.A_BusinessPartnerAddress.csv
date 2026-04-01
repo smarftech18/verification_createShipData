@@ -1,4 +1,4 @@
 BusinessPartner,AddressID,ValidityStartDate,ValidityEndDate,AuthorizationGroup,AddressUUID,AdditionalStreetPrefixName,AdditionalStreetSuffixName,AddressTimeZone,CareOfName,CityCode,CityName,CompanyPostalCode,Country,County,DeliveryServiceNumber,DeliveryServiceTypeCode,District,FormOfAddress,FullName,HomeCityName,HouseNumber,HouseNumberSupplementText,Language,POBox,POBoxIsWithoutNumber,POBoxPostalCode,Person,PostalCode,Region,StreetName,StreetPrefixName,StreetSuffixName,TaxJurisdiction,TransportZone,IsDefaultAddress
-C0000001,10000001,2025-01-01 00:00:00,9999-12-31 00:00:00,,,,,Asia/Tokyo,,,千代田区,,JP,,,,,,,東京都,1-1,,JA,,,,100-0005,13,丸の内,,,,,true
-C0000002,10000002,2025-01-01 00:00:00,9999-12-31 00:00:00,,,,,Asia/Tokyo,,,,JP,,,,,,,大阪府,大阪市,2-2,,JA,,,,530-0001,27,梅田,,,,,true
-C0000003,10000003,2025-01-01 00:00:00,9999-12-31 00:00:00,,,,,Asia/Tokyo,,,,JP,,,,,,,愛知県,名古屋市,3-3,,JA,,,,460-0008,23,栄,,,,,true
+C0000001,10000001,2025-01-01T00:00:00Z,9999-12-31T00:00:00Z,,,,,Asia/Tokyo,,,千代田区,,JP,,,,,,,東京都,1-1,,JA,,,,100-0005,13,丸の内,,,,,true
+C0000002,10000002,2025-01-01T00:00:00Z,9999-12-31T00:00:00Z,,,,,Asia/Tokyo,,,,JP,,,,,,,大阪府,大阪市,2-2,,JA,,,,530-0001,27,梅田,,,,,true
+C0000003,10000003,2025-01-01T00:00:00Z,9999-12-31T00:00:00Z,,,,,Asia/Tokyo,,,,JP,,,,,,,愛知県,名古屋市,3-3,,JA,,,,460-0008,23,栄,,,,,true

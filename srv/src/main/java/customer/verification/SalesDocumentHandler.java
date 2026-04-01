@@ -578,7 +578,6 @@ public class SalesDocumentHandler implements EventHandler {
         h.setSalesOrganization  ((String)     src.get("SalesOrganization"));
         h.setDistributionChannel((String)     src.get("DistributionChannel"));
         h.setDivision           ((String)     src.get("Division"));
-        h.setSalesDocumentDate  (             src.get("SalesDocumentDate"));
         h.setSalesDocumentType  ((String)     src.get("SalesDocumentType"));
         h.setCustomerID         ((String)     src.get("CustomerID"));
         h.setCurrency           ((String)     src.get("Currency"));
@@ -624,8 +623,7 @@ public class SalesDocumentHandler implements EventHandler {
         item.setCurrency         ((String)     src.get("Currency"));
         item.setPlant            ((String)     src.get("Plant"));
         item.setStorageLocation  ((String)     src.get("StorageLocation"));
-        item.setPricingDate      (             src.get("PricingDate"));
-
+        
         // SalesDocItemView（MaterialMaster / PlantMaster補完）から
         if (master != null) {
             item.setMaterialName ((String) master.get("MaterialName"));
@@ -658,7 +656,6 @@ public class SalesDocumentHandler implements EventHandler {
         d.setDetailText         ((String)     src.get("DetailText"));
         d.setDetailAmount       ((BigDecimal) src.get("DetailAmount"));
         d.setConditionType      ((String)     src.get("ConditionType"));
-        d.setScheduleLineDate   (             src.get("ScheduleLineDate"));
         d.setDeliveryScheduleQty((BigDecimal) src.get("DeliveryScheduleQty"));
         d.setCurrency           ((String)     src.get("Currency"));
 
