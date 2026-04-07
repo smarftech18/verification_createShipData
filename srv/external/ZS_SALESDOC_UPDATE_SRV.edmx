@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+           xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+           xmlns:sap="http://www.sap.com/Protocols/SAPData">
+  <edmx:DataServices m:DataServiceVersion="2.0">
+    <Schema Namespace="ZS_SALESDOC_UPDATE_SRV"
+            xml:lang="en"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+
+      <!-- ============================================================
+           UpdateSalesDocStatus
+           売上伝票ステータス更新エンティティ
+           POST で S4 内部更新をトリガーする（CqnInsert で呼び出す）
+           p_key / c_key はダミーキー（業務的意味なし）
+      ============================================================ -->
+      <EntityType Name="UpdateSalesDocStatus" sap:content-version="1">
+        <Key>
+          <PropertyRef Name="p_key" />
+          <PropertyRef Name="c_key" />
+        </Key>
+        <Property Name="p_key"               Type="Edm.String" Nullable="false" MaxLength="1"   sap:label="Primary Key (Dummy)" />
+        <Property Name="c_key"               Type="Edm.String" Nullable="false" MaxLength="1"   sap:label="Client Key (Dummy)" />
+        <Property Name="SalesDocument"       Type="Edm.String" Nullable="false" MaxLength="10"  sap:label="Sales Document" />
+        <Property Name="SalesDocumentItem"   Type="Edm.String" Nullable="false" MaxLength="6"   sap:label="Sales Document Item" />
+        <Property Name="ProcessingStatus"    Type="Edm.String" Nullable="false" MaxLength="2"   sap:label="Processing Status" />
+        <Property Name="ProcessedDate"       Type="Edm.String" Nullable="false" MaxLength="10"  sap:label="Processed Date" />
+        <Property Name="ProcessedBy"         Type="Edm.String" Nullable="false" MaxLength="12"  sap:label="Processed By" />
+        <Property Name="Remark"              Type="Edm.String" Nullable="false" MaxLength="255" sap:label="Remark" />
+        <Property Name="InternalCode"        Type="Edm.String" Nullable="false" MaxLength="20"  sap:label="Internal Code" />
+      </EntityType>
+
+      <!-- ============================================================
+           InsertSalesDocLog
+           売上伝票ログ登録エンティティ
+           POST で S4 ログテーブルへ書き込む（CqnInsert で呼び出す）
+      ============================================================ -->
+      <EntityType Name="InsertSalesDocLog" sap:content-version="1">
+        <Key>
+          <PropertyRef Name="p_key" />
+          <PropertyRef Name="c_key" />
+        </Key>
+        <Property Name="p_key"               Type="Edm.String" Nullable="false" MaxLength="1"   sap:label="Primary Key (Dummy)" />
+        <Property Name="c_key"               Type="Edm.String" Nullable="false" MaxLength="1"   sap:label="Client Key (Dummy)" />
+        <Property Name="SalesDocument"       Type="Edm.String" Nullable="false" MaxLength="10"  sap:label="Sales Document" />
+        <Property Name="SalesDocumentItem"   Type="Edm.String" Nullable="false" MaxLength="6"   sap:label="Sales Document Item" />
+        <Property Name="LogType"             Type="Edm.String" Nullable="false" MaxLength="1"   sap:label="Log Type (S=Success/E=Error)" />
+        <Property Name="LogMessage"          Type="Edm.String" Nullable="false" MaxLength="255" sap:label="Log Message" />
+      </EntityType>
+
+      <!-- ============================================================
+           EntitySet 定義
+           updatable/deletable/searchable はすべて false
+           （CqnInsert = POST のみ許可）
+      ============================================================ -->
+      <EntityContainer Name="ZS_SALESDOC_UPDATE_SRV_Entities" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="UpdateSalesDocStatus"
+                   EntityType="ZS_SALESDOC_UPDATE_SRV.UpdateSalesDocStatus"
+                   sap:updatable="false"
+                   sap:deletable="false"
+                   sap:searchable="false"
+                   sap:content-version="1" />
+        <EntitySet Name="InsertSalesDocLog"
+                   EntityType="ZS_SALESDOC_UPDATE_SRV.InsertSalesDocLog"
+                   sap:updatable="false"
+                   sap:deletable="false"
+                   sap:searchable="false"
+                   sap:content-version="1" />
+      </EntityContainer>
+
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

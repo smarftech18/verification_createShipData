@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="ZS_SALESDOC_UPDATE_SRV" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <Annotation Term="Core.Links">
+        <Collection>
+          <Record>
+            <PropertyValue Property="rel" String="author"/>
+            <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+          </Record>
+        </Collection>
+      </Annotation>
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="UpdateSalesDocStatus" EntityType="ZS_SALESDOC_UPDATE_SRV.UpdateSalesDocStatus"/>
+        <EntitySet Name="InsertSalesDocLog" EntityType="ZS_SALESDOC_UPDATE_SRV.InsertSalesDocLog"/>
+      </EntityContainer>
+      <EntityType Name="UpdateSalesDocStatus">
+        <Key>
+          <PropertyRef Name="p_key"/>
+          <PropertyRef Name="c_key"/>
+        </Key>
+        <Property Name="p_key" Type="Edm.String" MaxLength="1" Nullable="false"/>
+        <Property Name="c_key" Type="Edm.String" MaxLength="1" Nullable="false"/>
+        <Property Name="SalesDocument" Type="Edm.String" MaxLength="10" Nullable="false"/>
+        <Property Name="SalesDocumentItem" Type="Edm.String" MaxLength="6" Nullable="false"/>
+        <Property Name="ProcessingStatus" Type="Edm.String" MaxLength="2" Nullable="false"/>
+        <Property Name="ProcessedDate" Type="Edm.String" MaxLength="10" Nullable="false"/>
+        <Property Name="ProcessedBy" Type="Edm.String" MaxLength="12" Nullable="false"/>
+        <Property Name="Remark" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="InternalCode" Type="Edm.String" MaxLength="20" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="InsertSalesDocLog">
+        <Key>
+          <PropertyRef Name="p_key"/>
+          <PropertyRef Name="c_key"/>
+        </Key>
+        <Property Name="p_key" Type="Edm.String" MaxLength="1" Nullable="false"/>
+        <Property Name="c_key" Type="Edm.String" MaxLength="1" Nullable="false"/>
+        <Property Name="SalesDocument" Type="Edm.String" MaxLength="10" Nullable="false"/>
+        <Property Name="SalesDocumentItem" Type="Edm.String" MaxLength="6" Nullable="false"/>
+        <Property Name="LogType" Type="Edm.String" MaxLength="1" Nullable="false"/>
+        <Property Name="LogMessage" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

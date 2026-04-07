@@ -31,6 +31,22 @@
       "env": {
         "run.config": "{\"handlerId\":\"cap_java_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/verification\\\",\\\"profileName\\\":\\\"default\\\"}\"}"
       }
+    },
+    {
+      "name": "Local_Run verification-2",
+      "type": "java",
+      "request": "launch",
+      "args": [
+        "--spring.profiles.active=default"
+      ],
+      "mainClass": "customer.verification.Application",
+      "projectName": "verification",
+      "preLaunchTask": "PreLaunchTask for Run verification-2",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/env/.env2",
+      "env": {
+        "run.config": "{\"handlerId\":\"cap_java_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/verification\\\",\\\"profileName\\\":\\\"default\\\"}\"}"
+      }
     }
   ]
 }

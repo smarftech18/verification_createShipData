@@ -3059,6 +3059,25 @@
         }
       }
     },
+    "SalesDocumentService.updateS4Status": {
+      "kind": "action",
+      "returns": {
+        "elements": {
+          "success": {
+            "type": "cds.Boolean"
+          },
+          "message": {
+            "type": "cds.String"
+          },
+          "successCount": {
+            "type": "cds.Integer"
+          },
+          "errorCount": {
+            "type": "cds.Integer"
+          }
+        }
+      }
+    },
     "cds.outbox.Messages": {
       "kind": "entity",
       "elements": {
@@ -4856,6 +4875,128 @@
           "type": "cds.Decimal",
           "precision": 13,
           "scale": 3
+        }
+      }
+    },
+    "ZS_SALESDOC_UPDATE_SRV": {
+      "@source": "external/ZS_SALESDOC_UPDATE_SRV.cds",
+      "kind": "service",
+      "@cds.external": true,
+      "@m.IsDefaultEntityContainer": "true"
+    },
+    "ZS_SALESDOC_UPDATE_SRV.UpdateSalesDocStatus": {
+      "kind": "entity",
+      "@cds.external": true,
+      "@cds.persistence.skip": true,
+      "@sap.updatable": "false",
+      "@sap.deletable": "false",
+      "@sap.searchable": "false",
+      "@sap.content.version": "1",
+      "elements": {
+        "p_key": {
+          "@sap.label": "Primary Key (Dummy)",
+          "key": true,
+          "type": "cds.String",
+          "length": 1,
+          "notNull": true
+        },
+        "c_key": {
+          "@sap.label": "Client Key (Dummy)",
+          "key": true,
+          "type": "cds.String",
+          "length": 1,
+          "notNull": true
+        },
+        "SalesDocument": {
+          "@sap.label": "Sales Document",
+          "type": "cds.String",
+          "length": 10,
+          "notNull": true
+        },
+        "SalesDocumentItem": {
+          "@sap.label": "Sales Document Item",
+          "type": "cds.String",
+          "length": 6,
+          "notNull": true
+        },
+        "ProcessingStatus": {
+          "@sap.label": "Processing Status",
+          "type": "cds.String",
+          "length": 2,
+          "notNull": true
+        },
+        "ProcessedDate": {
+          "@sap.label": "Processed Date",
+          "type": "cds.String",
+          "length": 10,
+          "notNull": true
+        },
+        "ProcessedBy": {
+          "@sap.label": "Processed By",
+          "type": "cds.String",
+          "length": 12,
+          "notNull": true
+        },
+        "Remark": {
+          "@sap.label": "Remark",
+          "type": "cds.String",
+          "length": 255,
+          "notNull": true
+        },
+        "InternalCode": {
+          "@sap.label": "Internal Code",
+          "type": "cds.String",
+          "length": 20,
+          "notNull": true
+        }
+      }
+    },
+    "ZS_SALESDOC_UPDATE_SRV.InsertSalesDocLog": {
+      "kind": "entity",
+      "@cds.external": true,
+      "@cds.persistence.skip": true,
+      "@sap.updatable": "false",
+      "@sap.deletable": "false",
+      "@sap.searchable": "false",
+      "@sap.content.version": "1",
+      "elements": {
+        "p_key": {
+          "@sap.label": "Primary Key (Dummy)",
+          "key": true,
+          "type": "cds.String",
+          "length": 1,
+          "notNull": true
+        },
+        "c_key": {
+          "@sap.label": "Client Key (Dummy)",
+          "key": true,
+          "type": "cds.String",
+          "length": 1,
+          "notNull": true
+        },
+        "SalesDocument": {
+          "@sap.label": "Sales Document",
+          "type": "cds.String",
+          "length": 10,
+          "notNull": true
+        },
+        "SalesDocumentItem": {
+          "@sap.label": "Sales Document Item",
+          "type": "cds.String",
+          "length": 6,
+          "notNull": true
+        },
+        "LogType": {
+          "@sap.label": "Log Type (S=Success/E=Error)",
+          "type": "cds.String",
+          "length": 1,
+          "notNull": true
+        },
+        "LogMessage": {
+          "@sap.label": "Log Message",
+          "type": "cds.String",
+          "length": 255,
+          "notNull": true
         }
       }
     },

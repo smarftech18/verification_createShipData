@@ -38,3 +38,15 @@ management:
       enabled: true
     db:
       enabled: true
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+cds:
+  remote:
+    services:
+      '[ZS_SALESDOC_UPDATE_SRV]':
+        destination:
+          name: ZS_SALESDOC_UPDATE_SRV
+        type: odata-v2

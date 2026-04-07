@@ -16,272 +16,272 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocument": "s-10606396",
-  "SalesOrganization": "6396",
-  "DistributionChannel": "96",
-  "Division": "96",
-  "SalesDocumentDate": "2016-07-09",
-  "SalesDocumentType": "6396",
-  "CustomerID": "D-10606396",
-  "CustomerName": "CustomerName-10606396",
-  "CustomerGroup": "6396",
-  "Currency": "06396",
-  "TotalNetAmount": 923690374480.41,
-  "Status": "96",
-  "ErrorMessage": "ErrorMessage-10606396",
+  "SalesDocument": "rs-8013856",
+  "SalesOrganization": "3856",
+  "DistributionChannel": "56",
+  "Division": "56",
+  "SalesDocumentDate": "2021-04-22",
+  "SalesDocumentType": "3856",
+  "CustomerID": "ID-8013856",
+  "CustomerName": "CustomerName-8013856",
+  "CustomerGroup": "3856",
+  "Currency": "13856",
+  "TotalNetAmount": 2371466672574.77,
+  "Status": "56",
+  "ErrorMessage": "ErrorMessage-8013856",
   "items": [
     {
-      "SalesDocumentItem": "877686",
-      "MaterialCode": "erialCode-17877686",
-      "MaterialName": "MaterialName-17877686",
-      "MaterialGroup": "-17877686",
-      "OrderQuantity": 3405882040.554,
-      "OrderQuantityUnit": "686",
-      "NetAmount": 7341141805409.07,
-      "Currency": "77686",
-      "Plant": "7686",
-      "PlantName": "PlantName-17877686",
-      "CompanyCode": "7686",
-      "StorageLocation": "7686",
-      "PricingDate": "2012-09-11",
+      "SalesDocumentItem": "868617",
+      "MaterialCode": "erialCode-19868617",
+      "MaterialName": "MaterialName-19868617",
+      "MaterialGroup": "-19868617",
+      "OrderQuantity": 5306456481.929,
+      "OrderQuantityUnit": "617",
+      "NetAmount": 4667637769038.55,
+      "Currency": "68617",
+      "Plant": "8617",
+      "PlantName": "PlantName-19868617",
+      "CompanyCode": "8617",
+      "StorageLocation": "8617",
+      "PricingDate": "2007-09-12",
       "details": [
         {
-          "SalesDocument": "ls-9247650",
-          "SalesDocumentItem": "247650",
-          "SequentialNumber": "650",
-          "DetailCategory": "50",
-          "DetailText": "DetailText-9247650",
-          "DetailAmount": 316851888614.12,
-          "ConditionType": "7650",
-          "ScheduleLineDate": "2021-06-23",
-          "DeliveryScheduleQty": 5062555286.173,
-          "Currency": "47650",
-          "createdAt": "2004-11-13T00:00:00.000Z",
-          "createdBy": "createdBy.5i7j6@example.net",
-          "modifiedAt": "2001-09-20T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5i7j6@example.org"
+          "SalesDocument": "s-21622192",
+          "SalesDocumentItem": "622192",
+          "SequentialNumber": "192",
+          "DetailCategory": "92",
+          "DetailText": "DetailText-21622192",
+          "DetailAmount": 603439963252.49,
+          "ConditionType": "2192",
+          "ScheduleLineDate": "2017-02-19",
+          "DeliveryScheduleQty": 2416885209.269,
+          "Currency": "22192",
+          "createdAt": "2004-03-13T00:00:00.000Z",
+          "createdBy": "createdBy.cvfsg@example.com",
+          "modifiedAt": "2006-03-02T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.cvfsg@example.net"
         },
         {
-          "SalesDocument": "ls-9247651",
-          "SalesDocumentItem": "247651",
-          "SequentialNumber": "651",
-          "DetailCategory": "51",
-          "DetailText": "DetailText-9247651",
-          "DetailAmount": 7803694296990.32,
-          "ConditionType": "7651",
-          "ScheduleLineDate": "2005-12-24",
-          "DeliveryScheduleQty": 7528839449.464,
-          "Currency": "47651",
-          "createdAt": "2020-01-10T00:00:00.000Z",
-          "createdBy": "createdBy.5i7j7@example.com",
-          "modifiedAt": "2011-10-16T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5i7j7@example.org"
+          "SalesDocument": "s-21622193",
+          "SalesDocumentItem": "622193",
+          "SequentialNumber": "193",
+          "DetailCategory": "93",
+          "DetailText": "DetailText-21622193",
+          "DetailAmount": 6701019260959.09,
+          "ConditionType": "2193",
+          "ScheduleLineDate": "2006-09-06",
+          "DeliveryScheduleQty": 1948798592.705,
+          "Currency": "22193",
+          "createdAt": "2008-04-01T00:00:00.000Z",
+          "createdBy": "createdBy.cvfsh@example.com",
+          "modifiedAt": "2017-03-26T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.cvfsh@example.net"
         }
       ],
-      "createdAt": "2007-02-03T00:00:00.000Z",
-      "createdBy": "createdBy.an6ie@example.net",
-      "modifiedAt": "2022-10-18T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.an6ie@example.com"
+      "createdAt": "2012-07-10T00:00:00.000Z",
+      "createdBy": "createdBy.btuq1@example.net",
+      "modifiedAt": "2001-05-04T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.btuq1@example.org"
     },
     {
-      "SalesDocumentItem": "877687",
-      "MaterialCode": "erialCode-17877687",
-      "MaterialName": "MaterialName-17877687",
-      "MaterialGroup": "-17877687",
-      "OrderQuantity": 7989345400.553,
-      "OrderQuantityUnit": "687",
-      "NetAmount": 397374750641.75,
-      "Currency": "77687",
-      "Plant": "7687",
-      "PlantName": "PlantName-17877687",
-      "CompanyCode": "7687",
-      "StorageLocation": "7687",
-      "PricingDate": "2017-11-17",
+      "SalesDocumentItem": "868618",
+      "MaterialCode": "erialCode-19868618",
+      "MaterialName": "MaterialName-19868618",
+      "MaterialGroup": "-19868618",
+      "OrderQuantity": 7317207067.467,
+      "OrderQuantityUnit": "618",
+      "NetAmount": 3558638063226.08,
+      "Currency": "68618",
+      "Plant": "8618",
+      "PlantName": "PlantName-19868618",
+      "CompanyCode": "8618",
+      "StorageLocation": "8618",
+      "PricingDate": "2003-08-07",
       "details": [
         {
-          "SalesDocument": "ls-9601565",
-          "SalesDocumentItem": "601565",
-          "SequentialNumber": "565",
-          "DetailCategory": "65",
-          "DetailText": "DetailText-9601565",
-          "DetailAmount": 7981712178147.75,
-          "ConditionType": "1565",
-          "ScheduleLineDate": "2010-01-24",
-          "DeliveryScheduleQty": 3468793889.446,
-          "Currency": "01565",
-          "createdAt": "2017-11-16T00:00:00.000Z",
-          "createdBy": "createdBy.5psm5@example.com",
-          "modifiedAt": "2008-12-07T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5psm5@example.net"
+          "SalesDocument": "s-10541510",
+          "SalesDocumentItem": "541510",
+          "SequentialNumber": "510",
+          "DetailCategory": "10",
+          "DetailText": "DetailText-10541510",
+          "DetailAmount": 8858342817558.02,
+          "ConditionType": "1510",
+          "ScheduleLineDate": "2002-05-18",
+          "DeliveryScheduleQty": 3493390457.789,
+          "Currency": "41510",
+          "createdAt": "2003-02-26T00:00:00.000Z",
+          "createdBy": "createdBy.69xvq@example.org",
+          "modifiedAt": "2003-08-29T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.69xvq@example.com"
         },
         {
-          "SalesDocument": "ls-9601566",
-          "SalesDocumentItem": "601566",
-          "SequentialNumber": "566",
-          "DetailCategory": "66",
-          "DetailText": "DetailText-9601566",
-          "DetailAmount": 7347008261566.25,
-          "ConditionType": "1566",
-          "ScheduleLineDate": "2015-12-02",
-          "DeliveryScheduleQty": 4169960496.579,
-          "Currency": "01566",
-          "createdAt": "2013-06-10T00:00:00.000Z",
-          "createdBy": "createdBy.5psm6@example.com",
-          "modifiedAt": "2022-04-02T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5psm6@example.net"
+          "SalesDocument": "s-10541511",
+          "SalesDocumentItem": "541511",
+          "SequentialNumber": "511",
+          "DetailCategory": "11",
+          "DetailText": "DetailText-10541511",
+          "DetailAmount": 6908804977609.06,
+          "ConditionType": "1511",
+          "ScheduleLineDate": "2004-03-24",
+          "DeliveryScheduleQty": 8108359150.256,
+          "Currency": "41511",
+          "createdAt": "2017-07-07T00:00:00.000Z",
+          "createdBy": "createdBy.69xvr@example.com",
+          "modifiedAt": "2007-06-20T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.69xvr@example.org"
         }
       ],
-      "createdAt": "2011-01-13T00:00:00.000Z",
-      "createdBy": "createdBy.an6if@example.net",
-      "modifiedAt": "2006-04-27T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.an6if@example.com"
+      "createdAt": "2018-01-25T00:00:00.000Z",
+      "createdBy": "createdBy.btuq2@example.com",
+      "modifiedAt": "2013-02-05T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.btuq2@example.com"
     }
   ],
-  "createdAt": "2000-10-12T00:00:00.000Z",
-  "createdBy": "createdBy.6bby4@example.net",
-  "modifiedAt": "2009-01-12T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.6bby4@example.org"
+  "createdAt": "2011-03-16T00:00:00.000Z",
+  "createdBy": "createdBy.4rrj4@example.org",
+  "modifiedAt": "2002-12-17T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.4rrj4@example.com"
 }
 
 
 ### SalesDocHeaders
 # @name SalesDocHeaders_PATCH
-PATCH {{server}}/odata/v4/api/sales-documents/SalesDocHeaders/s-10606396
+PATCH {{server}}/odata/v4/api/sales-documents/SalesDocHeaders/rs-8013856
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocument": "s-10606396",
-  "SalesOrganization": "6396",
-  "DistributionChannel": "96",
-  "Division": "96",
-  "SalesDocumentDate": "2016-07-09",
-  "SalesDocumentType": "6396",
-  "CustomerID": "D-10606396",
-  "CustomerName": "CustomerName-10606396",
-  "CustomerGroup": "6396",
-  "Currency": "06396",
-  "TotalNetAmount": 923690374480.41,
-  "Status": "96",
-  "ErrorMessage": "ErrorMessage-10606396",
+  "SalesDocument": "rs-8013856",
+  "SalesOrganization": "3856",
+  "DistributionChannel": "56",
+  "Division": "56",
+  "SalesDocumentDate": "2021-04-22",
+  "SalesDocumentType": "3856",
+  "CustomerID": "ID-8013856",
+  "CustomerName": "CustomerName-8013856",
+  "CustomerGroup": "3856",
+  "Currency": "13856",
+  "TotalNetAmount": 2371466672574.77,
+  "Status": "56",
+  "ErrorMessage": "ErrorMessage-8013856",
   "items": [
     {
-      "SalesDocumentItem": "877686",
-      "MaterialCode": "erialCode-17877686",
-      "MaterialName": "MaterialName-17877686",
-      "MaterialGroup": "-17877686",
-      "OrderQuantity": 3405882040.554,
-      "OrderQuantityUnit": "686",
-      "NetAmount": 7341141805409.07,
-      "Currency": "77686",
-      "Plant": "7686",
-      "PlantName": "PlantName-17877686",
-      "CompanyCode": "7686",
-      "StorageLocation": "7686",
-      "PricingDate": "2012-09-11",
+      "SalesDocumentItem": "868617",
+      "MaterialCode": "erialCode-19868617",
+      "MaterialName": "MaterialName-19868617",
+      "MaterialGroup": "-19868617",
+      "OrderQuantity": 5306456481.929,
+      "OrderQuantityUnit": "617",
+      "NetAmount": 4667637769038.55,
+      "Currency": "68617",
+      "Plant": "8617",
+      "PlantName": "PlantName-19868617",
+      "CompanyCode": "8617",
+      "StorageLocation": "8617",
+      "PricingDate": "2007-09-12",
       "details": [
         {
-          "SalesDocument": "ls-9247650",
-          "SalesDocumentItem": "247650",
-          "SequentialNumber": "650",
-          "DetailCategory": "50",
-          "DetailText": "DetailText-9247650",
-          "DetailAmount": 316851888614.12,
-          "ConditionType": "7650",
-          "ScheduleLineDate": "2021-06-23",
-          "DeliveryScheduleQty": 5062555286.173,
-          "Currency": "47650",
-          "createdAt": "2004-11-13T00:00:00.000Z",
-          "createdBy": "createdBy.5i7j6@example.net",
-          "modifiedAt": "2001-09-20T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5i7j6@example.org"
+          "SalesDocument": "s-21622192",
+          "SalesDocumentItem": "622192",
+          "SequentialNumber": "192",
+          "DetailCategory": "92",
+          "DetailText": "DetailText-21622192",
+          "DetailAmount": 603439963252.49,
+          "ConditionType": "2192",
+          "ScheduleLineDate": "2017-02-19",
+          "DeliveryScheduleQty": 2416885209.269,
+          "Currency": "22192",
+          "createdAt": "2004-03-13T00:00:00.000Z",
+          "createdBy": "createdBy.cvfsg@example.com",
+          "modifiedAt": "2006-03-02T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.cvfsg@example.net"
         },
         {
-          "SalesDocument": "ls-9247651",
-          "SalesDocumentItem": "247651",
-          "SequentialNumber": "651",
-          "DetailCategory": "51",
-          "DetailText": "DetailText-9247651",
-          "DetailAmount": 7803694296990.32,
-          "ConditionType": "7651",
-          "ScheduleLineDate": "2005-12-24",
-          "DeliveryScheduleQty": 7528839449.464,
-          "Currency": "47651",
-          "createdAt": "2020-01-10T00:00:00.000Z",
-          "createdBy": "createdBy.5i7j7@example.com",
-          "modifiedAt": "2011-10-16T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5i7j7@example.org"
+          "SalesDocument": "s-21622193",
+          "SalesDocumentItem": "622193",
+          "SequentialNumber": "193",
+          "DetailCategory": "93",
+          "DetailText": "DetailText-21622193",
+          "DetailAmount": 6701019260959.09,
+          "ConditionType": "2193",
+          "ScheduleLineDate": "2006-09-06",
+          "DeliveryScheduleQty": 1948798592.705,
+          "Currency": "22193",
+          "createdAt": "2008-04-01T00:00:00.000Z",
+          "createdBy": "createdBy.cvfsh@example.com",
+          "modifiedAt": "2017-03-26T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.cvfsh@example.net"
         }
       ],
-      "createdAt": "2007-02-03T00:00:00.000Z",
-      "createdBy": "createdBy.an6ie@example.net",
-      "modifiedAt": "2022-10-18T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.an6ie@example.com"
+      "createdAt": "2012-07-10T00:00:00.000Z",
+      "createdBy": "createdBy.btuq1@example.net",
+      "modifiedAt": "2001-05-04T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.btuq1@example.org"
     },
     {
-      "SalesDocumentItem": "877687",
-      "MaterialCode": "erialCode-17877687",
-      "MaterialName": "MaterialName-17877687",
-      "MaterialGroup": "-17877687",
-      "OrderQuantity": 7989345400.553,
-      "OrderQuantityUnit": "687",
-      "NetAmount": 397374750641.75,
-      "Currency": "77687",
-      "Plant": "7687",
-      "PlantName": "PlantName-17877687",
-      "CompanyCode": "7687",
-      "StorageLocation": "7687",
-      "PricingDate": "2017-11-17",
+      "SalesDocumentItem": "868618",
+      "MaterialCode": "erialCode-19868618",
+      "MaterialName": "MaterialName-19868618",
+      "MaterialGroup": "-19868618",
+      "OrderQuantity": 7317207067.467,
+      "OrderQuantityUnit": "618",
+      "NetAmount": 3558638063226.08,
+      "Currency": "68618",
+      "Plant": "8618",
+      "PlantName": "PlantName-19868618",
+      "CompanyCode": "8618",
+      "StorageLocation": "8618",
+      "PricingDate": "2003-08-07",
       "details": [
         {
-          "SalesDocument": "ls-9601565",
-          "SalesDocumentItem": "601565",
-          "SequentialNumber": "565",
-          "DetailCategory": "65",
-          "DetailText": "DetailText-9601565",
-          "DetailAmount": 7981712178147.75,
-          "ConditionType": "1565",
-          "ScheduleLineDate": "2010-01-24",
-          "DeliveryScheduleQty": 3468793889.446,
-          "Currency": "01565",
-          "createdAt": "2017-11-16T00:00:00.000Z",
-          "createdBy": "createdBy.5psm5@example.com",
-          "modifiedAt": "2008-12-07T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5psm5@example.net"
+          "SalesDocument": "s-10541510",
+          "SalesDocumentItem": "541510",
+          "SequentialNumber": "510",
+          "DetailCategory": "10",
+          "DetailText": "DetailText-10541510",
+          "DetailAmount": 8858342817558.02,
+          "ConditionType": "1510",
+          "ScheduleLineDate": "2002-05-18",
+          "DeliveryScheduleQty": 3493390457.789,
+          "Currency": "41510",
+          "createdAt": "2003-02-26T00:00:00.000Z",
+          "createdBy": "createdBy.69xvq@example.org",
+          "modifiedAt": "2003-08-29T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.69xvq@example.com"
         },
         {
-          "SalesDocument": "ls-9601566",
-          "SalesDocumentItem": "601566",
-          "SequentialNumber": "566",
-          "DetailCategory": "66",
-          "DetailText": "DetailText-9601566",
-          "DetailAmount": 7347008261566.25,
-          "ConditionType": "1566",
-          "ScheduleLineDate": "2015-12-02",
-          "DeliveryScheduleQty": 4169960496.579,
-          "Currency": "01566",
-          "createdAt": "2013-06-10T00:00:00.000Z",
-          "createdBy": "createdBy.5psm6@example.com",
-          "modifiedAt": "2022-04-02T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.5psm6@example.net"
+          "SalesDocument": "s-10541511",
+          "SalesDocumentItem": "541511",
+          "SequentialNumber": "511",
+          "DetailCategory": "11",
+          "DetailText": "DetailText-10541511",
+          "DetailAmount": 6908804977609.06,
+          "ConditionType": "1511",
+          "ScheduleLineDate": "2004-03-24",
+          "DeliveryScheduleQty": 8108359150.256,
+          "Currency": "41511",
+          "createdAt": "2017-07-07T00:00:00.000Z",
+          "createdBy": "createdBy.69xvr@example.com",
+          "modifiedAt": "2007-06-20T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.69xvr@example.org"
         }
       ],
-      "createdAt": "2011-01-13T00:00:00.000Z",
-      "createdBy": "createdBy.an6if@example.net",
-      "modifiedAt": "2006-04-27T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.an6if@example.com"
+      "createdAt": "2018-01-25T00:00:00.000Z",
+      "createdBy": "createdBy.btuq2@example.com",
+      "modifiedAt": "2013-02-05T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.btuq2@example.com"
     }
   ],
-  "createdAt": "2000-10-12T00:00:00.000Z",
-  "createdBy": "createdBy.6bby4@example.net",
-  "modifiedAt": "2009-01-12T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.6bby4@example.org"
+  "createdAt": "2011-03-16T00:00:00.000Z",
+  "createdBy": "createdBy.4rrj4@example.org",
+  "modifiedAt": "2002-12-17T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.4rrj4@example.com"
 }
 
 
 ### SalesDocHeaders
 # @name SalesDocHeaders_DELETE
-DELETE {{server}}/odata/v4/api/sales-documents/SalesDocHeaders/s-10606396
+DELETE {{server}}/odata/v4/api/sales-documents/SalesDocHeaders/rs-8013856
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -299,124 +299,124 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocumentItem": "877686",
-  "MaterialCode": "erialCode-17877686",
-  "MaterialName": "MaterialName-17877686",
-  "MaterialGroup": "-17877686",
-  "OrderQuantity": 3405882040.554,
-  "OrderQuantityUnit": "686",
-  "NetAmount": 7341141805409.07,
-  "Currency": "77686",
-  "Plant": "7686",
-  "PlantName": "PlantName-17877686",
-  "CompanyCode": "7686",
-  "StorageLocation": "7686",
-  "PricingDate": "2012-09-11",
+  "SalesDocumentItem": "868617",
+  "MaterialCode": "erialCode-19868617",
+  "MaterialName": "MaterialName-19868617",
+  "MaterialGroup": "-19868617",
+  "OrderQuantity": 5306456481.929,
+  "OrderQuantityUnit": "617",
+  "NetAmount": 4667637769038.55,
+  "Currency": "68617",
+  "Plant": "8617",
+  "PlantName": "PlantName-19868617",
+  "CompanyCode": "8617",
+  "StorageLocation": "8617",
+  "PricingDate": "2007-09-12",
   "details": [
     {
-      "SalesDocument": "ls-9247650",
-      "SalesDocumentItem": "247650",
-      "SequentialNumber": "650",
-      "DetailCategory": "50",
-      "DetailText": "DetailText-9247650",
-      "DetailAmount": 316851888614.12,
-      "ConditionType": "7650",
-      "ScheduleLineDate": "2021-06-23",
-      "DeliveryScheduleQty": 5062555286.173,
-      "Currency": "47650",
-      "createdAt": "2004-11-13T00:00:00.000Z",
-      "createdBy": "createdBy.5i7j6@example.net",
-      "modifiedAt": "2001-09-20T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.5i7j6@example.org"
+      "SalesDocument": "s-21622192",
+      "SalesDocumentItem": "622192",
+      "SequentialNumber": "192",
+      "DetailCategory": "92",
+      "DetailText": "DetailText-21622192",
+      "DetailAmount": 603439963252.49,
+      "ConditionType": "2192",
+      "ScheduleLineDate": "2017-02-19",
+      "DeliveryScheduleQty": 2416885209.269,
+      "Currency": "22192",
+      "createdAt": "2004-03-13T00:00:00.000Z",
+      "createdBy": "createdBy.cvfsg@example.com",
+      "modifiedAt": "2006-03-02T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.cvfsg@example.net"
     },
     {
-      "SalesDocument": "ls-9247651",
-      "SalesDocumentItem": "247651",
-      "SequentialNumber": "651",
-      "DetailCategory": "51",
-      "DetailText": "DetailText-9247651",
-      "DetailAmount": 7803694296990.32,
-      "ConditionType": "7651",
-      "ScheduleLineDate": "2005-12-24",
-      "DeliveryScheduleQty": 7528839449.464,
-      "Currency": "47651",
-      "createdAt": "2020-01-10T00:00:00.000Z",
-      "createdBy": "createdBy.5i7j7@example.com",
-      "modifiedAt": "2011-10-16T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.5i7j7@example.org"
+      "SalesDocument": "s-21622193",
+      "SalesDocumentItem": "622193",
+      "SequentialNumber": "193",
+      "DetailCategory": "93",
+      "DetailText": "DetailText-21622193",
+      "DetailAmount": 6701019260959.09,
+      "ConditionType": "2193",
+      "ScheduleLineDate": "2006-09-06",
+      "DeliveryScheduleQty": 1948798592.705,
+      "Currency": "22193",
+      "createdAt": "2008-04-01T00:00:00.000Z",
+      "createdBy": "createdBy.cvfsh@example.com",
+      "modifiedAt": "2017-03-26T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.cvfsh@example.net"
     }
   ],
-  "createdAt": "2007-02-03T00:00:00.000Z",
-  "createdBy": "createdBy.an6ie@example.net",
-  "modifiedAt": "2022-10-18T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.an6ie@example.com"
+  "createdAt": "2012-07-10T00:00:00.000Z",
+  "createdBy": "createdBy.btuq1@example.net",
+  "modifiedAt": "2001-05-04T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.btuq1@example.org"
 }
 
 
 ### SalesDocItems
 # @name SalesDocItems_PATCH
-PATCH {{server}}/odata/v4/api/sales-documents/SalesDocItems(SalesDocument='s-10606396',SalesDocumentItem='877686')
+PATCH {{server}}/odata/v4/api/sales-documents/SalesDocItems(SalesDocument='rs-8013856',SalesDocumentItem='868617')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocumentItem": "877686",
-  "MaterialCode": "erialCode-17877686",
-  "MaterialName": "MaterialName-17877686",
-  "MaterialGroup": "-17877686",
-  "OrderQuantity": 3405882040.554,
-  "OrderQuantityUnit": "686",
-  "NetAmount": 7341141805409.07,
-  "Currency": "77686",
-  "Plant": "7686",
-  "PlantName": "PlantName-17877686",
-  "CompanyCode": "7686",
-  "StorageLocation": "7686",
-  "PricingDate": "2012-09-11",
+  "SalesDocumentItem": "868617",
+  "MaterialCode": "erialCode-19868617",
+  "MaterialName": "MaterialName-19868617",
+  "MaterialGroup": "-19868617",
+  "OrderQuantity": 5306456481.929,
+  "OrderQuantityUnit": "617",
+  "NetAmount": 4667637769038.55,
+  "Currency": "68617",
+  "Plant": "8617",
+  "PlantName": "PlantName-19868617",
+  "CompanyCode": "8617",
+  "StorageLocation": "8617",
+  "PricingDate": "2007-09-12",
   "details": [
     {
-      "SalesDocument": "ls-9247650",
-      "SalesDocumentItem": "247650",
-      "SequentialNumber": "650",
-      "DetailCategory": "50",
-      "DetailText": "DetailText-9247650",
-      "DetailAmount": 316851888614.12,
-      "ConditionType": "7650",
-      "ScheduleLineDate": "2021-06-23",
-      "DeliveryScheduleQty": 5062555286.173,
-      "Currency": "47650",
-      "createdAt": "2004-11-13T00:00:00.000Z",
-      "createdBy": "createdBy.5i7j6@example.net",
-      "modifiedAt": "2001-09-20T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.5i7j6@example.org"
+      "SalesDocument": "s-21622192",
+      "SalesDocumentItem": "622192",
+      "SequentialNumber": "192",
+      "DetailCategory": "92",
+      "DetailText": "DetailText-21622192",
+      "DetailAmount": 603439963252.49,
+      "ConditionType": "2192",
+      "ScheduleLineDate": "2017-02-19",
+      "DeliveryScheduleQty": 2416885209.269,
+      "Currency": "22192",
+      "createdAt": "2004-03-13T00:00:00.000Z",
+      "createdBy": "createdBy.cvfsg@example.com",
+      "modifiedAt": "2006-03-02T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.cvfsg@example.net"
     },
     {
-      "SalesDocument": "ls-9247651",
-      "SalesDocumentItem": "247651",
-      "SequentialNumber": "651",
-      "DetailCategory": "51",
-      "DetailText": "DetailText-9247651",
-      "DetailAmount": 7803694296990.32,
-      "ConditionType": "7651",
-      "ScheduleLineDate": "2005-12-24",
-      "DeliveryScheduleQty": 7528839449.464,
-      "Currency": "47651",
-      "createdAt": "2020-01-10T00:00:00.000Z",
-      "createdBy": "createdBy.5i7j7@example.com",
-      "modifiedAt": "2011-10-16T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.5i7j7@example.org"
+      "SalesDocument": "s-21622193",
+      "SalesDocumentItem": "622193",
+      "SequentialNumber": "193",
+      "DetailCategory": "93",
+      "DetailText": "DetailText-21622193",
+      "DetailAmount": 6701019260959.09,
+      "ConditionType": "2193",
+      "ScheduleLineDate": "2006-09-06",
+      "DeliveryScheduleQty": 1948798592.705,
+      "Currency": "22193",
+      "createdAt": "2008-04-01T00:00:00.000Z",
+      "createdBy": "createdBy.cvfsh@example.com",
+      "modifiedAt": "2017-03-26T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.cvfsh@example.net"
     }
   ],
-  "createdAt": "2007-02-03T00:00:00.000Z",
-  "createdBy": "createdBy.an6ie@example.net",
-  "modifiedAt": "2022-10-18T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.an6ie@example.com"
+  "createdAt": "2012-07-10T00:00:00.000Z",
+  "createdBy": "createdBy.btuq1@example.net",
+  "modifiedAt": "2001-05-04T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.btuq1@example.org"
 }
 
 
 ### SalesDocItems
 # @name SalesDocItems_DELETE
-DELETE {{server}}/odata/v4/api/sales-documents/SalesDocItems(SalesDocument='s-10606396',SalesDocumentItem='877686')
+DELETE {{server}}/odata/v4/api/sales-documents/SalesDocItems(SalesDocument='rs-8013856',SalesDocumentItem='868617')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -434,50 +434,50 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocument": "ls-9247650",
-  "SalesDocumentItem": "247650",
-  "SequentialNumber": "650",
-  "DetailCategory": "50",
-  "DetailText": "DetailText-9247650",
-  "DetailAmount": 316851888614.12,
-  "ConditionType": "7650",
-  "ScheduleLineDate": "2021-06-23",
-  "DeliveryScheduleQty": 5062555286.173,
-  "Currency": "47650",
-  "createdAt": "2004-11-13T00:00:00.000Z",
-  "createdBy": "createdBy.5i7j6@example.net",
-  "modifiedAt": "2001-09-20T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.5i7j6@example.org"
+  "SalesDocument": "s-21622192",
+  "SalesDocumentItem": "622192",
+  "SequentialNumber": "192",
+  "DetailCategory": "92",
+  "DetailText": "DetailText-21622192",
+  "DetailAmount": 603439963252.49,
+  "ConditionType": "2192",
+  "ScheduleLineDate": "2017-02-19",
+  "DeliveryScheduleQty": 2416885209.269,
+  "Currency": "22192",
+  "createdAt": "2004-03-13T00:00:00.000Z",
+  "createdBy": "createdBy.cvfsg@example.com",
+  "modifiedAt": "2006-03-02T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.cvfsg@example.net"
 }
 
 
 ### SalesDocDetails
 # @name SalesDocDetails_PATCH
-PATCH {{server}}/odata/v4/api/sales-documents/SalesDocDetails(SalesDocument='ls-9247650',SalesDocumentItem='247650',SequentialNumber='650')
+PATCH {{server}}/odata/v4/api/sales-documents/SalesDocDetails(SalesDocument='s-21622192',SalesDocumentItem='622192',SequentialNumber='192')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocument": "ls-9247650",
-  "SalesDocumentItem": "247650",
-  "SequentialNumber": "650",
-  "DetailCategory": "50",
-  "DetailText": "DetailText-9247650",
-  "DetailAmount": 316851888614.12,
-  "ConditionType": "7650",
-  "ScheduleLineDate": "2021-06-23",
-  "DeliveryScheduleQty": 5062555286.173,
-  "Currency": "47650",
-  "createdAt": "2004-11-13T00:00:00.000Z",
-  "createdBy": "createdBy.5i7j6@example.net",
-  "modifiedAt": "2001-09-20T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.5i7j6@example.org"
+  "SalesDocument": "s-21622192",
+  "SalesDocumentItem": "622192",
+  "SequentialNumber": "192",
+  "DetailCategory": "92",
+  "DetailText": "DetailText-21622192",
+  "DetailAmount": 603439963252.49,
+  "ConditionType": "2192",
+  "ScheduleLineDate": "2017-02-19",
+  "DeliveryScheduleQty": 2416885209.269,
+  "Currency": "22192",
+  "createdAt": "2004-03-13T00:00:00.000Z",
+  "createdBy": "createdBy.cvfsg@example.com",
+  "modifiedAt": "2006-03-02T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.cvfsg@example.net"
 }
 
 
 ### SalesDocDetails
 # @name SalesDocDetails_DELETE
-DELETE {{server}}/odata/v4/api/sales-documents/SalesDocDetails(SalesDocument='ls-9247650',SalesDocumentItem='247650',SequentialNumber='650')
+DELETE {{server}}/odata/v4/api/sales-documents/SalesDocDetails(SalesDocument='s-21622192',SalesDocumentItem='622192',SequentialNumber='192')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -501,6 +501,15 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "salesDocument": "12345",
+  "salesDocument": "nt-7538443",
   "forceUpdate": false
 }
+
+
+### updateS4Status
+# @name updateS4Status_POST
+POST {{server}}/odata/v4/api/sales-documents/updateS4Status
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{}

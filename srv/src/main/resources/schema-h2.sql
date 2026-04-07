@@ -13,6 +13,8 @@ DROP VIEW IF EXISTS BusinessPartnerService_EmailAddresses;
 DROP VIEW IF EXISTS BusinessPartnerService_Addresses;
 DROP VIEW IF EXISTS BusinessPartnerService_BusinessPartners;
 DROP TABLE IF EXISTS cds_outbox_Messages;
+DROP TABLE IF EXISTS ZS_SALESDOC_UPDATE_SRV_InsertSalesDocLog;
+DROP TABLE IF EXISTS ZS_SALESDOC_UPDATE_SRV_UpdateSalesDocStatus;
 DROP TABLE IF EXISTS ZC_SALESDOCUMENT_SERVICE_ZcSalesDocument;
 DROP TABLE IF EXISTS com_example_bp_master_PlantMaster;
 DROP TABLE IF EXISTS com_example_bp_master_MaterialMaster;
@@ -461,6 +463,29 @@ CREATE TABLE ZC_SALESDOCUMENT_SERVICE_ZcSalesDocument (
   ScheduleLineDate DATE,
   DeliveryScheduleQty DECIMAL(13, 3),
   PRIMARY KEY(SalesDocument, SalesDocumentItem, SequentialNumber)
+);
+
+CREATE TABLE ZS_SALESDOC_UPDATE_SRV_UpdateSalesDocStatus (
+  p_key NVARCHAR(1) NOT NULL,
+  c_key NVARCHAR(1) NOT NULL,
+  SalesDocument NVARCHAR(10) NOT NULL,
+  SalesDocumentItem NVARCHAR(6) NOT NULL,
+  ProcessingStatus NVARCHAR(2) NOT NULL,
+  ProcessedDate NVARCHAR(10) NOT NULL,
+  ProcessedBy NVARCHAR(12) NOT NULL,
+  Remark NVARCHAR(255) NOT NULL,
+  InternalCode NVARCHAR(20) NOT NULL,
+  PRIMARY KEY(p_key, c_key)
+);
+
+CREATE TABLE ZS_SALESDOC_UPDATE_SRV_InsertSalesDocLog (
+  p_key NVARCHAR(1) NOT NULL,
+  c_key NVARCHAR(1) NOT NULL,
+  SalesDocument NVARCHAR(10) NOT NULL,
+  SalesDocumentItem NVARCHAR(6) NOT NULL,
+  LogType NVARCHAR(1) NOT NULL,
+  LogMessage NVARCHAR(255) NOT NULL,
+  PRIMARY KEY(p_key, c_key)
 );
 
 CREATE TABLE cds_outbox_Messages (

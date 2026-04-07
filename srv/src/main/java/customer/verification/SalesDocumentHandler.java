@@ -27,6 +27,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,13 @@ public class SalesDocumentHandler implements EventHandler {
     private static final String HEADER_ENTITY = "com.example.bp.SalesDocHeader";
     private static final String ITEM_ENTITY   = "com.example.bp.SalesDocItem";
     private static final String DETAIL_ENTITY = "com.example.bp.SalesDocDetail";
+
+    /** S4 更新サービス定数 */
+    /** ダミーキー: p_key / c_key に設定する空文字（null は S4 エラーになるため "" を使用） */
+    private static final String DUMMY_KEY            = "";
+    private static final String UPDATE_SERVICE_NAME  = "ZS_SALESDOC_UPDATE_SRV";
+    private static final String S4_UPDATE_ENTITY     = "ZS_SALESDOC_UPDATE_SRV.UpdateSalesDocStatus";
+    private static final String S4_LOG_ENTITY        = "ZS_SALESDOC_UPDATE_SRV.InsertSalesDocLog";
 
     // ---------------------------------------------------------------
     // 依存サービス
@@ -692,5 +700,184 @@ public class SalesDocumentHandler implements EventHandler {
         ctx.put("itemsCreated",   items);
         ctx.put("detailsCreated", details);
         ctx.put("errorCount",     errors);
+    }
+
+    // ====================================================================
+    // updateS4Status イベントハンドラ
+    // ====================================================================
+
+    /**
+     * S4 ステータス更新アクションハンドラ。
+     *
+     * <p>ローカルDB の SalesDocItem を全件取得し、伝票明細単位で
+     * S4 へステータス更新（UpdateSalesDocStatus）とログ登録（InsertSalesDocLog）を行う。
+     *
+     * <p>例外処理方針:
+     * <ul>
+     *   <li>ステータス更新失敗: errorMessages に記録し、当該明細をスキップして続行</li>
+     *   <li>ログ登録失敗: log.warn のみ（業務処理は継続）</li>
+     *   <li>finally で errorMessages をクリアする</li>
+     * </ul>
+     */
+    @On(event = "updateS4Status", service = "SalesDocumentService")
+    public void onUpdateS4Status(EventContext ctx) {
+
+        int successCount = 0;
+        int errorCount   = 0;
+
+        try {
+            // 1. ローカルDB から更新対象明細を取得
+            List<Row> targets = fetchUpdateTargets();
+
+            // 2. 明細単位でS4更新
+            for (Row item : targets) {
+                String salesDocument     = (String) item.get("SalesDocument");
+                String salesDocumentItem = (String) item.get("SalesDocumentItem");
+
+                try {
+                    updateS4DocStatus(salesDocument, salesDocumentItem);
+                    insertS4DocLog(salesDocument, salesDocumentItem, "S", "処理成功");
+                    successCount++;
+                } catch (DocumentProcessingException e) {
+                    // updateS4DocStatus 内でエラーを errorMessages に追記済み
+                    errorCount++;
+                }
+            }
+
+            // 3. 結果セット
+            boolean success = (errorCount == 0);
+            String  message = buildS4UpdateResultMessage(successCount, errorCount);
+            ctx.put("success",      success);
+            ctx.put("message",      message);
+            ctx.put("successCount", successCount);
+            ctx.put("errorCount",   errorCount);
+
+        } catch (DocumentProcessingException e) {
+            // fetchUpdateTargets() の失敗 — 明細取得自体が不可
+            ctx.put("success",      false);
+            ctx.put("message",      "更新対象の取得に失敗しました: " + e.getMessage());
+            ctx.put("successCount", 0);
+            ctx.put("errorCount",   errorCount);
+        } catch (Exception e) {
+            log.error("updateS4Status で予期しないエラーが発生しました", e);
+            ctx.put("success",      false);
+            ctx.put("message",      "予期しないエラー: " + e.getMessage());
+            ctx.put("successCount", successCount);
+            ctx.put("errorCount",   errorCount);
+        } finally {
+            errorMessages.clear();
+        }
+    }
+
+    // --------------------------------------------------------------------
+    // updateS4Status ヘルパーメソッド
+    // --------------------------------------------------------------------
+
+    /**
+     * ローカルDB から更新対象の SalesDocItem を全件取得する。
+     *
+     * @return SalesDocItem レコードのリスト
+     * @throws DocumentProcessingException 取得に失敗した場合
+     */
+    private List<Row> fetchUpdateTargets() {
+        try {
+            Result result = db.run(Select.from(ITEM_ENTITY));
+            return result.list();
+        } catch (ServiceException e) {
+            String msg = "更新対象明細の取得でS4サービスエラーが発生しました: " + e.getMessage();
+            log.error(msg, e);
+            errorMessages.add(msg);
+            throw new DocumentProcessingException(msg);
+        } catch (Exception e) {
+            String msg = "更新対象明細の取得で予期しないエラーが発生しました: " + e.getMessage();
+            log.error(msg, e);
+            errorMessages.add(msg);
+            throw new DocumentProcessingException(msg);
+        }
+    }
+
+    /**
+     * S4 へ売上伝票明細のステータス更新を行う（CqnInsert = POST）。
+     *
+     * <p>p_key / c_key はダミーキーのため空文字を設定する。
+     * 更新不要な項目（ProcessedBy, Remark, InternalCode）は空文字を設定する。
+     *
+     * @param salesDocument     売上伝票番号
+     * @param salesDocumentItem 明細番号
+     * @throws DocumentProcessingException 更新に失敗した場合
+     */
+    private void updateS4DocStatus(String salesDocument, String salesDocumentItem) {
+        Map<String, Object> entry = new LinkedHashMap<>();
+        entry.put("p_key",             DUMMY_KEY);
+        entry.put("c_key",             DUMMY_KEY);
+        entry.put("SalesDocument",     salesDocument);
+        entry.put("SalesDocumentItem", salesDocumentItem);
+        entry.put("ProcessingStatus",  "02");                              // 処理済み
+        entry.put("ProcessedDate",     LocalDate.now().toString());        // YYYY-MM-DD
+        entry.put("ProcessedBy",       "");                                // not null: 空文字
+        entry.put("Remark",            "");                                // not null: 空文字
+        entry.put("InternalCode",      "");                                // not null: 空文字
+
+        try {
+            CqnService updateSrv = (CqnService) runtime.getServiceCatalog()
+                    .getService(CqnService.class, UPDATE_SERVICE_NAME);
+            updateSrv.run(Insert.into(S4_UPDATE_ENTITY).entry(entry));
+        } catch (ServiceException e) {
+            String msg = String.format("伝票[%s]明細[%s] S4ステータス更新エラー: %s",
+                    salesDocument, salesDocumentItem, e.getMessage());
+            log.error(msg, e);
+            errorMessages.add(msg);
+            throw new DocumentProcessingException(msg);
+        } catch (Exception e) {
+            String msg = String.format("伝票[%s]明細[%s] S4ステータス更新で予期しないエラー: %s",
+                    salesDocument, salesDocumentItem, e.getMessage());
+            log.error(msg, e);
+            errorMessages.add(msg);
+            throw new DocumentProcessingException(msg);
+        }
+    }
+
+    /**
+     * S4 へ売上伝票処理ログを登録する（CqnInsert = POST）。
+     *
+     * <p>ログ登録の失敗は業務処理を止めない。エラーは log.warn のみ。
+     *
+     * @param salesDocument     売上伝票番号
+     * @param salesDocumentItem 明細番号
+     * @param logType           ログ種別 (S=成功 / E=エラー)
+     * @param logMessage        ログメッセージ
+     */
+    private void insertS4DocLog(String salesDocument, String salesDocumentItem,
+                                String logType, String logMessage) {
+        Map<String, Object> entry = new LinkedHashMap<>();
+        entry.put("p_key",             DUMMY_KEY);
+        entry.put("c_key",             DUMMY_KEY);
+        entry.put("SalesDocument",     salesDocument);
+        entry.put("SalesDocumentItem", salesDocumentItem);
+        entry.put("LogType",           logType);
+        entry.put("LogMessage",        logMessage);
+
+        try {
+            CqnService updateSrv = (CqnService) runtime.getServiceCatalog()
+                    .getService(CqnService.class, UPDATE_SERVICE_NAME);
+            updateSrv.run(Insert.into(S4_LOG_ENTITY).entry(entry));
+        } catch (Exception e) {
+            // ログ登録失敗は業務処理を止めない
+            log.warn("伝票[{}]明細[{}] S4ログ登録に失敗しました（処理は継続）: {}",
+                    salesDocument, salesDocumentItem, e.getMessage());
+        }
+    }
+
+    /**
+     * S4 更新処理の結果メッセージを組み立てる。
+     */
+    private String buildS4UpdateResultMessage(int successCount, int errorCount) {
+        if (errorCount == 0) {
+            return String.format("updateS4Status 完了: 成功=%d件", successCount);
+        }
+        String summary = String.format(
+                "updateS4Status 完了（エラーあり）: 成功=%d件, エラー=%d件",
+                successCount, errorCount);
+        return summary + "\n" + String.join("\n", errorMessages);
     }
 }

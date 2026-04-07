@@ -34,6 +34,7 @@
         <EntitySet Name="S4SalesDocuments" EntityType="SalesDocumentService.S4SalesDocuments"/>
         <ActionImport Name="createSalesDocuments" Action="SalesDocumentService.createSalesDocuments"/>
         <FunctionImport Name="getSalesDocStatus" Function="SalesDocumentService.getSalesDocStatus"/>
+        <ActionImport Name="updateS4Status" Action="SalesDocumentService.updateS4Status"/>
       </EntityContainer>
       <EntityType Name="SalesDocHeaders">
         <Key>
@@ -180,6 +181,12 @@
         <Property Name="lastUpdated" Type="Edm.DateTimeOffset"/>
         <Property Name="errorMessage" Type="Edm.String" MaxLength="255"/>
       </ComplexType>
+      <ComplexType Name="return_SalesDocumentService_updateS4Status">
+        <Property Name="success" Type="Edm.Boolean"/>
+        <Property Name="message" Type="Edm.String"/>
+        <Property Name="successCount" Type="Edm.Int32"/>
+        <Property Name="errorCount" Type="Edm.Int32"/>
+      </ComplexType>
       <Action Name="createSalesDocuments" IsBound="false">
         <Parameter Name="salesDocument" Type="Edm.String" MaxLength="10"/>
         <Parameter Name="forceUpdate" Type="Edm.Boolean"/>
@@ -189,6 +196,9 @@
         <Parameter Name="salesDocument" Type="Edm.String" MaxLength="10"/>
         <ReturnType Type="SalesDocumentService.return_SalesDocumentService_getSalesDocStatus"/>
       </Function>
+      <Action Name="updateS4Status" IsBound="false">
+        <ReturnType Type="SalesDocumentService.return_SalesDocumentService_updateS4Status"/>
+      </Action>
       <Annotations Target="SalesDocumentService.SalesDocHeaders/createdAt">
         <Annotation Term="UI.HiddenFilter" Bool="true"/>
         <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>

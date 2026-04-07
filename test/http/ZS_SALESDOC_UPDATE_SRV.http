@@ -1,0 +1,99 @@
+@server=http://localhost:8080
+@username=authenticated
+@password=
+
+
+### UpdateSalesDocStatus
+# @name UpdateSalesDocStatus_GET
+GET {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus
+Authorization: Basic {{username}}:{{password}}
+
+
+### UpdateSalesDocStatus
+# @name UpdateSalesDocStatus_POST
+POST {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "p_key": "9",
+  "c_key": "9",
+  "SalesDocument": "nt-3795499",
+  "SalesDocumentItem": "795499",
+  "ProcessingStatus": "99",
+  "ProcessedDate": "te-3795499",
+  "ProcessedBy": "edBy-3795499",
+  "Remark": "Remark-3795499",
+  "InternalCode": "InternalCode-3795499"
+}
+
+
+### UpdateSalesDocStatus
+# @name UpdateSalesDocStatus_PATCH
+PATCH {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus(p_key='9',c_key='9')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "p_key": "9",
+  "c_key": "9",
+  "SalesDocument": "nt-3795499",
+  "SalesDocumentItem": "795499",
+  "ProcessingStatus": "99",
+  "ProcessedDate": "te-3795499",
+  "ProcessedBy": "edBy-3795499",
+  "Remark": "Remark-3795499",
+  "InternalCode": "InternalCode-3795499"
+}
+
+
+### UpdateSalesDocStatus
+# @name UpdateSalesDocStatus_DELETE
+DELETE {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus(p_key='9',c_key='9')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+
+### InsertSalesDocLog
+# @name InsertSalesDocLog_GET
+GET {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog
+Authorization: Basic {{username}}:{{password}}
+
+
+### InsertSalesDocLog
+# @name InsertSalesDocLog_POST
+POST {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "p_key": "8",
+  "c_key": "8",
+  "SalesDocument": "nt-7108148",
+  "SalesDocumentItem": "108148",
+  "LogType": "8",
+  "LogMessage": "LogMessage-7108148"
+}
+
+
+### InsertSalesDocLog
+# @name InsertSalesDocLog_PATCH
+PATCH {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog(p_key='8',c_key='8')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
+
+{
+  "p_key": "8",
+  "c_key": "8",
+  "SalesDocument": "nt-7108148",
+  "SalesDocumentItem": "108148",
+  "LogType": "8",
+  "LogMessage": "LogMessage-7108148"
+}
+
+
+### InsertSalesDocLog
+# @name InsertSalesDocLog_DELETE
+DELETE {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog(p_key='8',c_key='8')
+Content-Type: application/json
+Authorization: Basic {{username}}:{{password}}
