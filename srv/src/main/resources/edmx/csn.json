@@ -4887,7 +4887,6 @@
     "ZS_SALESDOC_UPDATE_SRV.UpdateSalesDocStatus": {
       "kind": "entity",
       "@cds.external": true,
-      "@cds.persistence.skip": true,
       "@sap.updatable": "false",
       "@sap.deletable": "false",
       "@sap.searchable": "false",

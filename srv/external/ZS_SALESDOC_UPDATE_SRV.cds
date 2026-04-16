@@ -3,7 +3,7 @@
 @m.IsDefaultEntityContainer : 'true'
 service ZS_SALESDOC_UPDATE_SRV {
   @cds.external : true
-  @cds.persistence.skip : true
+  // @cds.persistence.skip : true
   @sap.updatable : 'false'
   @sap.deletable : 'false'
   @sap.searchable : 'false'
