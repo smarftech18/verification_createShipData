@@ -16,67 +16,67 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocument": "t-18191479",
-  "SalesDocumentItem": "191479",
-  "SequentialNumber": "479",
-  "SalesOrganization": "1479",
-  "DistributionChannel": "79",
-  "Division": "79",
-  "SalesDocumentDate": "2002-12-27",
-  "SalesDocumentType": "1479",
-  "CustomerID": "D-18191479",
-  "MaterialCode": "erialCode-18191479",
-  "OrderQuantity": 4822140416.661,
-  "OrderQuantityUnit": "479",
-  "NetAmount": 656616661377.92,
-  "Currency": "91479",
-  "Plant": "1479",
-  "StorageLocation": "1479",
-  "PricingDate": "2008-10-23",
-  "DetailCategory": "79",
-  "DetailText": "DetailText-18191479",
-  "DetailAmount": 8484471341696.23,
-  "ConditionType": "1479",
-  "ScheduleLineDate": "2012-05-18",
-  "DeliveryScheduleQty": 754948486.982
+  "SalesDocument": "nt-6793526",
+  "SalesDocumentItem": "793526",
+  "SequentialNumber": "526",
+  "SalesOrganization": "3526",
+  "DistributionChannel": "26",
+  "Division": "26",
+  "SalesDocumentDate": "2013-01-12",
+  "SalesDocumentType": "3526",
+  "CustomerID": "ID-6793526",
+  "MaterialCode": "terialCode-6793526",
+  "OrderQuantity": 5980552608.497,
+  "OrderQuantityUnit": "526",
+  "NetAmount": 9919075886344.9,
+  "Currency": "93526",
+  "Plant": "3526",
+  "StorageLocation": "3526",
+  "PricingDate": "2019-11-19",
+  "DetailCategory": "26",
+  "DetailText": "DetailText-6793526",
+  "DetailAmount": 717508720220.6,
+  "ConditionType": "3526",
+  "ScheduleLineDate": "2013-08-04",
+  "DeliveryScheduleQty": 5510370356.039
 }
 
 
 ### ZcSalesDocument
 # @name ZcSalesDocument_PATCH
-PATCH {{server}}/odata/v4/ZC_SALESDOCUMENT_SERVICE/ZcSalesDocument(SalesDocument='t-18191479',SalesDocumentItem='191479',SequentialNumber='479')
+PATCH {{server}}/odata/v4/ZC_SALESDOCUMENT_SERVICE/ZcSalesDocument(SalesDocument='nt-6793526',SalesDocumentItem='793526',SequentialNumber='526')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "SalesDocument": "t-18191479",
-  "SalesDocumentItem": "191479",
-  "SequentialNumber": "479",
-  "SalesOrganization": "1479",
-  "DistributionChannel": "79",
-  "Division": "79",
-  "SalesDocumentDate": "2002-12-27",
-  "SalesDocumentType": "1479",
-  "CustomerID": "D-18191479",
-  "MaterialCode": "erialCode-18191479",
-  "OrderQuantity": 4822140416.661,
-  "OrderQuantityUnit": "479",
-  "NetAmount": 656616661377.92,
-  "Currency": "91479",
-  "Plant": "1479",
-  "StorageLocation": "1479",
-  "PricingDate": "2008-10-23",
-  "DetailCategory": "79",
-  "DetailText": "DetailText-18191479",
-  "DetailAmount": 8484471341696.23,
-  "ConditionType": "1479",
-  "ScheduleLineDate": "2012-05-18",
-  "DeliveryScheduleQty": 754948486.982
+  "SalesDocument": "nt-6793526",
+  "SalesDocumentItem": "793526",
+  "SequentialNumber": "526",
+  "SalesOrganization": "3526",
+  "DistributionChannel": "26",
+  "Division": "26",
+  "SalesDocumentDate": "2013-01-12",
+  "SalesDocumentType": "3526",
+  "CustomerID": "ID-6793526",
+  "MaterialCode": "terialCode-6793526",
+  "OrderQuantity": 5980552608.497,
+  "OrderQuantityUnit": "526",
+  "NetAmount": 9919075886344.9,
+  "Currency": "93526",
+  "Plant": "3526",
+  "StorageLocation": "3526",
+  "PricingDate": "2019-11-19",
+  "DetailCategory": "26",
+  "DetailText": "DetailText-6793526",
+  "DetailAmount": 717508720220.6,
+  "ConditionType": "3526",
+  "ScheduleLineDate": "2013-08-04",
+  "DeliveryScheduleQty": 5510370356.039
 }
 
 
 ### ZcSalesDocument
 # @name ZcSalesDocument_DELETE
-DELETE {{server}}/odata/v4/ZC_SALESDOCUMENT_SERVICE/ZcSalesDocument(SalesDocument='t-18191479',SalesDocumentItem='191479',SequentialNumber='479')
+DELETE {{server}}/odata/v4/ZC_SALESDOCUMENT_SERVICE/ZcSalesDocument(SalesDocument='nt-6793526',SalesDocumentItem='793526',SequentialNumber='526')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}

@@ -14,11 +14,20 @@ spring:
       path: /h2-console
       settings:
         web-allow-others: true
+  config:
+    activate:
+      on-profile: default,mocked,develop
 cds:
   data-source.auto-config.enabled: false
   security:
     mock:
       enabled: true
+  remote:
+    services:
+      '[ZS_SALESDOC_UPDATE_SRV]':
+        destination:
+          name: ZS_SALESDOC_UPDATE_SRV
+        type: odata-v2
   
 ---
 management:
@@ -39,14 +48,5 @@ management:
     db:
       enabled: true
 ---
-spring:
-  config:
-    activate:
-      on-profile: default
-cds:
-  remote:
-    services:
-      '[ZS_SALESDOC_UPDATE_SRV]':
-        destination:
-          name: ZS_SALESDOC_UPDATE_SRV
-        type: odata-v2
+
+

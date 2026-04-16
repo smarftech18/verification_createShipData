@@ -16,278 +16,278 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "55502316-e247-4754-ace3-0f1ab0b46165",
-  "businessPartnerID": "rID-555023",
-  "fullName": "fullName-555023",
-  "firstName": "firstName-555023",
-  "lastName": "lastName-555023",
-  "category": "3",
-  "isBlocked": false,
-  "isMarkedForDeletion": false,
+  "ID": "20501078-1f83-4c8d-866b-e8147d60939e",
+  "businessPartnerID": "D-20501078",
+  "fullName": "fullName-20501078",
+  "firstName": "firstName-20501078",
+  "lastName": "lastName-20501078",
+  "category": "8",
+  "isBlocked": true,
+  "isMarkedForDeletion": true,
   "addresses": [
     {
-      "ID": "18125867-5909-491c-97c3-79ffdd4d7eaa",
-      "addressID": "D-18125867",
-      "country": "867",
-      "region": "867",
-      "postalCode": "e-18125867",
-      "cityName": "cityName-18125867",
-      "streetName": "streetName-18125867",
-      "houseNumber": "r-18125867",
-      "isDefault": false,
-      "emailAddresses": [
-        {
-          "ID": "22155159-a6ce-47cf-b0b9-2d2efebd38d1",
-          "email": "email-22155159",
-          "isDefault": false,
-          "createdAt": "2000-11-01T00:00:00.000Z",
-          "createdBy": "createdBy.d6v13@example.com",
-          "modifiedAt": "2021-05-08T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.d6v13@example.org"
-        },
-        {
-          "ID": "22155160-38bd-4988-9c42-1fcac0d657af",
-          "email": "email-22155160",
-          "isDefault": true,
-          "createdAt": "2004-06-23T00:00:00.000Z",
-          "createdBy": "createdBy.d6v14@example.com",
-          "modifiedAt": "2015-11-01T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.d6v14@example.com"
-        }
-      ],
-      "phoneNumbers": [
-        {
-          "ID": "14821702-97a8-42cb-80bb-d528790bb4ca",
-          "phoneNumber": "phoneNumber-14821702",
-          "extension": "n-14821702",
-          "isDefault": true,
-          "createdAt": "2019-07-28T00:00:00.000Z",
-          "createdBy": "createdBy.8tohy@example.net",
-          "modifiedAt": "2010-01-18T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.8tohy@example.org"
-        },
-        {
-          "ID": "14821703-8f23-4b3a-a1ae-90cb4d9606d0",
-          "phoneNumber": "phoneNumber-14821703",
-          "extension": "n-14821703",
-          "isDefault": false,
-          "createdAt": "2002-04-12T00:00:00.000Z",
-          "createdBy": "createdBy.8tohz@example.org",
-          "modifiedAt": "2009-07-13T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.8tohz@example.com"
-        }
-      ],
-      "createdAt": "2011-03-11T00:00:00.000Z",
-      "createdBy": "createdBy.asi0b@example.org",
-      "modifiedAt": "2001-07-28T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.asi0b@example.org"
-    },
-    {
-      "ID": "18125868-0a8f-4b12-911f-3f963d0a1339",
-      "addressID": "D-18125868",
-      "country": "868",
-      "region": "868",
-      "postalCode": "e-18125868",
-      "cityName": "cityName-18125868",
-      "streetName": "streetName-18125868",
-      "houseNumber": "r-18125868",
+      "ID": "29665150-4534-4c4d-aa37-d6b948a05eac",
+      "addressID": "D-29665150",
+      "country": "150",
+      "region": "150",
+      "postalCode": "e-29665150",
+      "cityName": "cityName-29665150",
+      "streetName": "streetName-29665150",
+      "houseNumber": "r-29665150",
       "isDefault": true,
       "emailAddresses": [
         {
-          "ID": "10162315-35da-42d0-a2ae-ef557d060bdc",
-          "email": "email-10162315",
+          "ID": "30273811-abcd-43c0-b4c2-36c7e31bb962",
+          "email": "email-30273811",
           "isDefault": false,
-          "createdAt": "2002-03-18T00:00:00.000Z",
-          "createdBy": "createdBy.61taj@example.com",
-          "modifiedAt": "2019-10-24T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.61taj@example.com"
+          "createdAt": "2019-10-11T00:00:00.000Z",
+          "createdBy": "createdBy.i0vf7@example.com",
+          "modifiedAt": "2008-09-20T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.i0vf7@example.com"
         },
         {
-          "ID": "10162316-4676-4c71-ba22-f3c1f89d4fac",
-          "email": "email-10162316",
+          "ID": "30273812-db1e-4fb1-9e55-35ec5022e52a",
+          "email": "email-30273812",
           "isDefault": true,
-          "createdAt": "2015-08-22T00:00:00.000Z",
-          "createdBy": "createdBy.61tak@example.net",
-          "modifiedAt": "2018-12-21T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.61tak@example.com"
+          "createdAt": "2014-09-26T00:00:00.000Z",
+          "createdBy": "createdBy.i0vf8@example.com",
+          "modifiedAt": "2017-09-16T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.i0vf8@example.com"
         }
       ],
       "phoneNumbers": [
         {
-          "ID": "63639369-bde6-49fa-a0e1-8d167498edad",
-          "phoneNumber": "phoneNumber-6363936",
-          "extension": "on-6363936",
-          "isDefault": true,
-          "createdAt": "2008-07-02T00:00:00.000Z",
-          "createdBy": "createdBy.3seg0@example.org",
-          "modifiedAt": "2013-07-17T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.3seg0@example.com"
+          "ID": "31318545-315d-45a1-86d4-5e94c7bfe269",
+          "phoneNumber": "phoneNumber-31318545",
+          "extension": "n-31318545",
+          "isDefault": false,
+          "createdAt": "2017-06-07T00:00:00.000Z",
+          "createdBy": "createdBy.in9jl@example.net",
+          "modifiedAt": "2007-09-05T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.in9jl@example.org"
         },
         {
-          "ID": "63639370-c971-4d43-8edc-5ec19c860852",
-          "phoneNumber": "phoneNumber-6363937",
-          "extension": "on-6363937",
-          "isDefault": false,
-          "createdAt": "2023-06-22T00:00:00.000Z",
-          "createdBy": "createdBy.3seg1@example.net",
-          "modifiedAt": "2002-09-09T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.3seg1@example.com"
+          "ID": "31318546-98ba-42ac-bfbb-d171c0799e39",
+          "phoneNumber": "phoneNumber-31318546",
+          "extension": "n-31318546",
+          "isDefault": true,
+          "createdAt": "2005-11-22T00:00:00.000Z",
+          "createdBy": "createdBy.in9jm@example.org",
+          "modifiedAt": "2022-09-20T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.in9jm@example.com"
         }
       ],
-      "createdAt": "2003-12-02T00:00:00.000Z",
-      "createdBy": "createdBy.asi0c@example.org",
-      "modifiedAt": "2004-11-27T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.asi0c@example.org"
+      "createdAt": "2013-04-03T00:00:00.000Z",
+      "createdBy": "createdBy.hntry@example.net",
+      "modifiedAt": "2015-01-25T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.hntry@example.org"
+    },
+    {
+      "ID": "29665151-412f-46c6-a5aa-1eebd5d6e2a4",
+      "addressID": "D-29665151",
+      "country": "151",
+      "region": "151",
+      "postalCode": "e-29665151",
+      "cityName": "cityName-29665151",
+      "streetName": "streetName-29665151",
+      "houseNumber": "r-29665151",
+      "isDefault": false,
+      "emailAddresses": [
+        {
+          "ID": "19564714-4938-40f9-a5d8-95b1088b19be",
+          "email": "email-1956",
+          "isDefault": true,
+          "createdAt": "2010-11-04T00:00:00.000Z",
+          "createdBy": "createdBy.1ic@example.net",
+          "modifiedAt": "2002-05-08T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.1ic@example.com"
+        },
+        {
+          "ID": "1957137a-6775-4bd1-865a-2ac142cf2d8c",
+          "email": "email-1957",
+          "isDefault": false,
+          "createdAt": "2011-12-04T00:00:00.000Z",
+          "createdBy": "createdBy.1id@example.org",
+          "modifiedAt": "2005-08-09T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.1id@example.net"
+        }
+      ],
+      "phoneNumbers": [
+        {
+          "ID": "6482721d-6e63-4c10-bce9-8ce02cc8c6c2",
+          "phoneNumber": "phoneNumber-6482721",
+          "extension": "on-6482721",
+          "isDefault": false,
+          "createdAt": "2005-07-27T00:00:00.000Z",
+          "createdBy": "createdBy.3uy3l@example.net",
+          "modifiedAt": "2010-03-28T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.3uy3l@example.org"
+        },
+        {
+          "ID": "64827224-0e10-47bb-af59-8ac37ade14b6",
+          "phoneNumber": "phoneNumber-6482722",
+          "extension": "on-6482722",
+          "isDefault": true,
+          "createdAt": "2010-03-13T00:00:00.000Z",
+          "createdBy": "createdBy.3uy3m@example.org",
+          "modifiedAt": "2010-08-12T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.3uy3m@example.com"
+        }
+      ],
+      "createdAt": "2014-06-11T00:00:00.000Z",
+      "createdBy": "createdBy.hntrz@example.com",
+      "modifiedAt": "2019-06-21T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.hntrz@example.net"
     }
   ],
-  "createdAt": "2013-08-02T00:00:00.000Z",
-  "createdBy": "createdBy.bw9b@example.org",
-  "modifiedAt": "2017-12-03T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.bw9b@example.net"
+  "createdAt": "2015-09-14T00:00:00.000Z",
+  "createdBy": "createdBy.c7eqe@example.org",
+  "modifiedAt": "2018-07-16T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.c7eqe@example.com"
 }
 
 
 ### BusinessPartners
 # @name BusinessPartners_PATCH
-PATCH {{server}}/odata/v4/api/business-partners/BusinessPartners/55502316-e247-4754-ace3-0f1ab0b46165
+PATCH {{server}}/odata/v4/api/business-partners/BusinessPartners/20501078-1f83-4c8d-866b-e8147d60939e
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "55502316-e247-4754-ace3-0f1ab0b46165",
-  "businessPartnerID": "rID-555023",
-  "fullName": "fullName-555023",
-  "firstName": "firstName-555023",
-  "lastName": "lastName-555023",
-  "category": "3",
-  "isBlocked": false,
-  "isMarkedForDeletion": false,
+  "ID": "20501078-1f83-4c8d-866b-e8147d60939e",
+  "businessPartnerID": "D-20501078",
+  "fullName": "fullName-20501078",
+  "firstName": "firstName-20501078",
+  "lastName": "lastName-20501078",
+  "category": "8",
+  "isBlocked": true,
+  "isMarkedForDeletion": true,
   "addresses": [
     {
-      "ID": "18125867-5909-491c-97c3-79ffdd4d7eaa",
-      "addressID": "D-18125867",
-      "country": "867",
-      "region": "867",
-      "postalCode": "e-18125867",
-      "cityName": "cityName-18125867",
-      "streetName": "streetName-18125867",
-      "houseNumber": "r-18125867",
-      "isDefault": false,
-      "emailAddresses": [
-        {
-          "ID": "22155159-a6ce-47cf-b0b9-2d2efebd38d1",
-          "email": "email-22155159",
-          "isDefault": false,
-          "createdAt": "2000-11-01T00:00:00.000Z",
-          "createdBy": "createdBy.d6v13@example.com",
-          "modifiedAt": "2021-05-08T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.d6v13@example.org"
-        },
-        {
-          "ID": "22155160-38bd-4988-9c42-1fcac0d657af",
-          "email": "email-22155160",
-          "isDefault": true,
-          "createdAt": "2004-06-23T00:00:00.000Z",
-          "createdBy": "createdBy.d6v14@example.com",
-          "modifiedAt": "2015-11-01T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.d6v14@example.com"
-        }
-      ],
-      "phoneNumbers": [
-        {
-          "ID": "14821702-97a8-42cb-80bb-d528790bb4ca",
-          "phoneNumber": "phoneNumber-14821702",
-          "extension": "n-14821702",
-          "isDefault": true,
-          "createdAt": "2019-07-28T00:00:00.000Z",
-          "createdBy": "createdBy.8tohy@example.net",
-          "modifiedAt": "2010-01-18T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.8tohy@example.org"
-        },
-        {
-          "ID": "14821703-8f23-4b3a-a1ae-90cb4d9606d0",
-          "phoneNumber": "phoneNumber-14821703",
-          "extension": "n-14821703",
-          "isDefault": false,
-          "createdAt": "2002-04-12T00:00:00.000Z",
-          "createdBy": "createdBy.8tohz@example.org",
-          "modifiedAt": "2009-07-13T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.8tohz@example.com"
-        }
-      ],
-      "createdAt": "2011-03-11T00:00:00.000Z",
-      "createdBy": "createdBy.asi0b@example.org",
-      "modifiedAt": "2001-07-28T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.asi0b@example.org"
-    },
-    {
-      "ID": "18125868-0a8f-4b12-911f-3f963d0a1339",
-      "addressID": "D-18125868",
-      "country": "868",
-      "region": "868",
-      "postalCode": "e-18125868",
-      "cityName": "cityName-18125868",
-      "streetName": "streetName-18125868",
-      "houseNumber": "r-18125868",
+      "ID": "29665150-4534-4c4d-aa37-d6b948a05eac",
+      "addressID": "D-29665150",
+      "country": "150",
+      "region": "150",
+      "postalCode": "e-29665150",
+      "cityName": "cityName-29665150",
+      "streetName": "streetName-29665150",
+      "houseNumber": "r-29665150",
       "isDefault": true,
       "emailAddresses": [
         {
-          "ID": "10162315-35da-42d0-a2ae-ef557d060bdc",
-          "email": "email-10162315",
+          "ID": "30273811-abcd-43c0-b4c2-36c7e31bb962",
+          "email": "email-30273811",
           "isDefault": false,
-          "createdAt": "2002-03-18T00:00:00.000Z",
-          "createdBy": "createdBy.61taj@example.com",
-          "modifiedAt": "2019-10-24T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.61taj@example.com"
+          "createdAt": "2019-10-11T00:00:00.000Z",
+          "createdBy": "createdBy.i0vf7@example.com",
+          "modifiedAt": "2008-09-20T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.i0vf7@example.com"
         },
         {
-          "ID": "10162316-4676-4c71-ba22-f3c1f89d4fac",
-          "email": "email-10162316",
+          "ID": "30273812-db1e-4fb1-9e55-35ec5022e52a",
+          "email": "email-30273812",
           "isDefault": true,
-          "createdAt": "2015-08-22T00:00:00.000Z",
-          "createdBy": "createdBy.61tak@example.net",
-          "modifiedAt": "2018-12-21T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.61tak@example.com"
+          "createdAt": "2014-09-26T00:00:00.000Z",
+          "createdBy": "createdBy.i0vf8@example.com",
+          "modifiedAt": "2017-09-16T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.i0vf8@example.com"
         }
       ],
       "phoneNumbers": [
         {
-          "ID": "63639369-bde6-49fa-a0e1-8d167498edad",
-          "phoneNumber": "phoneNumber-6363936",
-          "extension": "on-6363936",
-          "isDefault": true,
-          "createdAt": "2008-07-02T00:00:00.000Z",
-          "createdBy": "createdBy.3seg0@example.org",
-          "modifiedAt": "2013-07-17T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.3seg0@example.com"
+          "ID": "31318545-315d-45a1-86d4-5e94c7bfe269",
+          "phoneNumber": "phoneNumber-31318545",
+          "extension": "n-31318545",
+          "isDefault": false,
+          "createdAt": "2017-06-07T00:00:00.000Z",
+          "createdBy": "createdBy.in9jl@example.net",
+          "modifiedAt": "2007-09-05T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.in9jl@example.org"
         },
         {
-          "ID": "63639370-c971-4d43-8edc-5ec19c860852",
-          "phoneNumber": "phoneNumber-6363937",
-          "extension": "on-6363937",
-          "isDefault": false,
-          "createdAt": "2023-06-22T00:00:00.000Z",
-          "createdBy": "createdBy.3seg1@example.net",
-          "modifiedAt": "2002-09-09T00:00:00.000Z",
-          "modifiedBy": "modifiedBy.3seg1@example.com"
+          "ID": "31318546-98ba-42ac-bfbb-d171c0799e39",
+          "phoneNumber": "phoneNumber-31318546",
+          "extension": "n-31318546",
+          "isDefault": true,
+          "createdAt": "2005-11-22T00:00:00.000Z",
+          "createdBy": "createdBy.in9jm@example.org",
+          "modifiedAt": "2022-09-20T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.in9jm@example.com"
         }
       ],
-      "createdAt": "2003-12-02T00:00:00.000Z",
-      "createdBy": "createdBy.asi0c@example.org",
-      "modifiedAt": "2004-11-27T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.asi0c@example.org"
+      "createdAt": "2013-04-03T00:00:00.000Z",
+      "createdBy": "createdBy.hntry@example.net",
+      "modifiedAt": "2015-01-25T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.hntry@example.org"
+    },
+    {
+      "ID": "29665151-412f-46c6-a5aa-1eebd5d6e2a4",
+      "addressID": "D-29665151",
+      "country": "151",
+      "region": "151",
+      "postalCode": "e-29665151",
+      "cityName": "cityName-29665151",
+      "streetName": "streetName-29665151",
+      "houseNumber": "r-29665151",
+      "isDefault": false,
+      "emailAddresses": [
+        {
+          "ID": "19564714-4938-40f9-a5d8-95b1088b19be",
+          "email": "email-1956",
+          "isDefault": true,
+          "createdAt": "2010-11-04T00:00:00.000Z",
+          "createdBy": "createdBy.1ic@example.net",
+          "modifiedAt": "2002-05-08T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.1ic@example.com"
+        },
+        {
+          "ID": "1957137a-6775-4bd1-865a-2ac142cf2d8c",
+          "email": "email-1957",
+          "isDefault": false,
+          "createdAt": "2011-12-04T00:00:00.000Z",
+          "createdBy": "createdBy.1id@example.org",
+          "modifiedAt": "2005-08-09T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.1id@example.net"
+        }
+      ],
+      "phoneNumbers": [
+        {
+          "ID": "6482721d-6e63-4c10-bce9-8ce02cc8c6c2",
+          "phoneNumber": "phoneNumber-6482721",
+          "extension": "on-6482721",
+          "isDefault": false,
+          "createdAt": "2005-07-27T00:00:00.000Z",
+          "createdBy": "createdBy.3uy3l@example.net",
+          "modifiedAt": "2010-03-28T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.3uy3l@example.org"
+        },
+        {
+          "ID": "64827224-0e10-47bb-af59-8ac37ade14b6",
+          "phoneNumber": "phoneNumber-6482722",
+          "extension": "on-6482722",
+          "isDefault": true,
+          "createdAt": "2010-03-13T00:00:00.000Z",
+          "createdBy": "createdBy.3uy3m@example.org",
+          "modifiedAt": "2010-08-12T00:00:00.000Z",
+          "modifiedBy": "modifiedBy.3uy3m@example.com"
+        }
+      ],
+      "createdAt": "2014-06-11T00:00:00.000Z",
+      "createdBy": "createdBy.hntrz@example.com",
+      "modifiedAt": "2019-06-21T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.hntrz@example.net"
     }
   ],
-  "createdAt": "2013-08-02T00:00:00.000Z",
-  "createdBy": "createdBy.bw9b@example.org",
-  "modifiedAt": "2017-12-03T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.bw9b@example.net"
+  "createdAt": "2015-09-14T00:00:00.000Z",
+  "createdBy": "createdBy.c7eqe@example.org",
+  "modifiedAt": "2018-07-16T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.c7eqe@example.com"
 }
 
 
 ### BusinessPartners
 # @name BusinessPartners_DELETE
-DELETE {{server}}/odata/v4/api/business-partners/BusinessPartners/55502316-e247-4754-ace3-0f1ab0b46165
+DELETE {{server}}/odata/v4/api/business-partners/BusinessPartners/20501078-1f83-4c8d-866b-e8147d60939e
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -305,132 +305,132 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "18125867-5909-491c-97c3-79ffdd4d7eaa",
-  "addressID": "D-18125867",
-  "country": "867",
-  "region": "867",
-  "postalCode": "e-18125867",
-  "cityName": "cityName-18125867",
-  "streetName": "streetName-18125867",
-  "houseNumber": "r-18125867",
-  "isDefault": false,
+  "ID": "29665150-4534-4c4d-aa37-d6b948a05eac",
+  "addressID": "D-29665150",
+  "country": "150",
+  "region": "150",
+  "postalCode": "e-29665150",
+  "cityName": "cityName-29665150",
+  "streetName": "streetName-29665150",
+  "houseNumber": "r-29665150",
+  "isDefault": true,
   "emailAddresses": [
     {
-      "ID": "22155159-a6ce-47cf-b0b9-2d2efebd38d1",
-      "email": "email-22155159",
+      "ID": "30273811-abcd-43c0-b4c2-36c7e31bb962",
+      "email": "email-30273811",
       "isDefault": false,
-      "createdAt": "2000-11-01T00:00:00.000Z",
-      "createdBy": "createdBy.d6v13@example.com",
-      "modifiedAt": "2021-05-08T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.d6v13@example.org"
+      "createdAt": "2019-10-11T00:00:00.000Z",
+      "createdBy": "createdBy.i0vf7@example.com",
+      "modifiedAt": "2008-09-20T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.i0vf7@example.com"
     },
     {
-      "ID": "22155160-38bd-4988-9c42-1fcac0d657af",
-      "email": "email-22155160",
+      "ID": "30273812-db1e-4fb1-9e55-35ec5022e52a",
+      "email": "email-30273812",
       "isDefault": true,
-      "createdAt": "2004-06-23T00:00:00.000Z",
-      "createdBy": "createdBy.d6v14@example.com",
-      "modifiedAt": "2015-11-01T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.d6v14@example.com"
+      "createdAt": "2014-09-26T00:00:00.000Z",
+      "createdBy": "createdBy.i0vf8@example.com",
+      "modifiedAt": "2017-09-16T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.i0vf8@example.com"
     }
   ],
   "phoneNumbers": [
     {
-      "ID": "14821702-97a8-42cb-80bb-d528790bb4ca",
-      "phoneNumber": "phoneNumber-14821702",
-      "extension": "n-14821702",
-      "isDefault": true,
-      "createdAt": "2019-07-28T00:00:00.000Z",
-      "createdBy": "createdBy.8tohy@example.net",
-      "modifiedAt": "2010-01-18T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.8tohy@example.org"
+      "ID": "31318545-315d-45a1-86d4-5e94c7bfe269",
+      "phoneNumber": "phoneNumber-31318545",
+      "extension": "n-31318545",
+      "isDefault": false,
+      "createdAt": "2017-06-07T00:00:00.000Z",
+      "createdBy": "createdBy.in9jl@example.net",
+      "modifiedAt": "2007-09-05T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.in9jl@example.org"
     },
     {
-      "ID": "14821703-8f23-4b3a-a1ae-90cb4d9606d0",
-      "phoneNumber": "phoneNumber-14821703",
-      "extension": "n-14821703",
-      "isDefault": false,
-      "createdAt": "2002-04-12T00:00:00.000Z",
-      "createdBy": "createdBy.8tohz@example.org",
-      "modifiedAt": "2009-07-13T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.8tohz@example.com"
+      "ID": "31318546-98ba-42ac-bfbb-d171c0799e39",
+      "phoneNumber": "phoneNumber-31318546",
+      "extension": "n-31318546",
+      "isDefault": true,
+      "createdAt": "2005-11-22T00:00:00.000Z",
+      "createdBy": "createdBy.in9jm@example.org",
+      "modifiedAt": "2022-09-20T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.in9jm@example.com"
     }
   ],
-  "createdAt": "2011-03-11T00:00:00.000Z",
-  "createdBy": "createdBy.asi0b@example.org",
-  "modifiedAt": "2001-07-28T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.asi0b@example.org"
+  "createdAt": "2013-04-03T00:00:00.000Z",
+  "createdBy": "createdBy.hntry@example.net",
+  "modifiedAt": "2015-01-25T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.hntry@example.org"
 }
 
 
 ### Addresses
 # @name Addresses_PATCH
-PATCH {{server}}/odata/v4/api/business-partners/Addresses/18125867-5909-491c-97c3-79ffdd4d7eaa
+PATCH {{server}}/odata/v4/api/business-partners/Addresses/29665150-4534-4c4d-aa37-d6b948a05eac
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "18125867-5909-491c-97c3-79ffdd4d7eaa",
-  "addressID": "D-18125867",
-  "country": "867",
-  "region": "867",
-  "postalCode": "e-18125867",
-  "cityName": "cityName-18125867",
-  "streetName": "streetName-18125867",
-  "houseNumber": "r-18125867",
-  "isDefault": false,
+  "ID": "29665150-4534-4c4d-aa37-d6b948a05eac",
+  "addressID": "D-29665150",
+  "country": "150",
+  "region": "150",
+  "postalCode": "e-29665150",
+  "cityName": "cityName-29665150",
+  "streetName": "streetName-29665150",
+  "houseNumber": "r-29665150",
+  "isDefault": true,
   "emailAddresses": [
     {
-      "ID": "22155159-a6ce-47cf-b0b9-2d2efebd38d1",
-      "email": "email-22155159",
+      "ID": "30273811-abcd-43c0-b4c2-36c7e31bb962",
+      "email": "email-30273811",
       "isDefault": false,
-      "createdAt": "2000-11-01T00:00:00.000Z",
-      "createdBy": "createdBy.d6v13@example.com",
-      "modifiedAt": "2021-05-08T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.d6v13@example.org"
+      "createdAt": "2019-10-11T00:00:00.000Z",
+      "createdBy": "createdBy.i0vf7@example.com",
+      "modifiedAt": "2008-09-20T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.i0vf7@example.com"
     },
     {
-      "ID": "22155160-38bd-4988-9c42-1fcac0d657af",
-      "email": "email-22155160",
+      "ID": "30273812-db1e-4fb1-9e55-35ec5022e52a",
+      "email": "email-30273812",
       "isDefault": true,
-      "createdAt": "2004-06-23T00:00:00.000Z",
-      "createdBy": "createdBy.d6v14@example.com",
-      "modifiedAt": "2015-11-01T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.d6v14@example.com"
+      "createdAt": "2014-09-26T00:00:00.000Z",
+      "createdBy": "createdBy.i0vf8@example.com",
+      "modifiedAt": "2017-09-16T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.i0vf8@example.com"
     }
   ],
   "phoneNumbers": [
     {
-      "ID": "14821702-97a8-42cb-80bb-d528790bb4ca",
-      "phoneNumber": "phoneNumber-14821702",
-      "extension": "n-14821702",
-      "isDefault": true,
-      "createdAt": "2019-07-28T00:00:00.000Z",
-      "createdBy": "createdBy.8tohy@example.net",
-      "modifiedAt": "2010-01-18T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.8tohy@example.org"
+      "ID": "31318545-315d-45a1-86d4-5e94c7bfe269",
+      "phoneNumber": "phoneNumber-31318545",
+      "extension": "n-31318545",
+      "isDefault": false,
+      "createdAt": "2017-06-07T00:00:00.000Z",
+      "createdBy": "createdBy.in9jl@example.net",
+      "modifiedAt": "2007-09-05T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.in9jl@example.org"
     },
     {
-      "ID": "14821703-8f23-4b3a-a1ae-90cb4d9606d0",
-      "phoneNumber": "phoneNumber-14821703",
-      "extension": "n-14821703",
-      "isDefault": false,
-      "createdAt": "2002-04-12T00:00:00.000Z",
-      "createdBy": "createdBy.8tohz@example.org",
-      "modifiedAt": "2009-07-13T00:00:00.000Z",
-      "modifiedBy": "modifiedBy.8tohz@example.com"
+      "ID": "31318546-98ba-42ac-bfbb-d171c0799e39",
+      "phoneNumber": "phoneNumber-31318546",
+      "extension": "n-31318546",
+      "isDefault": true,
+      "createdAt": "2005-11-22T00:00:00.000Z",
+      "createdBy": "createdBy.in9jm@example.org",
+      "modifiedAt": "2022-09-20T00:00:00.000Z",
+      "modifiedBy": "modifiedBy.in9jm@example.com"
     }
   ],
-  "createdAt": "2011-03-11T00:00:00.000Z",
-  "createdBy": "createdBy.asi0b@example.org",
-  "modifiedAt": "2001-07-28T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.asi0b@example.org"
+  "createdAt": "2013-04-03T00:00:00.000Z",
+  "createdBy": "createdBy.hntry@example.net",
+  "modifiedAt": "2015-01-25T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.hntry@example.org"
 }
 
 
 ### Addresses
 # @name Addresses_DELETE
-DELETE {{server}}/odata/v4/api/business-partners/Addresses/18125867-5909-491c-97c3-79ffdd4d7eaa
+DELETE {{server}}/odata/v4/api/business-partners/Addresses/29665150-4534-4c4d-aa37-d6b948a05eac
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -448,36 +448,36 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "22155159-a6ce-47cf-b0b9-2d2efebd38d1",
-  "email": "email-22155159",
+  "ID": "30273811-abcd-43c0-b4c2-36c7e31bb962",
+  "email": "email-30273811",
   "isDefault": false,
-  "createdAt": "2000-11-01T00:00:00.000Z",
-  "createdBy": "createdBy.d6v13@example.com",
-  "modifiedAt": "2021-05-08T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.d6v13@example.org"
+  "createdAt": "2019-10-11T00:00:00.000Z",
+  "createdBy": "createdBy.i0vf7@example.com",
+  "modifiedAt": "2008-09-20T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.i0vf7@example.com"
 }
 
 
 ### EmailAddresses
 # @name EmailAddresses_PATCH
-PATCH {{server}}/odata/v4/api/business-partners/EmailAddresses/22155159-a6ce-47cf-b0b9-2d2efebd38d1
+PATCH {{server}}/odata/v4/api/business-partners/EmailAddresses/30273811-abcd-43c0-b4c2-36c7e31bb962
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "22155159-a6ce-47cf-b0b9-2d2efebd38d1",
-  "email": "email-22155159",
+  "ID": "30273811-abcd-43c0-b4c2-36c7e31bb962",
+  "email": "email-30273811",
   "isDefault": false,
-  "createdAt": "2000-11-01T00:00:00.000Z",
-  "createdBy": "createdBy.d6v13@example.com",
-  "modifiedAt": "2021-05-08T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.d6v13@example.org"
+  "createdAt": "2019-10-11T00:00:00.000Z",
+  "createdBy": "createdBy.i0vf7@example.com",
+  "modifiedAt": "2008-09-20T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.i0vf7@example.com"
 }
 
 
 ### EmailAddresses
 # @name EmailAddresses_DELETE
-DELETE {{server}}/odata/v4/api/business-partners/EmailAddresses/22155159-a6ce-47cf-b0b9-2d2efebd38d1
+DELETE {{server}}/odata/v4/api/business-partners/EmailAddresses/30273811-abcd-43c0-b4c2-36c7e31bb962
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -495,38 +495,38 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "14821702-97a8-42cb-80bb-d528790bb4ca",
-  "phoneNumber": "phoneNumber-14821702",
-  "extension": "n-14821702",
-  "isDefault": true,
-  "createdAt": "2019-07-28T00:00:00.000Z",
-  "createdBy": "createdBy.8tohy@example.net",
-  "modifiedAt": "2010-01-18T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.8tohy@example.org"
+  "ID": "31318545-315d-45a1-86d4-5e94c7bfe269",
+  "phoneNumber": "phoneNumber-31318545",
+  "extension": "n-31318545",
+  "isDefault": false,
+  "createdAt": "2017-06-07T00:00:00.000Z",
+  "createdBy": "createdBy.in9jl@example.net",
+  "modifiedAt": "2007-09-05T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.in9jl@example.org"
 }
 
 
 ### PhoneNumbers
 # @name PhoneNumbers_PATCH
-PATCH {{server}}/odata/v4/api/business-partners/PhoneNumbers/14821702-97a8-42cb-80bb-d528790bb4ca
+PATCH {{server}}/odata/v4/api/business-partners/PhoneNumbers/31318545-315d-45a1-86d4-5e94c7bfe269
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "ID": "14821702-97a8-42cb-80bb-d528790bb4ca",
-  "phoneNumber": "phoneNumber-14821702",
-  "extension": "n-14821702",
-  "isDefault": true,
-  "createdAt": "2019-07-28T00:00:00.000Z",
-  "createdBy": "createdBy.8tohy@example.net",
-  "modifiedAt": "2010-01-18T00:00:00.000Z",
-  "modifiedBy": "modifiedBy.8tohy@example.org"
+  "ID": "31318545-315d-45a1-86d4-5e94c7bfe269",
+  "phoneNumber": "phoneNumber-31318545",
+  "extension": "n-31318545",
+  "isDefault": false,
+  "createdAt": "2017-06-07T00:00:00.000Z",
+  "createdBy": "createdBy.in9jl@example.net",
+  "modifiedAt": "2007-09-05T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.in9jl@example.org"
 }
 
 
 ### PhoneNumbers
 # @name PhoneNumbers_DELETE
-DELETE {{server}}/odata/v4/api/business-partners/PhoneNumbers/14821702-97a8-42cb-80bb-d528790bb4ca
+DELETE {{server}}/odata/v4/api/business-partners/PhoneNumbers/31318545-315d-45a1-86d4-5e94c7bfe269
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -562,6 +562,6 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "businessPartnerID": "D-19463955",
-  "includeAddresses": false
+  "businessPartnerID": "D-12412982",
+  "includeAddresses": true
 }

@@ -37,10 +37,11 @@
       "type": "java",
       "request": "launch",
       "args": [
-        "--spring.profiles.active=default"
+        "--spring.profiles.active=default,mocked"
       ],
       "mainClass": "customer.verification.Application",
       "projectName": "verification",
+      "vmArgs": "-Dspring.profiles.active=mocked",
       "preLaunchTask": "PreLaunchTask for Run verification-2",
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/env/.env2",

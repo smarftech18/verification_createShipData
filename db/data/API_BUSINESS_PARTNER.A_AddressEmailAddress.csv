@@ -1,4 +1,4 @@
 AddressID,Person,OrdinalNumber,IsDefaultEmailAddress,EmailAddress,SearchEmailAddress,AddressCommunicationRemarkText
-10000001,,1,true,contact@tech-shoji.co.jp,CONTACT@TECH-SHOJI.CO.JP,
-10000002,,1,true,info@global-bussan.co.jp,INFO@GLOBAL-BUSSAN.CO.JP,
-10000003,,1,true,inquiry@sakura-seizoubp.co.jp,INQUIRY@SAKURA-SEIZOUBP.CO.JP,
+10000001,A,1,true,contact@tech-shoji.co.jp,CONTACT@TECH-SHOJI.C,
+10000002,A,1,true,info@global-bussan.co.jp,INFO@GLOBAL-BUSSAN.C,
+10000003,A,1,true,inquiry@sakura-seizoubp.co.jp,INQUIRY@SAKURA-SEIZO,

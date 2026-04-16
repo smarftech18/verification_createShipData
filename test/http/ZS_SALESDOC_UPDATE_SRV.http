@@ -16,40 +16,40 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "p_key": "9",
-  "c_key": "9",
-  "SalesDocument": "nt-3795499",
-  "SalesDocumentItem": "795499",
-  "ProcessingStatus": "99",
-  "ProcessedDate": "te-3795499",
-  "ProcessedBy": "edBy-3795499",
-  "Remark": "Remark-3795499",
-  "InternalCode": "InternalCode-3795499"
+  "p_key": "7",
+  "c_key": "7",
+  "SalesDocument": "t-24590887",
+  "SalesDocumentItem": "590887",
+  "ProcessingStatus": "87",
+  "ProcessedDate": "e-24590887",
+  "ProcessedBy": "dBy-24590887",
+  "Remark": "Remark-24590887",
+  "InternalCode": "nternalCode-24590887"
 }
 
 
 ### UpdateSalesDocStatus
 # @name UpdateSalesDocStatus_PATCH
-PATCH {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus(p_key='9',c_key='9')
+PATCH {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus(p_key='7',c_key='7')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "p_key": "9",
-  "c_key": "9",
-  "SalesDocument": "nt-3795499",
-  "SalesDocumentItem": "795499",
-  "ProcessingStatus": "99",
-  "ProcessedDate": "te-3795499",
-  "ProcessedBy": "edBy-3795499",
-  "Remark": "Remark-3795499",
-  "InternalCode": "InternalCode-3795499"
+  "p_key": "7",
+  "c_key": "7",
+  "SalesDocument": "t-24590887",
+  "SalesDocumentItem": "590887",
+  "ProcessingStatus": "87",
+  "ProcessedDate": "e-24590887",
+  "ProcessedBy": "dBy-24590887",
+  "Remark": "Remark-24590887",
+  "InternalCode": "nternalCode-24590887"
 }
 
 
 ### UpdateSalesDocStatus
 # @name UpdateSalesDocStatus_DELETE
-DELETE {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus(p_key='9',c_key='9')
+DELETE {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/UpdateSalesDocStatus(p_key='7',c_key='7')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
@@ -67,33 +67,33 @@ Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "p_key": "8",
-  "c_key": "8",
-  "SalesDocument": "nt-7108148",
-  "SalesDocumentItem": "108148",
-  "LogType": "8",
-  "LogMessage": "LogMessage-7108148"
+  "p_key": "9",
+  "c_key": "9",
+  "SalesDocument": "nt-8599939",
+  "SalesDocumentItem": "599939",
+  "LogType": "9",
+  "LogMessage": "LogMessage-8599939"
 }
 
 
 ### InsertSalesDocLog
 # @name InsertSalesDocLog_PATCH
-PATCH {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog(p_key='8',c_key='8')
+PATCH {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog(p_key='9',c_key='9')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
 
 {
-  "p_key": "8",
-  "c_key": "8",
-  "SalesDocument": "nt-7108148",
-  "SalesDocumentItem": "108148",
-  "LogType": "8",
-  "LogMessage": "LogMessage-7108148"
+  "p_key": "9",
+  "c_key": "9",
+  "SalesDocument": "nt-8599939",
+  "SalesDocumentItem": "599939",
+  "LogType": "9",
+  "LogMessage": "LogMessage-8599939"
 }
 
 
 ### InsertSalesDocLog
 # @name InsertSalesDocLog_DELETE
-DELETE {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog(p_key='8',c_key='8')
+DELETE {{server}}/odata/v4/ZS_SALESDOC_UPDATE_SRV/InsertSalesDocLog(p_key='9',c_key='9')
 Content-Type: application/json
 Authorization: Basic {{username}}:{{password}}
