@@ -1,10 +1,12 @@
 package customer.verification.handler.mock;
 
 import com.sap.cds.services.ErrorStatus;
+import com.sap.cds.services.EventContext;
 import com.sap.cds.services.ServiceException;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.Before;
+import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -20,19 +22,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  *   <li>{@code insertS4DocLog}    → {@code InsertSalesDocLog} への INSERT (CREATE)</li>
  * </ul>
  *
- * <p>【UpdateSalesDocStatus の動作モード（パターンB）】
- * <ul>
- *   <li>1回目の呼び出し: スルー（実際の RemoteService が動作する）</li>
- *   <li>2回目以降: HTTP 503 をスロー → {@code updateS4DocStatus} の catch へ伝播</li>
- * </ul>
- * → 「1件目は成功・2件目は失敗」という部分成功シナリオのテストに使用する。
+ * <p>【@Before と @On を両方定義する理由】
+ * {@code @ServiceName} を持つBeanを登録すると、CAP Java は組み込みの @On モックを
+ * 無効化する。@On が存在しないと "No ON handler completed the processing" になるため、
+ * 正常系（1回目）の @On を自クラスで実装する必要がある。
  *
- * <p>【InsertSalesDocLog の動作モード（パターンB）】
- * <ul>
- *   <li>1回目の呼び出し: スルー（実際の RemoteService が動作する）</li>
- *   <li>2回目以降: HTTP 503 をスロー → {@code insertS4DocLog} の warn ログのみ（業務継続）</li>
- * </ul>
- * → ログ登録失敗は業務エラーにならないが、例外経路を通るテストに使用できる。
+ * <p>【UpdateSalesDocStatus の動作フロー（パターンB）】
+ * <pre>
+ * 1回目: @Before (count=1 → return) → @On (正常完了)
+ * 2回目: @Before (count=2 → 503 throw) → updateS4DocStatus catch → errorCount++
+ * </pre>
+ * → 「1件目は成功・2件目は失敗」の部分成功シナリオをテストできる。
  *
  * <p>テストの {@code @BeforeEach} で {@link #reset()} を呼び出すこと。
  */
@@ -53,17 +53,21 @@ public class ZsSalesdocUpdateSrvMock implements EventHandler {
     /** InsertSalesDocLog 呼び出し回数 */
     private final AtomicInteger logCallCount = new AtomicInteger(0);
 
+    // ---------------------------------------------------------------
+    // UpdateSalesDocStatus
+    // ---------------------------------------------------------------
+
     /**
-     * UpdateSalesDocStatus CREATE をインターセプトする。
+     * 2回目以降の呼び出しで 503 をスローする。
      *
-     * <p>updateS4DocStatus が使う INSERT (POST) 呼び出しをモック化する。
-     * 例外は {@code DocumentProcessingException} へラップされ errorCount に計上される。
+     * <p>例外は {@code updateS4DocStatus} の catch(ServiceException) → DocumentProcessingException
+     * にラップされて伝播し、明細ループの errorCount に計上される。
      */
     @Before(event = CqnService.EVENT_CREATE, entity = "UpdateSalesDocStatus")
     public void beforeUpdateStatus() {
         int count = updateCallCount.incrementAndGet();
         if (count == 1) {
-            return; // 1回目はスルー → 実際のRemoteServiceが動く
+            return; // 1回目: @On へ進む
         }
         throw new ServiceException(
                 SERVICE_UNAVAILABLE,
@@ -72,21 +76,44 @@ public class ZsSalesdocUpdateSrvMock implements EventHandler {
     }
 
     /**
-     * InsertSalesDocLog CREATE をインターセプトする。
+     * INSERT を正常完了させる（1回目のみ到達）。
      *
-     * <p>insertS4DocLog が使う INSERT (POST) 呼び出しをモック化する。
-     * 例外は log.warn のみ処理され、業務フローは継続する。
+     * <p>呼び出し元（{@code updateS4DocStatus}）は戻り値を使用しないため、
+     * 結果を設定せず正常返却するだけでよい。
+     */
+    @On(event = CqnService.EVENT_CREATE, entity = "UpdateSalesDocStatus")
+    public void onCreateUpdateStatus(EventContext ctx) {
+        // 正常完了（呼び出し元は戻り値を使用しない）
+    }
+
+    // ---------------------------------------------------------------
+    // InsertSalesDocLog
+    // ---------------------------------------------------------------
+
+    /**
+     * 2回目以降の呼び出しで 503 をスローする。
+     *
+     * <p>例外は {@code insertS4DocLog} の catch(Exception) で warn ログのみ出力され
+     * 業務フローは継続する。
      */
     @Before(event = CqnService.EVENT_CREATE, entity = "InsertSalesDocLog")
     public void beforeInsertLog() {
         int count = logCallCount.incrementAndGet();
         if (count == 1) {
-            return; // 1回目はスルー → 実際のRemoteServiceが動く
+            return; // 1回目: @On へ進む
         }
         throw new ServiceException(
                 SERVICE_UNAVAILABLE,
                 "ZS_SALESDOC_UPDATE_SRV (InsertSalesDocLog) への接続に失敗しました（モック）"
         );
+    }
+
+    /**
+     * INSERT を正常完了させる（1回目のみ到達）。
+     */
+    @On(event = CqnService.EVENT_CREATE, entity = "InsertSalesDocLog")
+    public void onCreateInsertLog(EventContext ctx) {
+        // 正常完了（ログ登録失敗は業務影響なし）
     }
 
     /**
